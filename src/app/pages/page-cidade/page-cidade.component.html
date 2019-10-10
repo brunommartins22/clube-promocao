@@ -1,0 +1,24 @@
+<crud  [componente]="this"  [permissao]="1.02" titulo="Cidade">
+
+
+    <div detalhes>
+        <div class="row" *ngIf="estadoTela!=='Inserir'">
+            <inputText id="id" md="2" disabled="true" label="ID" [(ngModel)]="objetoSelecionado.id"></inputText>
+        </div>
+
+        <div class="row">
+            <div class="ui-g-12 ui-md-2">
+                <label>Estados</label><br>
+                <p-dropdown id="cuF" [options]="listaEstados" [style]="{width: '100%','border':'1px solid #00B5B8'}"
+                    [(ngModel)]="objetoSelecionado.cuF" [filter]="true" optionLabel="uf">
+                </p-dropdown>
+            </div>
+
+            <inputText id="xmun" md="10" label="Nome da Cidade" [(ngModel)]="objetoSelecionado.xmun"></inputText>
+
+        </div>
+
+
+    </div>
+
+</crud>

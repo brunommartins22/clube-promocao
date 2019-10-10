@@ -1,0 +1,595 @@
+<processo [componente]="this" [titulo]="tituloProdutoCliente" permissao="2.04">
+
+    <div *ngIf="renderizarListagemCliente && !renderizarListagemProdutoCliente">
+
+        <div class="row">
+            <p-fieldset legend="Filtros" class="ui-g-12" [toggleable]="true">
+                <inputText md="2" label="CPF/CNPJ" maxlength="18" [(ngModel)]="codigoCliente"
+                    (onkeyEnter)="searchClientOnFields()" placeholder="Informe o CPF/CNPJ"
+                    (onChange)="searchClientOnFields()">
+                </inputText>
+                <inputText md="6" label="Razão Social/Nome" placeholder="Informe a Razão Social/Nome"
+                    [(ngModel)]="nomeCliente" (onkeyEnter)="searchClientOnFields()" (onChange)="searchClientOnFields()">
+                </inputText>
+                <div class="ui-g-12 ui-md-4">
+                    <label>Ordenação</label><br>
+                    <p-dropdown [options]="listaOrdenacao" [style]="{width: '100%','border':'1px solid #00B5B8'}"
+                        [(ngModel)]="ordenacaoSelecionada" (onChange)="searchClientOnFields()">
+                    </p-dropdown>
+                </div>
+            </p-fieldset>
+        </div>
+        <data-table [lista]="dadosClienteProduto" [cols]="cols1" (change)="setObjeto($event)"
+            (doubleClick)="edit($event)" [showCaption]="true" [id]="'clienteId'">
+
+            <button label="Editar" (click)="edit($event)" icon="fa fa-edit" pButton></button>
+            <button label="Atualizar" icon="pi pi-refresh" (click)="searchClientOnFields()" pButton></button>
+        </data-table>
+
+
+        <p-paginator [rows]="registrosPorPagina" [rowsPerPageOptions]="[10,20,30]" [totalRecords]="quantidadeRegistros"
+            (onPageChange)="paginate($event)">
+        </p-paginator>
+
+
+        <div style="text-align: center;padding: 5px">
+            Registro de {{posicaoInicial + 1}} /
+            {{posicaoInicial + (quantidadeRegistros
+            < registrosPorPagina ? quantidadeRegistros : registrosPorPagina)}}
+            de um total de
+            {{quantidadeRegistros}}
+        </div>
+
+
+    </div>
+
+    <div *ngIf="!renderizarListagemCliente && renderizarListagemProdutoCliente">
+        <div *ngIf="!renderizarProduto">
+
+            <p-fieldset legend="Filtros" [toggleable]="true" [collapsed]="isActiveFieldset">
+                <div class="row">
+                    <div class="ui-g-12 ui-md-4 ui-lg-3">
+                        <label>Cenário</label><br>
+                        <p-dropdown [options]="listaCenarios" [style]="{width: '100%','border':'1px solid #00B5B8'}"
+                            [(ngModel)]="cenarioSelecionado">
+                        </p-dropdown>
+                    </div>
+                    <div class="ui-g-12 ui-md-4 ui-lg-5" style="position: relative;top:-2px">
+                        <inputText md="12" label="Descrição/EAN do Produto"
+                            placeholder="Informe a Descrição/EAN do Produto" [(ngModel)]="nomeProduto" maxlength="255">
+                        </inputText>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-4 ui-lg-2" style="position: relative;top:-2px">
+                        <inputText md="12" label="NCM" placeholder="Informe o NCM" [(ngModel)]="ncm" maxlength="8">
+                        </inputText>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-4 ui-lg-2" style="position: relative;top:-1px">
+                        <label>Capítulo NCM</label><br>
+                        <p-spinner [(ngModel)]="capituloSelecionado" placeholder="QTD. DÍGITOS" [min]="2" [max]="8">
+                        </p-spinner>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-4 ui-lg-2">
+                        <label>Estado do Consumidor</label><br>
+                        <p-dropdown [options]="listaEstado" [filter]="true"
+                            [style]="{width: '100%','border':'1px solid #00B5B8'}" [(ngModel)]="estadoSelecionado">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-4 ui-lg-2">
+                        <label>Regras</label><br>
+                        <p-dropdown [options]="listaRegras"
+                            [disabled]="statusSelecionado==null||statusSelecionado=='Inativo'"
+                            [style]="{width: '100%','border':'1px solid #00B5B8'}" [(ngModel)]="regraSelecionadaSearch">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-4 ui-lg-2">
+                        <label>Status</label><br>
+                        <p-dropdown [options]="listaStatus" [style]="{width: '100%','border':'1px solid #00B5B8'}"
+                            [(ngModel)]="statusSelecionado" (onChange)="statusOnChange()">
+                        </p-dropdown>
+                    </div>
+
+
+                    <div class="ui-g-12 ui-md-8 ui-lg-3 mt-3">
+                        <button class="mr-1" label="Pesquisar" (click)="searchProdutoCenario()" icon="fa fa-search"
+                            pButton></button>
+                        <button class="mr-1" label="Limpar" (click)="clearSearch()" icon="fa fa-eraser"
+                            pButton></button>
+                        <button pButton title="Voltar" icon="fa fa-times" (click)="cancel()"></button>
+                    </div>
+
+                </div>
+            </p-fieldset>
+
+
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-12">
+                    <p-table [value]="dadosProdutoCenario" dataKey="id" selectionMode="single" [resizableColumns]="true"
+                        [loading]="loading" [scrollable]="true" scrollHeight="332px" [(selection)]="produtoSelecionado"
+                        [responsive]="false" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
+                        [(contextMenuSelection)]="produtoSelecionado" [contextMenu]="cm2">
+                        <ng-template pTemplate="caption">
+
+                            <div style="position: relative;top: -5px;">
+
+                                <button label="Editar" (click)="editProdutoSelecionado()" icon="fa fa-edit"
+                                    pButton></button>
+
+                                <button label="Atualizar" (click)="searchProdutoCenario()" icon="pi pi-refresh"
+                                    pButton></button>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <!-- <th style="width: 80px !important;text-align: center !important">Status</th> -->
+                                <th style="width: 3em">
+                                    <p-checkbox binary="true"
+                                        *ngIf=" statusSelecionado==null || statusSelecionado =='Pendente'"
+                                        [disabled]="dadosProdutoCenario.length==0"
+                                        (onChange)="loadValidationCkeckList('ALL')" [(ngModel)]="isSelectedAll">
+                                    </p-checkbox>
+                                </th>
+                                <th style="width: 80px !important;text-align: center !important">Regra</th>
+                                <th style="width: 110px !important;text-align: center !important">Cod. Barras</th>
+                                <th style="width: 300px !important;text-align: justify !important">Descrição</th>
+                                <th style="width: 80px !important;text-align: center !important">NCM</th>
+                                <th style="width: 80px !important;text-align: center !important">CEST</th>
+                                <th
+                                    style="width: 50px !important;text-align: center !important;font-size: 11px !important">
+                                    CST PIS</th>
+                                <th
+                                    style="width: 50px !important;text-align: center !important;font-size: 11px !important">
+                                    ALQ PIS</th>
+                                <th
+                                    style="width: 50px !important;text-align: center !important;font-size: 11px !important">
+                                    CST COFINS</th>
+                                <th
+                                    style="width: 50px !important;text-align: center !important;font-size: 11px !important">
+                                    ALQ COFINS</th>
+                                <th
+                                    style="width: 50px !important;text-align: center !important;font-size: 11px !important">
+                                    CST IPI</th>
+                                <th
+                                    style="width: 50px !important;text-align: center !important;font-size: 11px !important">
+                                    ALQ IPI</th>
+                                <th
+                                    style="width: 50px !important;text-align: center !important;font-size: 11px !important">
+                                    CST ICMS</th>
+                                <th
+                                    style="width: 50px !important;text-align: center !important;font-size: 11px !important">
+                                    ALQ ICMS</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-item let-expanded="expanded">
+                            <tr [pSelectableRow]="item" [pContextMenuRow]="item"
+                                [ngClass]="(item.status=='Validado'?null:!item.produtoCliente.ativo ? 'divergent':'incorret')"
+                                [title]="(item.status =='Validado' ? 'Produto Validado':!item.produtoCliente.ativo ? item.produtoCliente.log:'')">
+                                <!-- <td style="width: 80px !important;text-align: center !important">{{item.status}}</td> -->
+                                <td style="width: 3em">
+                                    <p-checkbox *ngIf="!item.confirmado && item.produtoCliente.ativo"
+                                        (onChange)="loadValidationCkeckList(item.isCheck)" binary="true"
+                                        [(ngModel)]="item.isCheck">
+                                    </p-checkbox>
+                                    <a href="#" *ngIf="!item.produtoCliente.ativo" [pRowToggler]="item">
+                                        <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                                    </a>
+                                </td>
+                                <td style="width: 80px !important;text-align: center !important">
+                                    {{item.dominioRegrasInformado}}
+                                </td>
+                                <td style="width: 110px !important;text-align: center !important">
+                                    {{item.produtoCliente.ean}}</td>
+                                <td style="width: 300px !important;text-align: justify !important">
+                                    {{item.produtoCliente.nomeProduto}}</td>
+                                <td style="width: 80px !important;text-align: center !important"
+                                    [title]="item.produtoCliente.ncmPadrao!=null && item.produtoCliente.ncmPadrao!='' && item.produtoCliente.ncmInformado != item.produtoCliente.ncmPadrao ? 'Ncm Informado('+item.ncmInformado+') difere do Ncm Sugerido('+item.ncmPadrao+')' : ''"
+                                    [ngClass]="item.produtoCliente.ncmPadrao!=null && item.produtoCliente.ncmPadrao!='' && item.produtoCliente.ncmInformado != item.produtoCliente.ncmPadrao ? 'divergent' : null">
+                                    {{item.produtoCliente.ncmInformado}}</td>
+                                <td style="width: 80px !important;text-align: center !important"
+                                    [title]="item.produtoCliente.cestInformado != item.produtoCliente.cestPadrao ? 'Cest Informado('+item.cestInformado+') difere do Cest Sugerido('+item.cestInformado+')' : ''"
+                                    [ngClass]="item.produtoCliente.cestPadrao!=null && item.produtoCliente.cestPadrao!='' && item.produtoCliente.cestInformado != item.produtoCliente.cestPadrao ? 'divergent' : null">
+                                    {{item.produtoCliente.cestInformado}}</td>
+                                <td style="width: 50px !important;text-align: center !important"
+                                    [title]="item.tributoFederalInformado.cstPisSaidaInformado != item.tributoFederalPadrao.cstPisSaidaPadrao ? 'CST PIS Informado( '+item.tributoFederalInformado.cstPisSaidaInformado+' ) difere do CST PIS Sugerido( '+ item.tributoFederalPadrao.cstPisSaidaPadrao +' )' : ''"
+                                    [ngClass]="item.tributoFederalPadrao.cstPisSaidaPadrao!=null && item.tributoFederalPadrao.cstPisSaidaPadrao !='' && item.tributoFederalPadrao.cstPisSaidaPadrao != item.tributoFederalInformado.cstPisSaidaInformado ? 'divergent' : null">
+                                    {{item.tributoFederalInformado.cstPisSaidaInformado}}</td>
+                                <td style="width: 50px !important;text-align: center !important"
+                                    [title]="item.tributoFederalInformado.aliquotaPisSaidaInformado != item.tributoFederalPadrao.aliquotaPisSaidaPadrao ? 'Alí. PIS Informado( '+(item.tributoFederalInformado.aliquotaPisSaidaInformado| currency:'BRL':'':'1.2-2')+' ) difere do Alíq. PIS Sugerido( '+(item.tributoFederalPadrao.aliquotaPisSaidaPadrao| currency:'BRL':'':'1.2-2')+' )' : ''"
+                                    [ngClass]="item.tributoFederalPadrao.aliquotaPisSaidaPadrao!=null && item.tributoFederalPadrao.aliquotaPisSaidaPadrao != item.tributoFederalInformado.aliquotaPisSaidaInformado ? 'divergent' : null">
+                                    {{item.tributoFederalInformado.aliquotaPisSaidaInformado| currency:'BRL':'':'1.2-2'}}
+                                </td>
+                                <td style="width: 50px !important;text-align: center !important"
+                                    [title]="item.tributoFederalInformado.cstCofinsSaidaInformado != item.tributoFederalPadrao.cstCofinsSaidaPadrao ? 'CST COFINS( '+item.tributoFederalInformado.cstCofinsSaidaInformado+' ) Informado difere do CST COFINS Sugerido( '+item.tributoFederalPadrao.cstCofinsSaidaPadrao+' )' : ''"
+                                    [ngClass]="item.tributoFederalPadrao.cstCofinsSaidaPadrao!=null && item.tributoFederalPadrao.cstCofinsSaidaPadrao !='' && item.tributoFederalPadrao.cstCofinsSaidaPadrao != item.tributoFederalInformado.cstCofinsSaidaInformado ? 'divergent' : null">
+                                    {{item.tributoFederalInformado.cstCofinsSaidaInformado}}</td>
+                                <td style="width: 50px !important;text-align: center !important"
+                                    [title]="item.tributoFederalInformado.aliquotaCofinsSaidaInformado != item.tributoFederalPadrao.aliquotaCofinsSaidaPadrao ? 'Alí. COFINS Informado( '+(item.tributoFederalInformado.aliquotaCofinsSaidaInformado| currency:'BRL':'':'1.2-2')+' ) difere do Alíq. COFINS Sugerido( '+(item.tributoFederalPadrao.aliquotaCofinsSaidaPadrao| currency:'BRL':'':'1.2-2')+' )' : ''"
+                                    [ngClass]="item.tributoFederalPadrao.aliquotaCofinsSaidaPadrao!=null && item.tributoFederalPadrao.aliquotaCofinsSaidaPadrao != item.tributoFederalInformado.aliquotaCofinsSaidaInformado ? 'divergent' : null">
+                                    {{item.tributoFederalInformado.aliquotaCofinsSaidaInformado| currency:'BRL':'':'1.2-2'}}
+                                </td>
+                                <td style="width: 50px !important;text-align: center !important"
+                                    [title]="item.tributoFederalInformado.cstIpiSaidaInformado != item.tributoFederalPadrao.cstIpiSaidaPadrao ? 'CST IPI Informado( '+item.tributoFederalInformado.cstIpiSaidaInformado+' ) difere do CST IPI Sugerido( '+item.tributoFederalPadrao.cstIpiSaidaPadrao+' )' : ''"
+                                    [ngClass]="item.tributoFederalPadrao.cstIpiSaidaPadrao!=null && item.tributoFederalPadrao.cstIpiSaidaPadrao !='' && item.tributoFederalPadrao.cstIpiSaidaPadrao != item.tributoFederalInformado.cstIpiSaidaInformado ? 'divergent' : null">
+                                    {{item.tributoFederalInformado.cstIpiSaidaInformado}}</td>
+                                <td style="width: 50px !important;text-align: center !important"
+                                    [title]="item.tributoFederalInformado.aliquotaIpiSaidaInformado != item.tributoFederalPadrao.aliquotaIpiSaidaPadrao ? 'Alí. IPI Informado( '+(item.tributoFederalInformado.aliquotaIpiSaidaInformado| currency:'BRL':'':'1.2-2')+' ) difere do Alíq. IPI Sugerido( '+(item.tributoFederalPadrao.aliquotaIpiSaidaPadrao| currency:'BRL':'':'1.2-2')+' )' : ''"
+                                    [ngClass]="item.tributoFederalPadrao.aliquotaIpiSaidaPadrao!=null && item.tributoFederalPadrao.aliquotaIpiSaidaPadrao != item.tributoFederalInformado.aliquotaIpiSaidaInformado ? 'divergent' : null">
+                                    {{item.tributoFederalInformado.aliquotaIpiSaidaInformado| currency:'BRL':'':'1.2-2'}}
+                                </td>
+                                <td style="width: 50px !important;text-align: center !important"
+                                    [title]="item.tributoEstadualInformado.cstIcmsSaidaInformado != item.tributoEstadualPadrao.cstIcmsSaidaPadrao ? 'CST ICMS Informado( '+item.tributoEstadualInformado.cstIcmsSaidaInformado+' ) difere do CST ICMS Sugerido( '+item.tributoEstadualPadrao.cstIcmsSaidaPadrao+' )' : ''"
+                                    [ngClass]="item.tributoEstadualPadrao.cstIcmsSaidaPadrao!=null && item.tributoEstadualPadrao.cstIcmsSaidaPadrao !='' && item.tributoEstadualPadrao.cstIcmsSaidaPadrao != item.tributoEstadualInformado.cstIcmsSaidaInformado ? 'divergent' : null">
+                                    {{item.tributoEstadualInformado.cstIcmsSaidaInformado}}</td>
+                                <td style="width: 50px !important;text-align: center !important"
+                                    [title]="item.tributoEstadualInformado.aliquotaIcmsSaidaInformado != item.tributoEstadualPadrao.aliquotaIcmsSaidaPadrao ? 'Alí. ICMS Informado( '+(item.tributoEstadualInformado.aliquotaIcmsSaidaInformado | currency:'BRL':'':'1.2-2')+' ) difere do Alíq. ICMS Sugerido( '+(item.tributoEstadualPadrao.aliquotaIcmsSaidaPadrao | currency:'BRL':'':'1.2-2')+' )' : ''"
+                                    [ngClass]="item.tributoEstadualPadrao.aliquotaIcmsSaidaPadrao!=null && item.tributoEstadualPadrao.aliquotaIcmsSaidaPadrao != item.tributoEstadualInformado.aliquotaIcmsSaidaInformado ? 'divergent' : null">
+                                    {{item.tributoEstadualInformado.aliquotaIcmsSaidaInformado | currency:'BRL':'':'1.2-2'}}
+                                </td>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-item>
+                            <tr>
+                                <td colspan="14">Error: {{item.produtoCliente.log}}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <p-contextMenu #cm2 [model]="menuBotaoDireito"></p-contextMenu>
+                    <p-paginator [rows]="registrosPorPagina" [rowsPerPageOptions]="[10,20,30,50,100]"
+                        [totalRecords]="quantidadeRegistros" (onPageChange)="paginate($event)">
+                    </p-paginator>
+
+                    <espaco></espaco>
+                    <div style="text-align: center;padding: 5px">
+                        Registro de {{posicaoInicial + 1}} /
+                        {{posicaoInicial + (quantidadeRegistros
+            < registrosPorPagina ? quantidadeRegistros : registrosPorPagina)}}
+                        de um total de
+                        {{quantidadeRegistros}}
+                    </div>
+                </div>
+
+                <p-dialog [header]="respEdit" [(visible)]="displayProdutoCenario" [modal]="false" [closeOnEscape]="true"
+                    [responsive]="true" [style]="{width: '240px'}" [minY]="70" [maximizable]="false"
+                    [baseZIndex]="10000">
+                    <div class="row">
+                        <inputText id="ncmorcest" md="12" label="Informe o novo valor a ser corrigido"
+                            [maxlength]="respEdit=='CEST'?7:8" [(ngModel)]="ncmorcest"
+                            (onkeyEnter)="editValueNcmOrCestbyInformed()"
+                            (onchange)="editValueNcmOrCestbyInformed(respEdit=='NCM')">
+                        </inputText>
+
+                    </div>
+                </p-dialog>
+
+            </div>
+
+            <div class="row">
+
+                <p-fieldset class="ui-g-12" legend="* Legenda" *ngIf="dadosProdutoCenario.length > 0">
+
+                    <div class="ui-g-12 ui-md-3 pl-3 mr-1"
+                        style="background-color:#EE9EAF;border-radius: 2px !important">
+                        <div class="ui-g ">
+                            <i class="fa fa-database mr-2" style="position: relative;top: 15px"></i>
+                            <div>
+                                <div style="font-size: 28px"><b>584</b></div>
+                                <div style="font-size: 14.5px">Produto(s) Inexistente(s) na Base Geral</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-2 pl-3 mr-1"
+                        style="background-color:#D9C7DD;border-radius: 2px !important">
+                        <div class="ui-g ">
+                            <i class="fa fa-database mr-2" style="position: relative;top: 15px"></i>
+                            <div>
+                                <div style="font-size: 28px"><b>208</b></div>
+                                <div style="font-size: 14.5px">Produto(s) Inativo(s)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-2 pl-3 mr-1"
+                        style="background-color:#B6DEF7;border-radius: 2px !important">
+                        <div class="ui-g ">
+                            <i class="fa fa-database mr-2" style="position: relative;top: 15px"></i>
+                            <div>
+                                <div style="font-size: 28px"><b>{{produtosValidados}}</b></div>
+                                <div style="font-size: 14.5px">Produto(s) Validado(s)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-2 pl-3 mr-1 " style="background-color: #FFE399;border-radius: 2px !important">
+
+                        <div class="ui-g ">
+                            <i class="fa fa-exclamation-triangle mr-2" style="position: relative;top: 15px"></i>
+                            <div>
+                                <div style="font-size: 28px"><b>17580 </b></div>
+                                <div style="font-size: 14.5px">Produto(s) Pendente(s)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-2 pl-3" style="background-color: #EE9EAF;border-radius: 2px !important">
+                        <div class="ui-g ">
+                            <i class="fa fa-minus-circle mr-2" style="position: relative;top: 15px"></i>
+                            <div>
+                                <div style="font-size: 28px;"><b>17580</b></div>
+                                <div style="font-size: 14.5px">Produto(s) Divergente(s)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </p-fieldset>
+
+
+            </div>
+        </div>
+
+        <div *ngIf="renderizarProduto">
+            <div class="form-body">
+                <div class="row">
+
+                    <p-messages class="ui-g-12" [(value)]="msgs">
+                    </p-messages>
+
+                    <p-fieldset class="ui-g-12" legend="Regra Selecionada" [toggleable]="true">
+                        <div class="ui-g-12 ui-md-2">
+                            <input class="form-control" type="text" pInputText readonly="true"
+                                [(ngModel)]="regraInformada" style="text-align: justify" />
+
+                        </div>
+                        <p-dialog header="Regras" [(visible)]="displayRegras" [modal]="true" [responsive]="true"
+                            [style]="{width: '240px'}" [minY]="70" [maximizable]="false" [baseZIndex]="10000">
+                            <div class="row">
+                                <div class="ui-g-12">
+                                    <label style="font-weight: bold">Selecione :</label>
+                                    <div class="ui-g-12" *ngFor="let item of listaRegras; let indx = index">
+                                        <div *ngIf="item.value !== null">
+                                            <button class="ui-g-12" type="button" pButton
+                                                [icon]="item.value != regraSelecionadaEdit ? 'pi pi-plus':'fa fa-edit'"
+                                                (click)="closeDialog(item.value)" style="text-align: center;"
+                                                [label]="item.label"></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </p-dialog>
+
+                        <div class="ui-g-12 ui-md-4">
+                            <button class="mr-1" label="Editar" (click)="showDialog()" icon="fa fa-edit"
+                                pButton></button>
+                            <!-- <button *ngIf="!isDisabledField" label="Restaurar Padrão" (click)="restoreDataOnInit()"
+                                icon="fa fa-retweet" pButton></button> -->
+                        </div>
+
+                    </p-fieldset>
+                </div>
+                <p-tabView>
+                    <p-tabPanel leftIcon="fa fa-file-text" header="Dados do Produto">
+                        <div class="row">
+                            <inputText md="2" label="Código" disabled="true"
+                                [(ngModel)]="produtoSelecionado.produtoCliente.codigoProduto">
+                            </inputText>
+                            <inputText md="2" label="EAN" disabled="true"
+                                [(ngModel)]="produtoSelecionado.produtoCliente.ean">
+                            </inputText>
+                            <inputText md="8" label="Descrição do Produto" disabled="true"
+                                [(ngModel)]="produtoSelecionado.produtoCliente.nomeProduto">
+                            </inputText>
+                        </div>
+
+                        <div class="row">
+
+                            <div class=" ui-g-12 ui-md-2">
+                                <inputText md="12" label="NCM" maxlength="8"
+                                    [disabled]="produtoSelecionado.produtoCliente.isProdutoGeral && (produtoSelecionado.produtoCliente.ncmPadrao!=null && produtoSelecionado.produtoCliente.ncmPadrao!='' &&produtoSelecionado.produtoCliente.ncmInformado===produtoSelecionado.produtoCliente.ncmPadrao) "
+                                    [(ngModel)]="produtoSelecionado.produtoCliente.ncmInformado"></inputText>
+                                <div class="ui-md-12"
+                                    *ngIf="produtoSelecionado.produtoCliente.ncmPadrao!=null && produtoSelecionado.produtoCliente.ncmPadrao!='' &&produtoSelecionado.produtoCliente.ncmInformado!==produtoSelecionado.produtoCliente.ncmPadrao">
+                                    <label style="color:#B20100 !important;cursor: pointer;"
+                                        (click)="produtoSelecionado.produtoCliente.ncmInformado=produtoSelecionado.produtoCliente.ncmPadrao">*
+                                        NCM sugerido :
+                                        <u>{{produtoSelecionado.produtoCliente.ncmPadrao}}</u></label></div>
+                            </div>
+                            <div class="ui-g-12 ui-md-2">
+                                <inputText md="12" label="CEST" maxlength="7"
+                                    [disabled]="produtoSelecionado.produtoCliente.isProdutoGeral && (produtoSelecionado.produtoCliente.cestPadrao!=null && produtoSelecionado.produtoCliente.cestInformado===produtoSelecionado.produtoCliente.cestPadrao)"
+                                    [(ngModel)]="produtoSelecionado.produtoCliente.cestInformado"></inputText>
+                                <div class="ui-md-12"
+                                    *ngIf="(produtoSelecionado.produtoCliente.cestPadrao!=null && produtoSelecionado.produtoCliente.cestPadrao!='' && produtoSelecionado.produtoCliente.cestInformado!==produtoSelecionado.produtoCliente.cestPadrao)">
+                                    <label style="color: #B20100 !important;cursor: pointer;"
+                                        (click)="produtoSelecionado.produtoCliente.cestInformado=produtoSelecionado.produtoCliente.cestPadrao">*
+                                        CEST sugerido :
+                                        <u>{{produtoSelecionado.produtoCliente.cestPadrao}}</u></label></div>
+                            </div>
+                        </div>
+
+                    </p-tabPanel>
+
+                    <p-tabPanel leftIcon="fa fa-building-o" header="Tributação Federal">
+
+                        <label><i class="fa fa-bar-chart"></i><b> PIS </b></label>
+                        <hr>
+
+                        <div class="row">
+                            <p-fieldset legend="Saída" class="ui-g-12">
+
+                                <div class="ui-g-12 ui-md-10">
+                                    <label>CST</label><br>
+                                    <p-dropdown
+                                        [(ngModel)]="produtoSelecionado.tributoFederalInformado.cstPisSaidaInformado"
+                                        [style]="{width: '100%','border':'1px solid #00B5B8'}"
+                                        [options]="listaCSTPisCofins" [disabled]="isDisabledField">
+                                    </p-dropdown><br>
+                                    <div class="ui-md-12"
+                                        *ngIf="regraSelecionada == produtoSelecionado.dominioRegrasInformado && produtoSelecionado.tributoFederalPadrao.cstPisSaidaPadrao!=null && produtoSelecionado.tributoFederalPadrao.cstPisSaidaPadrao!='' && produtoSelecionado.tributoFederalPadrao.cstPisSaidaPadrao!==produtoSelecionado.tributoFederalInformado.cstPisSaidaInformado">
+                                        <label style="color: #B20100 !important;cursor: pointer;"
+                                            (click)="produtoSelecionado.tributoFederalInformado.cstPisSaidaInformado=produtoSelecionado.tributoFederalPadrao.cstPisSaidaPadrao">*
+                                            CST PIS sugerido:
+                                            <u>{{produtoSelecionado.tributoFederalPadrao.cstPisSaidaPadrao}}</u></label>
+                                    </div>
+                                </div>
+
+                                <div class="ui-g-12 ui-md-2">
+                                    <inputDecimal md="12" label="Alíquota" [disabled]="isDisabledField"
+                                        [(ngModel)]="produtoSelecionado.tributoFederalInformado.aliquotaPisSaidaInformado">
+                                    </inputDecimal>
+                                    <div class="ui-md-12"
+                                        *ngIf="regraSelecionada == produtoSelecionado.dominioRegrasInformado && produtoSelecionado.tributoFederalPadrao.aliquotaPisSaidaPadrao!=null && (produtoSelecionado.tributoFederalPadrao.aliquotaPisSaidaPadrao | number)!==(produtoSelecionado.tributoFederalInformado.aliquotaPisSaidaInformado | number)">
+                                        <label style="color: #B20100 !important;cursor: pointer;"
+                                            (click)="produtoSelecionado.tributoFederalInformado.aliquotaPisSaidaInformado=produtoSelecionado.tributoFederalPadrao.aliquotaPisSaidaPadrao">*
+                                            Alíq. PIS sugerido:
+                                            <u>{{produtoSelecionado.tributoFederalPadrao.aliquotaPisSaidaPadrao | number}}</u></label>
+                                    </div>
+                                </div>
+
+                            </p-fieldset>
+                        </div>
+
+                        <label><i class="fa fa-bar-chart"></i><b> COFINS </b></label>
+                        <hr>
+                        <div class="row">
+                            <p-fieldset legend="Saída" class="ui-g-12">
+
+                                <div class="ui-g-12 ui-md-10">
+                                    <label>CST</label><br>
+                                    <p-dropdown [disabled]="isDisabledField"
+                                        [(ngModel)]="produtoSelecionado.tributoFederalInformado.cstCofinsSaidaInformado"
+                                        [style]="{width: '100%','border':'1px solid #00B5B8'}"
+                                        [options]="listaCSTPisCofins">
+                                    </p-dropdown>
+                                    <div class="ui-md-12"
+                                        *ngIf="regraSelecionada == produtoSelecionado.dominioRegrasInformado && produtoSelecionado.tributoFederalPadrao.cstCofinsSaidaPadrao!=null && produtoSelecionado.tributoFederalPadrao.cstCofinsSaidaPadrao!='' && produtoSelecionado.tributoFederalPadrao.cstCofinsSaidaPadrao!==produtoSelecionado.tributoFederalInformado.cstCofinsSaidaInformado">
+                                        <label style="color: #B20100 !important;cursor: pointer"
+                                            (click)="produtoSelecionado.tributoFederalInformado.cstCofinsSaidaInformado=produtoSelecionado.tributoFederalPadrao.cstCofinsSaidaPadrao">*
+                                            CST COFINS sugerido:
+                                            <u>{{produtoSelecionado.tributoFederalPadrao.cstCofinsSaidaPadrao}}</u></label>
+                                    </div>
+                                </div>
+
+
+                                <div class="ui-g-12 ui-md-2">
+                                    <inputDecimal md="12" label="Alíquota" [disabled]="isDisabledField"
+                                        [(ngModel)]="produtoSelecionado.tributoFederalInformado.aliquotaCofinsSaidaInformado">
+                                    </inputDecimal>
+                                    <div class="ui-md-12"
+                                        *ngIf="regraSelecionada == produtoSelecionado.dominioRegrasInformado && produtoSelecionado.tributoFederalPadrao.aliquotaCofinsSaidaPadrao!=null && (produtoSelecionado.tributoFederalPadrao.aliquotaCofinsSaidaPadrao | number)!==(produtoSelecionado.tributoFederalInformado.aliquotaCofinsSaidaInformado | number)">
+                                        <label style="color: #B20100 !important;cursor: pointer;"
+                                            (click)="produtoSelecionado.tributoFederalInformado.aliquotaCofinsSaidaInformado=produtoSelecionado.tributoFederalPadrao.aliquotaCofinsSaidaPadrao">*
+                                            Alíq. COFINS sugerido:
+                                            <u>{{produtoSelecionado.tributoFederalPadrao.aliquotaCofinsSaidaPadrao | number}}</u></label>
+                                    </div>
+                                </div>
+                            </p-fieldset>
+                        </div>
+                        <espaco></espaco>
+                        <label><i class="fa fa-bar-chart"></i><b> IPI </b></label>
+                        <hr>
+                        <div class="row">
+                            <p-fieldset legend="Saída" class="ui-g-12">
+
+                                <div class="ui-g-12 ui-md-10">
+                                    <label>CST</label><br>
+                                    <p-dropdown [disabled]="isDisabledField"
+                                        [(ngModel)]="produtoSelecionado.tributoFederalInformado.cstIpiSaidaInformado"
+                                        [style]="{width: '100%','border':'1px solid #00B5B8'}"
+                                        [options]="listaCSTIPISaida">
+                                    </p-dropdown><br>
+                                    <div class="ui-md-12"
+                                        *ngIf="regraSelecionada == produtoSelecionado.dominioRegrasInformado && produtoSelecionado.tributoFederalPadrao.cstIpiSaidaPadrao!=null && produtoSelecionado.tributoFederalPadrao.cstIpiSaidaPadrao!='' && produtoSelecionado.tributoFederalPadrao.cstIpiSaidaPadrao!==produtoSelecionado.tributoFederalInformado.cstIpiSaidaInformado">
+                                        <label style="color: #B20100 !important;cursor: pointer;"
+                                            (click)="produtoSelecionado.tributoFederalInformado.cstIpiSaidaInformado=produtoSelecionado.tributoFederalPadrao.cstIpiSaidaPadrao">*
+                                            CST IPI sugerido:
+                                            <u>{{produtoSelecionado.tributoFederalPadrao.cstIpiSaidaPadrao}}</u></label>
+                                    </div>
+                                </div>
+
+
+                                <div class="ui-g-12 ui-md-2">
+                                    <inputDecimal md="12" label="Alíquota" [disabled]="isDisabledField"
+                                        [(ngModel)]="produtoSelecionado.tributoFederalInformado.aliquotaIpiSaidaInformado">
+                                    </inputDecimal>
+                                    <div class="ui-md-12"
+                                        *ngIf="regraSelecionada == produtoSelecionado.dominioRegrasInformado && produtoSelecionado.tributoFederalPadrao.aliquotaIpiSaidaPadrao!=null && (produtoSelecionado.tributoFederalPadrao.aliquotaIpiSaidaPadrao | number)!==(produtoSelecionado.tributoFederalInformado.aliquotaIpiSaidaInformado | number)">
+                                        <label style="color: #B20100 !important;cursor: pointer;"
+                                            (click)="produtoSelecionado.tributoFederalInformado.aliquotaIpiSaidaInformado=produtoSelecionado.tributoFederalPadrao.aliquotaIpiSaidaPadrao">*
+                                            Alíq. IPI sugerido:
+                                            <u>{{produtoSelecionado.tributoFederalPadrao.aliquotaIpiSaidaPadrao | number}}</u></label>
+                                    </div>
+                                </div>
+                            </p-fieldset>
+                        </div>
+
+
+                    </p-tabPanel>
+                    <p-tabPanel leftIcon="fa fa-building-o" header="Tributação Estadual">
+
+                        <label><i class="fa fa-bar-chart"></i><b> ICMS </b></label>
+                        <hr>
+
+                        <div class="row">
+                            <p-fieldset legend="Saída" class="ui-g-12">
+
+                                <div class="ui-g-10">
+                                    <label>CST</label><br>
+                                    <p-dropdown [disabled]="isDisabledField"
+                                        [(ngModel)]="produtoSelecionado.tributoEstadualInformado.cstIcmsSaidaInformado"
+                                        [style]="{width: '100%','border':'1px solid #00B5B8'}" [options]="listaCSTIcms">
+                                    </p-dropdown><br>
+                                    <div class="ui-md-12"
+                                        *ngIf="regraSelecionada == produtoSelecionado.dominioRegrasInformado && produtoSelecionado.tributoEstadualPadrao.cstIcmsSaidaPadrao!=null && produtoSelecionado.tributoEstadualPadrao.cstIcmsSaidaPadrao !='' && produtoSelecionado.tributoEstadualPadrao.cstIcmsSaidaPadrao !=produtoSelecionado.tributoEstadualInformado.cstIcmsSaidaInformado">
+                                        <label style="color: #B20100 !important;cursor: pointer;"
+                                            (click)="produtoSelecionado.tributoEstadualInformado.cstIcmsSaidaInformado=produtoSelecionado.tributoEstadualPadrao.cstIcmsSaidaPadrao">*
+                                            CST ICMS sugerido:
+                                            <u>{{produtoSelecionado.tributoEstadualPadrao.cstIcmsSaidaPadrao}}</u></label>
+                                    </div>
+                                </div>
+
+
+                                <div class="ui-g-12 ui-md-2">
+                                    <inputDecimal md="12" label="Alíquota" [disabled]="isDisabledField"
+                                        [(ngModel)]="produtoSelecionado.tributoEstadualInformado.aliquotaIcmsSaidaInformado">
+                                    </inputDecimal>
+                                    <div class="ui-md-12"
+                                        *ngIf="regraSelecionada == produtoSelecionado.dominioRegrasInformado && produtoSelecionado.tributoEstadualPadrao.aliquotaIcmsSaidaPadrao!=null && (produtoSelecionado.tributoEstadualPadrao.aliquotaIcmsSaidaPadrao | number)!==(produtoSelecionado.tributoEstadualInformado.aliquotaIcmsSaidaInformado | number)">
+                                        <label style="color: #B20100 !important;cursor: pointer"
+                                            (click)="produtoSelecionado.tributoEstadualInformado.aliquotaIcmsSaidaInformado=produtoSelecionado.tributoEstadualPadrao.aliquotaIcmsSaidaPadrao">*
+                                            Alíq. ICMS sugerido:
+                                            <u>{{produtoSelecionado.tributoEstadualPadrao.aliquotaIcmsSaidaPadrao | number}}</u></label>
+                                    </div>
+                                </div>
+
+                            </p-fieldset>
+                        </div>
+
+                    </p-tabPanel>
+
+                </p-tabView>
+                <br />
+            </div>
+        </div>
+
+
+    </div>
+
+    <div *ngIf="!renderizarListagemCliente && renderizarProduto">
+
+        <div style="padding: 5px;background-color: #136A8A;">
+            <button label="Confirmar" (click)="confirmProdutoCliente()" pButton icon="fa fa-check"></button>
+
+            <button pButton [label]="renderizarProduto?'Cancelar':'Fechar'" icon="fa fa-times"
+                (click)="cancel()"></button>
+        </div>
+
+    </div>
+
+    <p-toast [baseZIndex]="5000"></p-toast>
+</processo>

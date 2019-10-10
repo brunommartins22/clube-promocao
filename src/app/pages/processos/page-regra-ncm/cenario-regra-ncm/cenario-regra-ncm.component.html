@@ -1,0 +1,60 @@
+<crud [componente]="this" titulo=" cenario de regra por ncm" permissao="2.02.04">
+    <div filtro class="row">
+        <inputText md="6" label="NCM" placeholder="Digite para localizar" name="campoFiltro" [(ngModel)]="campoFiltro"
+            (onkeyEnter)="inputFiltroKeyDown()"></inputText>
+        <div class="col-md-3">
+            <label>Regime Configurado</label><br>
+            <p-dropdown [options]="filtroRegime" [(ngModel)]="filtroRegimeConfigurado"
+                [style]="{'border':'1px solid #00B5B8'}"></p-dropdown>
+        </div>
+        <div class="col-md-3">
+            <label>Regime Não Configurado</label><br>
+            <p-dropdown [options]="filtroRegime" [(ngModel)]="filtroRegimeNaoConfigurado"
+                [style]="{'border':'1px solid #00B5B8'}"></p-dropdown>
+        </div>
+    </div>
+
+    <div listagem>
+
+        <!-- {{objetoSelecionado|json}}  -->
+
+        <div class="table-responsive">
+            <data-table [lista]="dados" [loading]="loading" [cols]="cols" (change)="setObjeto($event)"
+                (doubleClick)="acaoAlterar($event)">
+            </data-table>
+        </div>
+    </div>
+
+    <div detalhes>
+
+        <div class="form-body row">
+            <div *ngIf="this.estadoTela == 'Alterar' ? false : true" class="col-md-12 mb-1">
+                <label>Cenário</label><br>
+                <p-dropdown [options]="listaCenarios" [(ngModel)]="objetoSelecionado.id.cenarioId"
+                    [style]="{'border':'1px solid #00B5B8'}" >
+                </p-dropdown>
+            </div>
+            <!-- <inputText md="2" label="CST PIS Ent." [(ngModel)]="objetoSelecionado.tributoFederalPadrao.cstPisEntradaPadrao"></inputText>
+                <inputDecimal md="2" label="Al. PIS Ent." [(ngModel)]="objetoSelecionado.tributoFederalPadrao.aliquotaPisEntradaPadrao"></inputDecimal> -->
+            <inputText md="2" label="CST PIS" [(ngModel)]="objetoSelecionado.tributoFederal.cstPisSaidaPadrao">
+            </inputText>
+            <inputDecimal md="2" label="Al. PIS" [(ngModel)]="objetoSelecionado.tributoFederal.aliquotaPisSaidaPadrao">
+            </inputDecimal>
+            <!-- <inputText md="2" label="CST COFINS Ent." [(ngModel)]="objetoSelecionado.tributoFederalPadrao.cstCofinsEntradaPadrao"></inputText>
+                <inputDecimal md="2" label="Al. COFINS Ent." [(ngModel)]="objetoSelecionado.tributoFederalPadrao.aliquotaCofinsEntradaPadrao"></inputDecimal> -->
+            <inputText md="2" label="CST COFINS" [(ngModel)]="objetoSelecionado.tributoFederal.cstCofinsSaidaPadrao">
+            </inputText>
+            <inputDecimal md="2" label="Al. COFINS"
+                [(ngModel)]="objetoSelecionado.tributoFederal.aliquotaCofinsSaidaPadrao"></inputDecimal>
+            <!-- <inputText md="2" label="CST IPI Ent." [(ngModel)]="objetoSelecionado.tributoFederalPadrao.cstIpiEntradaPadrao"></inputText>
+                <inputDecimal md="2" label="Al. IPI Ent." [(ngModel)]="objetoSelecionado.tributoFederalPadrao.aliquotaIpiEntradaPadrao"></inputDecimal> -->
+            <inputText md="2" label="CST IPI" [(ngModel)]="objetoSelecionado.tributoFederal.cstIpiSaidaPadrao">
+            </inputText>
+            <inputDecimal md="2" label="Al. IPI" [(ngModel)]="objetoSelecionado.tributoFederal.aliquotaIpiSaidaPadrao">
+            </inputDecimal>
+
+        </div>
+        <!-- {{objetoSelecionado|json}}  -->
+    </div>
+
+</crud>

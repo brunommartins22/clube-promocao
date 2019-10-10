@@ -1,0 +1,83 @@
+<crud [componente]="this" titulo=" regra por regime tributario" permissao="2.01">
+    <div filtro class="row">
+
+    </div>
+
+    <div detalhes>
+        <div class="row">
+            <div class="ui-g-12 ui-md-3">
+                <label>Regime Tributário</label><br>
+                <p-dropdown [options]="regime" [(ngModel)]="objetoSelecionado.regimeTributario"
+                    [style]="{width: '100%'}" [disabled]="(this.estadoTela == 'Alterar' ? true : false) || disableId">
+                </p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-9">
+                <label>Cenário</label><br>
+                <p-dropdown [options]="listaCenarios" [(ngModel)]="objetoSelecionado.cenario" [style]="{width: '100%'}"
+                    [disabled]="(this.estadoTela == 'Alterar' ? true : false) || disableId">
+                </p-dropdown>
+            </div>
+        </div>
+        <p-tabView>
+            <p-tabPanel leftIcon="fa fa-file-text" header="Tributação Federal">
+                <div class="row">
+                    <p-fieldset legend="PIS" class="ui-g-12">
+                        <div class="ui-g-12 ui-md-10">
+                            <label>CST</label><br>
+                            <p-dropdown [(ngModel)]="objetoSelecionado.tributoFederalPadrao.cstPisSaidaPadrao"
+                                [style]="{width: '100%'}" [options]="listaCSTPisCofins">
+                            </p-dropdown>
+                        </div>
+                        <inputDecimal md="2" label="Alíquota"
+                            [(ngModel)]="objetoSelecionado.tributoFederalPadrao.aliquotaPisSaidaPadrao">
+                        </inputDecimal>
+                    </p-fieldset>
+
+                    <p-fieldset legend="COFINS" class="ui-g-12">
+                        <div class="ui-g-12 ui-md-10">
+                            <label>CST</label><br>
+                            <p-dropdown [(ngModel)]="objetoSelecionado.tributoFederalPadrao.cstCofinsSaidaPadrao"
+                                [style]="{width: '100%'}" [options]="listaCSTPisCofins">
+                            </p-dropdown>
+                        </div>
+
+                        <inputDecimal md="2" label="Alíquota"
+                            [(ngModel)]="objetoSelecionado.tributoFederalPadrao.aliquotaCofinsSaidaPadrao">
+                        </inputDecimal>
+                    </p-fieldset>
+
+                    <p-fieldset legend="IPI" class="ui-g-12">
+                        <div class="ui-g-12 ui-md-10">
+                            <label>CST</label><br>
+                            <p-dropdown [(ngModel)]="objetoSelecionado.tributoFederalPadrao.cstIpiSaidaPadrao"
+                                [style]="{width: '100%'}" [options]="listaCSTIPISaida">
+                            </p-dropdown>
+                        </div>
+
+                        <inputDecimal md="2" label="Alíquota"
+                            [(ngModel)]="objetoSelecionado.tributoFederalPadrao.aliquotaIpiSaidaPadrao">
+                        </inputDecimal>
+                    </p-fieldset>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel leftIcon="fa fa-file-text" header="Tributação Estadual">
+                <div class="row">
+                    <p-fieldset legend="ICMS" class="ui-g-12">
+                        <div class="ui-g-12 ui-md-10">
+                            <label>CST</label><br>
+                            <p-dropdown [(ngModel)]="objetoSelecionado.tributoEstadualPadrao.cstIcmsSaidaPadrao"
+                                [style]="{width: '100%'}" [options]="listaCSTICMSSaida">
+                            </p-dropdown>
+                        </div>
+                        <inputDecimal md="2" label="Alíquota"
+                            [(ngModel)]="objetoSelecionado.tributoEstadualPadrao.aliquotaIcmsSaidaPadrao">
+                        </inputDecimal>
+                    </p-fieldset>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+
+    </div>
+
+
+</crud>

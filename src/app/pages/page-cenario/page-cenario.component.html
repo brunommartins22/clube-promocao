@@ -1,0 +1,24 @@
+<crud [componente]="this" titulo="Cenário" permissao="1.05">
+
+
+    <div detalhes>
+
+
+        <div class="row" *ngIf="estadoTela !== 'Inserir'">
+            <inputText id="id" md="2" disabled="true" label="ID" [(ngModel)]="objetoSelecionado.id"></inputText>
+        </div>
+
+        <div class="row">
+            <div class="ui-g-12 ui-md-2">
+                <label>Estado</label><br>
+                <p-dropdown selectId="estado2" [options]="listaEstados" [filter]="true"
+                    [(ngModel)]="objetoSelecionado.estado" [style]="{'width':'100%','border':'1px solid #00B5B8'}">
+                </p-dropdown>
+            </div>
+            <inputText id="nomeCenario" md="10" label="Nome do Cenário" maxlength="250"
+                [(ngModel)]="objetoSelecionado.nomeCenario"></inputText>
+        </div>
+
+
+    </div>
+</crud>

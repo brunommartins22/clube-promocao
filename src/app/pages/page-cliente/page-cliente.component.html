@@ -1,0 +1,276 @@
+<crud *ngIf="!historicoArquivos" [componente]="this" titulo="Cliente" permissao="1.01">
+    <div filtro>
+
+        <div class="row">
+
+            <inputText md="2" label="Código" [(ngModel)]="codigoFiltro" (onkeyEnter)="filtrar()">
+            </inputText>
+
+
+            <inputText id="nomeFiltro" md="8" label="Razão Social/Nome" [(ngModel)]="nomeFiltro"
+                (onkeyEnter)="filtrar()">
+            </inputText>
+
+            <div class="ui-g-12 ui-md-2">
+                <label>Tipo Pessoa</label><br>
+                <p-dropdown id="tipoClienteFiltro" (onChange)="filtrar()" [options]="pessoas"
+                    [(ngModel)]="tipoPessoaFiltro" [style]="{'width':'100%'}">
+                </p-dropdown>
+            </div>
+        </div>
+    </div>
+
+    <div detalhes>
+        <p-tabView [(activeIndex)]="activeIndex">
+            <p-tabPanel leftIcon="fa fa-address-card-o" header="Dados do Cliente">
+
+                <div class="row">
+                    <inputText *ngIf="estadoTela !=='Inserir'" id="id" md="2" disabled="true" label="Código"
+                        [(ngModel)]="objetoSelecionado.id">
+                    </inputText>
+
+
+                    <inputText id="razaoSocial" #razao maxlength="255" md="12"
+                        [label]="objetoSelecionado.tipoCliente == 'FISICA' ? 'Nome do Cliente ': 'Razão Social'"
+                        [(ngModel)]="objetoSelecionado.razaoSocial">
+                    </inputText>
+
+                    <div class="ui-g-12 ui-md-3">
+                        <label>Tipo Pessoa</label><br>
+                        <p-dropdown id="tipoCliente" [options]="pessoas" maxlength="30"
+                            [(ngModel)]="objetoSelecionado.tipoCliente" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="ui-g-12 ui-md-3">
+                        <label>Tipo Regime</label><br>
+                        <p-dropdown id="tipoRegime" [options]="regimes" maxlength="30"
+                            [(ngModel)]="objetoSelecionado.tipoRegime" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+
+                    <inputText md="3" label="Número do Contrato" name="numeroContrato"
+                        [(ngModel)]="objetoSelecionado.numeroContrato"></inputText>
+
+                    <div class="ui-g-12 ui-md-3 pl-5 pt-4">
+                        <p-checkbox label="Cliente Ativo" name="ativo" binary="true"
+                            [(ngModel)]="objetoSelecionado.ativo"></p-checkbox>
+                    </div>
+                
+                    <inputText id="nomeFantasia" md="8" label="Nome Fantasia" maxlength="255"
+                        *ngIf="objetoSelecionado.tipoCliente == 'JURIDICA'" (onkeyEnter)="keytab($event)"
+                        [(ngModel)]="objetoSelecionado.nomeFantasia">
+                    </inputText>
+
+                    <inputMask id="cpfCnpj" maxlength="20" md="2" class="abc"
+                        [label]="objetoSelecionado.tipoCliente == 'FISICA' ? 'CPF': 'CNPJ'"
+                        [mask]="objetoSelecionado.tipoCliente == 'FISICA' ? '999.999.999-99': '99.999.999/9999-99'"
+                        [(ngModel)]="objetoSelecionado.cpfCnpj"
+                        [placeholder]="objetoSelecionado.tipoCliente == 'FISICA' ? '___.___.___-__': '__.___.___/____-__'">
+                    </inputMask>
+
+                    <inputText id="rgIe" maxlength="12" md="2"
+                        [label]="objetoSelecionado.tipoCliente == 'FISICA' ? 'RG': 'Inscrição Estadual'"
+                        [(ngModel)]="objetoSelecionado.rgIe" class="form-control border-primary">
+                    </inputText>
+
+                    <inputText id="nomeResposavel" maxlength="255" md="6" label="Nome do Resposavel"
+                        *ngIf="objetoSelecionado.tipoCliente == 'JURIDICA'"
+                        [(ngModel)]="objetoSelecionado.nomeResposavel">
+                    </inputText>
+
+                    <inputText id="im" maxlength="12" md="2" label="Inscrição Municipal"
+                        *ngIf="objetoSelecionado.tipoCliente == 'JURIDICA'" [(ngModel)]="objetoSelecionado.im">
+                    </inputText>
+
+                    <inputText id="ieSt" maxlength="12" md="2" label="Inscrição Estadual ST "
+                        *ngIf="objetoSelecionado.tipoCliente == 'JURIDICA'" [(ngModel)]="objetoSelecionado.ieSt">
+                    </inputText>
+
+                    <inputText id="suframa" maxlength="12" md="2" label="Suframa"
+                        *ngIf="objetoSelecionado.tipoCliente == 'JURIDICA'" [(ngModel)]="objetoSelecionado.suframa">
+                    </inputText>
+
+
+                </div>
+            </p-tabPanel>
+            <p-tabPanel leftIcon="fa fa-map-marker" header="Endereço/Contato">
+                <div class="form-body">
+                    <formendereco [(objetoEnderecoSelecionado)]="objetoSelecionado.endereco"></formendereco>
+                </div> 
+                
+                <!-- {{objetoSelecionado.endereco|json}} -->
+            </p-tabPanel>
+            <p-tabPanel leftIcon="fa fa-tag" header="Cenários">
+                <div class="row" *ngIf="!renderizarCenario">
+                    <data-table [lista]="objetoSelecionado.cenarios" [cols]="cols2" (change)="setCenario($event)"
+                        (doubleClick)="editarCenario($event)" [showCaption]="true" [id]="'id'">
+                        <button label="Incluir" (click)="incluirCenario()" icon="fa fa-plus" pButton></button>
+
+                        <button label="Editar" (click)="editarCenario($event)" icon="fa fa-edit" pButton></button>
+
+                        <!-- <button label="Detalhes" icon="fa fa-edit" pButton></button>
+
+                        <button label="Atualizar" icon="pi pi-refresh" pButton></button> -->
+
+                        <button label="Remover" (click)="removerCenario()" icon="fa fa-trash" pButton></button>
+
+                    </data-table>
+
+                    <!-- <p-paginator [rows]="registrosPorPagina" [rowsPerPageOptions]="[10,20,30]"
+                        [totalRecords]="quantidadeRegistros" (onPageChange)="paginate($event)">
+                    </p-paginator>
+
+                    <espaco></espaco>
+                    <div style="text-align: center;padding: 5px">
+                         Registro de {{posicaoInicial + 1}} /
+                        {{posicaoInicial + (quantidadeRegistros
+        < registrosPorPagina ? quantidadeRegistros : registrosPorPagina)}}
+                        de um total de
+                        {{quantidadeRegistros}}
+                    </div> -->
+                </div>
+
+                <div *ngIf="renderizarCenario">
+                    <label><i class="fa fa-bar-chart"></i><b> Cenário </b></label>
+                    <hr>
+                    <div class="row">
+                        <div class="ui-g-12 ui-md-2 mr-3">
+
+                            <p-dropdown [disabled]="statusCenario=='3'" [options]="listaCenarios"
+                                [(ngModel)]="cenarioComboSelecionado" [style]="{'width':'100%'}" >
+                            </p-dropdown>
+
+
+                        </div>
+                        <div class="ui-g-12 ui-md-3">
+                            <button class="mr-1"
+                                [label]="statusCenario=='1'?'Adicionar':statusCenario=='2'?'Validar':'Remover'"
+                                (click)="adicionarCenario()"
+                                [icon]="statusCenario=='3'?'fa fa-trash':statusCenario=='2'?'fa fa-check':'fa fa-plus'"
+                                pButton></button>
+                            <button label="Cancelar" (click)="cancelarCenario()" icon="fa fa-times" pButton></button>
+                        </div>
+                    </div>
+
+
+                </div>
+                <espaco></espaco>
+            </p-tabPanel>
+
+            <p-tabPanel leftIcon="fa fa-list-alt" header="Atividades">
+                <div class="row" *ngIf="!renderizarAtividade">
+                    <data-table [lista]="objetoSelecionado.atividades" [cols]="colsAtividade"
+                        (change)="setAtividade($event)" (doubleClick)="editarAtividade($event)" [showCaption]="true"
+                        [id]="'id'">
+                        <button label="Incluir" (click)="incluirAtividade()" icon="fa fa-plus" pButton></button>
+
+                        <button label="Editar" (click)="editarAtividade($event)" icon="fa fa-edit" pButton></button>
+
+                        <button label="Remover" (click)="removerAtividade()" icon="fa fa-trash" pButton></button>
+
+                    </data-table>
+
+                </div>
+
+                <div *ngIf="renderizarAtividade">
+                    <label><i class="fa fa-bar-chart"></i><b> Atividades </b></label>
+                    <hr>
+                    <div class="row">
+
+                        <inputText md="2" label="CNAE" name="cnae" [f11]="true" (funF11)="openModalCnae()"
+                            [(ngModel)]="cnaeSelecionado.codigo" (onChange)="selecionarCnae()"></inputText>
+                        <inputText md="6" label="Atividade" name="descricao" [(ngModel)]="cnaeSelecionado.descricao"
+                            [disabled]="true"></inputText>
+
+                        <div class="ui-g-12 ui-md-3">
+                            <button class="mr-1 mt-3"
+                                [label]="statusAtividade=='1'?'Adicionar':statusAtividade=='2'?'Validar':'Remover'"
+                                (click)="adicionarAtividade()"
+                                [icon]="statusAtividade=='3'?'fa fa-trash':statusAtividade=='2'?'fa fa-check':'fa fa-plus'"
+                                pButton></button>
+                            <button class="mt-3" label="Cancelar" (click)="cancelarAtividade()" icon="fa fa-times"
+                                pButton></button>
+                        </div>
+                    </div>
+
+                </div>
+                <espaco></espaco>
+            </p-tabPanel>
+        </p-tabView>
+
+    </div>
+
+    <div botoes style="display: inline-block">
+        <button label="Arquivos recebidos" (click)="acaoArquivosRecebidos()" icon="fa fa-edit" pButton></button>
+    </div>
+</crud>
+
+<div class="row" *ngIf="historicoArquivos">
+
+    <div class="content-body">
+
+        <div class="ui-g">
+            <div class="ui-g-12">
+
+                <div class="card card-w-title">
+                    <h1><i class="fa fa-folder"></i> Histórico de Arquivos Recebidos do
+                        Cliente {{objetoSelecionado.razaoSocial}}</h1>
+
+                    <div style="height: 10px"></div>
+
+                    <div class="table-responsive">
+
+                        <p-blockUI [blocked]="processandoArquivos">
+                            <i class="pi pi-spin pi-spinner"
+                                style="position:absolute;top:50%;left:50%;font-size: 3em"></i>
+                        </p-blockUI>
+
+                        <p-table [value]="arquivosEnviados" dataKey="id">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 3em"></th>
+                                    <th>Arquivo</th>
+                                    <th>Situação</th>
+                                    <th style="width: 80px">Registros</th>
+                                    <th style="width: 100px">Processados</th>
+                                    <th style="width: 150px">Inicio Processo</th>
+                                    <th style="width: 150px">Fim Processo</th>
+                                    <th style="width: 150px">Duração</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item let-expanded="expanded">
+                                <tr>
+                                    <td>
+                                        <a href="#" [pRowToggler]="item">
+                                            <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                                        </a>
+                                    </td>
+                                    <td>{{item.nome}}</td>
+                                    <td>{{item.descricaoStatus}}</td>
+                                    <td>{{item.numeroRegistros}}</td>
+                                    <td>{{item.numeroRegistrosProcessados}}</td>
+                                    <td>{{item.dataInicioProcesso | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                                    <td>{{item.dataFimProcesso | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                                    <td *ngIf="item.duracaoProcesso > 0">
+                                        {{item.duracaoProcesso | currency:'BRL':'':'1.2-2'}} Segundos</td>
+                                    <td *ngIf="item.duracaoProcesso === undefined">{{item.duracaoProcesso}}</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="rowexpansion" let-item>
+                                <tr>
+                                    <td colspan="5">Linhas com erro: {{item.erros}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+
+                        <div style="padding: 5px;" class="primaryColor mt-5">
+                            <button label="Voltar" (click)="voltarArquivosRecebidos()" icon="fa fa-edit"
+                                pButton></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
