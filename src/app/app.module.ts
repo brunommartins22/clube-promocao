@@ -87,25 +87,12 @@ import { RaizComponent } from './raiz/raiz.component';
 import { PadraoModule } from 'padrao';
 import { environment } from 'src/environments/environment';
 import { PageCidadeComponent } from './pages/page-cidade/page-cidade.component';
-import { PageClienteComponent } from './pages/page-cliente/page-cliente.component';
-
-import { PageClienteProdutoComponent } from './pages/page-cliente-produto/page-cliente-produto.component';
-import { PageCenarioComponent } from './pages/page-cenario/page-cenario.component';
-import { PageRegraNcmComponent } from './pages/processos/page-regra-ncm/page-regra-ncm.component';
-import { PageRegraRegimeComponent } from './pages/processos/page-regra-regime/page-regra-regime.component';
-import { CenarioRegraNcmComponent } from './pages/processos/page-regra-ncm/cenario-regra-ncm/cenario-regra-ncm.component';
-import { CenarioRegraRegimeComponent } from './pages/processos/page-regra-regime/cenario-regra-regime/cenario-regra-regime.component';
-import { PageDashboardComponent } from './pages/page-dashboard/page-dashboard.component';
-import { DadosService } from './pages/page-dashboard/dados.service';
-import { PageRegraProdutoComponent } from './pages/processos/page-regra-produto/page-regra-produto.component';
-import { PageUploadArquivoComponent } from './pages/processos/page-upload-arquivo/page-upload-arquivo.component';
-import { PageProdutoGeralComponent } from './pages/page-produto-geral/page-produto-geral.component';
 
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import ptBr from '@angular/common/locales/pt';
-import { PageCnaeComponent } from './pages/page-cnae/page-cnae.component';
 import { PageHomeComponent } from './pages/page-home/page-home.component';
+import { PageScantechConfigComponent } from './pages/page-scanntech-config/page-scantech-config.component';
 registerLocaleData(ptBr)
 
 @NgModule({
@@ -192,50 +179,20 @@ registerLocaleData(ptBr)
         AppSubMenuComponent,
         AppTopBarComponent,
         AppFooterComponent,
-        // DashboardDemoComponent,
-        // SampleDemoComponent,
-        // FormsDemoComponent,
-        // DataDemoComponent,
-        // PanelsDemoComponent,
-        // OverlaysDemoComponent,
-        // MenusDemoComponent,
-        // MessagesDemoComponent,
-        // MessagesDemoComponent,
-        // MiscDemoComponent,
-        // ChartsDemoComponent,
-        // EmptyDemoComponent,
-        // FileDemoComponent,
-        // DocumentationComponent,
-         RaizComponent,
+        RaizComponent,
 
 
         PageCidadeComponent,
-        PageClienteComponent,
-        PageClienteProdutoComponent,
-        PageCenarioComponent,
-        PageRegraNcmComponent,
-        PageRegraRegimeComponent,
-        CenarioRegraNcmComponent,
-        CenarioRegraRegimeComponent,
-        PageRegraProdutoComponent,
-        PageUploadArquivoComponent,
-        PageDashboardComponent,
-        PageRegraProdutoComponent,
-        PageProdutoGeralComponent,
-        PageCnaeComponent,
-        PageHomeComponent
+        PageHomeComponent,
+        PageScantechConfigComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
-        DadosService,
         { provide: LOCALE_ID, useValue: 'pt' }
     ],
     bootstrap: [AppComponent],
     entryComponents: [
-        CenarioRegraNcmComponent,
-        CenarioRegraRegimeComponent,
-        PageCnaeComponent,
-        PageClienteComponent
+
     ]
 })
 export class AppModule { }

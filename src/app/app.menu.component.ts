@@ -24,29 +24,17 @@ export class AppMenuComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.model = [
             { label: 'Home', icon: 'fa fa-fw fa-home', routerLink: ['/sys/home-page'] },
-            // {
-            //     label: 'dashboard', icon: 'fa fa-fw fa-plus-circle',
-            //     items: [
-            //         { label: 'Dashboard', icon: 'fa-area-chart ', routerLink: ['/sys/dashboard/'] },
-            //     ]
-            // },
+       
             {
                 label: 'Cadastros', icon: 'fa fa-fw fa-plus-circle', badge: 6,
                 items: [
-                    { label: 'Usuário', icon: 'fa fa-fw fa-user', routerLink: ['/sys/usuario/'] },
-                    { label: 'Cliente', icon: 'fa fa-fw fa-users', routerLink: ['/sys/cliente/'] },
-                    { label: 'Cenario', icon: 'fa fa-fw fa-tags', routerLink: ['/sys/cenario/'] },
-                    { label: 'Regra Regime', icon: 'fa fa-fw fa-cubes', routerLink: ['/sys/regra-regime'] },
-                    { label: 'Regra Ncm', icon: 'fa fa-fw fa-cubes', routerLink: ['/sys/regra-ncm'] },
-                    { label: 'Regra Produto', icon: 'fa fa-fw fa-cubes', routerLink: ['/sys/regra-produto'] }
+                    { label: 'Usuário', icon: 'fa fa-fw fa-user', routerLink: ['/sys/usuario/'] }
                 ]
             },
             {
-                label: 'Integração', icon: 'fa fa-fw fa-compress', badge: 3,
+                label: 'Relatórios', icon: 'fa fa-fw fa-compress', badge: 3,
                 items: [
-                    { label: 'Produto do Cliente', icon: 'fa fa-fw fa-code-fork', routerLink: ['/sys/integracao/'] },
-                    { label: 'Produto Geral', icon: 'fa fa-fw fa-database', routerLink: ['/sys/produtoGeral/'] },
-                    { label: 'Recebimento de Arquivo', icon: 'fa fa-fw fa-cloud-upload', routerLink: ['/sys/upload-arquivo'] }
+                    {}
                 ]
             },
             // {
@@ -68,6 +56,7 @@ export class AppMenuComponent implements OnInit, AfterViewInit {
             {
                 label: 'Configuração', icon: 'fa fa-fw fa-cog',
                 items: [
+                    { label: 'Scanntech', icon: 'fa fa-fw fa-setting', routerLink: ['/sys/configuracao-scanntech'] },
                     {
                         label: 'Layout', icon: 'fa fa-fw fa-bars', badge: 5,
                         items: [
