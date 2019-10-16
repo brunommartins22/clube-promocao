@@ -1,5 +1,258 @@
 <processo [componente]="this" [titulo]="tituloConfiguracao">
-    test
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <p-messages class="ui-g-12" [(value)]="msgsInfo" [closable]="false">
+            </p-messages>
+            <div *ngIf="!renderizarConfiguracao">
+                <div class="row">
+                    <div class="ui-g-12 ui-md-4 ui-lg-4">
+                        <div class="ui-g-10 mr-1">
+                            <label>Intervalo entre sincronizações(<i>min</i>)</label><br>
+                            <input type="text" class="ui-g-12" pInputText readonly="true"
+                                [(ngModel)]="intervalo" style="width:100%" />
+                            <p-slider [(ngModel)]="intervalo" [step]="5" min="5"
+                                max="60" class="ui-g-12" [style]="{'width':'100%'}"></p-slider>
+                        </div>
+                        <button *ngIf="intervalo!=configuracaoSelecionada.intervaloSincronizacao" class="mt-4" 
+                        icon="fa fa-refresh" title="Atualizar Intervalo da Configuração" (click)="atualizarConfiguracao()" pButton></button>
+                    </div>
+
+                    <div class="ui-g-12">
+                        <espaco></espaco>
+                        <p-table [value]="configuracaoSelecionada.configuracaoItem" dataKey="id" selectionMode="single"
+                            [resizableColumns]="true" [scrollable]="true" scrollHeight="330px"
+                            [(selection)]="configuracaoItemSelecionada" [responsive]="false"
+                            (onRowSelect)="onRowSelectConfiguracao($event)"
+                            (onRowUnselect)="onRowUnselectConfiguracao($event)">
+                            <ng-template pTemplate="caption">
+
+                                <div style="position: relative;top: -5px;">
+
+                                    <button label="Adicionar" (click)="adicionarConfiguracao()" icon="fa fa-plus"
+                                        pButton></button>
+
+                                    <button label="Editar" (click)="editarConfiguracao()" icon="fa fa-edit"
+                                        pButton></button>
+
+                                    <button label="Remover" icon="fa fa-trash" pButton></button>
+
+                                    <button label="Atualizar" icon="fa fa-refresh" pButton></button>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="text-align: center;width: 80px !important;">ID</th>
+                                    <th style="text-align: center;width: 150px !important;">Código da Empresa</th>
+                                    <th style="text-align: justify;width: 350px !important;">Nome da Empresa</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr [pSelectableRow]="item">
+                                    <td style="text-align: center;width: 80px !important;">{{item.id}}</td>
+                                    <td style="text-align: center;width: 150px !important;">{{item.codigoEmpresa}}</td>
+                                    <td style="text-align: justify;width: 350px !important;">
+                                        {{item.empresaPrincipal}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="renderizarConfiguracao" class="form-body">
+                <p-tabView>
+                    <p-tabPanel leftIcon="fa fa-list-alt" header="Dados Empresa">
+
+                        <div class="row">
+                            <div class="ui-g-12" *ngIf="!renderizarFilial">
+                                <div class="ui-g-12 ui-md-2">
+                                    <inputText md="12" placeholder="Código da empresa"
+                                        [(ngModel)]="configuracaoItemSelecionada.codigoEmpresa" id="cod_empresa"
+                                        label="Código da Empresa">
+                                    </inputText>
+                                </div>
+                                <div class="ui-g-12 ui-md-10">
+                                    <inputText md="12" placeholder="Nome da Empresa"
+                                        [(ngModel)]="configuracaoItemSelecionada.empresaPrincipal" id="cod_empresa"
+                                        label="Nome da Empresa">
+                                    </inputText>
+                                </div>
+
+                                <div class="ui-g-12">
+                                    <p-table [value]="configuracaoItemSelecionada.listaFilial" dataKey="codigoFilial"
+                                        selectionMode="single" [resizableColumns]="true" [scrollable]="true"
+                                        scrollHeight="200px" [(selection)]="filialSelecionada" [responsive]="false"
+                                        (onRowSelect)="onRowSelectFilial($event)"
+                                        (onRowUnselect)="onRowUnselectFilial($event)">
+                                        <ng-template pTemplate="caption">
+
+                                            <div style="position: relative;top: -5px;">
+
+                                                <button label="Adicionar" (click)="adicionarFilial()" icon="fa fa-plus"
+                                                    pButton></button>
+
+                                                <button label="Editar" (click)="editarFilial()" icon="fa fa-edit"
+                                                    pButton></button>
+
+                                                <button label="Remover" (click)="removerFilial()" icon="fa fa-trash"
+                                                    pButton></button>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th style="text-align: center;width: 80px !important;">Código</th>
+                                                <th style="text-align: justify;width: 350px !important;">Filial</th>
+                                                <th style="text-align: center;width: 150px !important;">Código Scanntech
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-item>
+                                            <tr [pSelectableRow]="item">
+                                                <td style="text-align: center;width: 80px !important;">
+                                                    {{item.codigoFilial}}</td>
+                                                <td style="text-align: justify;width: 350px !important;">
+                                                    {{item.nomeFilial}}</td>
+                                                <td style="text-align: center;width: 150px !important;">
+                                                    {{item.codigoScanntech}}</td>
+                                            </tr>
+                                        </ng-template>
+
+                                    </p-table>
+                                </div>
+
+                                <p-messages id="filial" [closable]="false" class="ui-g-12" [(value)]="msgsFilial">
+                                </p-messages>
+                                <espaco></espaco>
+                            </div>
+
+                            <div class="ui-g-12" *ngIf="renderizarFilial">
+                                <label><i class="fa fa-list-alt"></i><b> Empresa </b></label>
+                                <hr>
+                                <div class="row">
+                                    <div class="ui-g-12 ui-md-4 ui-lg-6">
+                                        <label>Filial</label><br>
+                                        <p-dropdown [options]="dadosFilialDropdown" [disabled]="status=='3'"
+                                            [(ngModel)]="filialDropdownSelecionada" [style]="{'width':'100%'}">
+                                        </p-dropdown>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-4 ui-lg-2" style="position: relative;top:-3px !important">
+                                        <inputText md="12" placeholder="Código Scanntech" [disabled]="status=='3'"
+                                            [(ngModel)]="codigoScanntech" id="cod_scanntech" label="Código Scanntech">
+                                        </inputText>
+                                    </div>
+                                    <div class="ui-g-12 ui-lg-4 mt-3">
+                                        <button class="mr-1"
+                                            [label]="status=='1'?'Adicionar':status=='2'?'Validar':'Remover'"
+                                            (click)="confirmarFilial()"
+                                            [icon]="status=='3'?'fa fa-trash':status=='2'?'fa fa-check':'fa fa-plus'"
+                                            pButton></button>
+                                        <button label="Cancelar" (click)="cancelarFilial()" icon="fa fa-times"
+                                            pButton></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p-tabPanel>
+                    <p-tabPanel leftIcon="fa fa-file-text" header="Dados Scanntech">
+                        <div class="row">
+                            <div class="ui-g-12" *ngIf="!renderizarUrl">
+                                <div class="ui-g-12 ui-md-4 ui-lg-4">
+                                    <inputText md="12" placeholder="Usuário"
+                                        [(ngModel)]="configuracaoItemSelecionada.usuario" id="usuario" label="Usuário">
+                                    </inputText>
+                                </div>
+                                <div class="ui-g-12 ui-md-4 ui-lg-2">
+                                    <label>Senha</label><br>
+                                    <div class="ui-inputgroup">
+                                        <input [type]="isCheck?'text':'password'" class="ui-g-12"
+                                            [(ngModel)]="configuracaoItemSelecionada.senha" pInputText
+                                            [placeholder]="isCheck?'text':'password'">
+                                        <span class="ui-inputgroup-addon">
+                                            <p-checkbox title="Visualizar Senha" binary="true" [(ngModel)]="isCheck">
+                                            </p-checkbox>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="ui-g-12">
+                                    <p-table [value]="configuracaoItemSelecionada.listaUrl" dataKey="valor"
+                                        selectionMode="single" [resizableColumns]="true" [scrollable]="true"
+                                        scrollHeight="200px" [(selection)]="urlSelecionada" [responsive]="false"
+                                        (onRowSelect)="onRowSelectUrl($event)"
+                                        (onRowUnselect)="onRowUnselectUrl($event)">
+                                        <ng-template pTemplate="caption">
+
+                                            <div style="position: relative;top: -5px;">
+
+                                                <button label="Adicionar" (click)="adicionarUrl()" icon="fa fa-plus"
+                                                    pButton></button>
+
+                                                <button label="Editar" (click)="editarUrl()" icon="fa fa-edit"
+                                                    pButton></button>
+
+                                                <button label="Remover" (click)="removerUrl()" icon="fa fa-trash"
+                                                    pButton></button>
+
+                                            </div>
+                                        </ng-template>
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <!-- <th style="text-align: center;width: 80px !important;">Código</th> -->
+                                                <th style="text-align: justify;">URL</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-item>
+                                            <tr [pSelectableRow]="item">
+                                                <!-- <td style="text-align: center;width: 80px !important;">{{item.id}}</td> -->
+                                                <td style="text-align: justify;">{{item.valor}}</td>
+                                            </tr>
+                                        </ng-template>
+
+                                    </p-table>
+
+                                </div>
+                            </div>
+                            <div class="ui-g-12" *ngIf="renderizarUrl">
+                                <div class="ui-g-12">
+                                    <label><i class="fa fa-share-alt"></i><b> Url </b></label>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="ui-g-12 ui-lg-4">
+                                            <div class="ui-inputgroup">
+                                                <span class="ui-inputgroup-addon" style="font-style: italic;"> http://
+                                                </span>
+                                                <input type="text" [disabled]="status=='3'" [(ngModel)]="url" id="url"
+                                                    pInputText style="font-style: italic;" class="ui-g-12"
+                                                    placeholder="Ex: interagese.com.br">
+                                            </div>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-lg-4 ">
+                                            <button class="mr-1"
+                                                [label]="status=='1'?'Adicionar':status=='2'?'Validar':'Remover'"
+                                                (click)="confirmarUrl()"
+                                                [icon]="status=='3'?'fa fa-trash':status=='2'?'fa fa-check':'fa fa-plus'"
+                                                pButton></button>
+                                            <button label="Cancelar" (click)="cancelarUrl()" icon="fa fa-times"
+                                                pButton></button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </p-tabPanel>
+
+                </p-tabView>
+                <espaco></espaco>
+                <div style="padding: 5px;background-color: #136A8A;">
+                    <button label="Confirmar" (click)="confirmarConfiguracao()" pButton icon="fa fa-check"></button>
+                    <button pButton label="Cancelar" (click)="cancelarConfiguracao()" icon="fa fa-times"></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 
     <p-toast [baseZIndex]="5000"></p-toast>
 </processo>
