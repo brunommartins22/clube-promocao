@@ -93,6 +93,7 @@ import { registerLocaleData } from '@angular/common';
 import ptBr from '@angular/common/locales/pt';
 import { PageHomeComponent } from './pages/page-home/page-home.component';
 import { PageScantechConfigComponent } from './pages/page-scanntech-config/page-scantech-config.component';
+import { PageConsultaPromocaoComponent } from './pages/page-consulta-promocao/page-consulta-promocao.component';
 registerLocaleData(ptBr)
 
 @NgModule({
@@ -184,7 +185,8 @@ registerLocaleData(ptBr)
 
         PageCidadeComponent,
         PageHomeComponent,
-        PageScantechConfigComponent
+        PageScantechConfigComponent,
+        PageConsultaPromocaoComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },

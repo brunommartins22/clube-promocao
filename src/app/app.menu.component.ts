@@ -26,13 +26,19 @@ export class AppMenuComponent implements OnInit, AfterViewInit {
             { label: 'Home', icon: 'fa fa-fw fa-home', routerLink: ['/sys/home-page'] },
        
             {
-                label: 'Cadastros', icon: 'fa fa-fw fa-plus-circle', badge: 6,
+                label: 'Cadastros', icon: 'fa fa-fw fa-plus-circle', badge: 1,
                 items: [
-                    { label: 'Usuário', icon: 'fa fa-fw fa-user', routerLink: ['/sys/usuario/'] }
+                    { label: 'Usuário', icon: 'fa fa-fw fa-user', routerLink: ['/sys/usuario'] }
                 ]
             },
             {
-                label: 'Relatórios', icon: 'fa fa-fw fa-compress', badge: 3,
+                label: 'Integração', icon: 'fa fa-fw fa-compress', badge: 1,
+                items: [
+                    {label:'Consulta de Promoção',icon:'fa fa-fw fa-search', routerLink:['/sys/consulta-promocao-scanntech']}
+                ]
+            },
+            {
+                label: 'Relatórios', icon: 'fa fa-fw fa-print', badge: 0,
                 items: [
                     {}
                 ]
@@ -56,7 +62,7 @@ export class AppMenuComponent implements OnInit, AfterViewInit {
             {
                 label: 'Configuração', icon: 'fa fa-fw fa-cog',
                 items: [
-                    { label: 'Scanntech', icon: 'fa fa-fw fa-setting', routerLink: ['/sys/configuracao-scanntech'] },
+                    { label: 'Scanntech', icon: 'fa fa-fw fa-cogs', routerLink: ['/sys/configuracao-scanntech'] },
                     {
                         label: 'Layout', icon: 'fa fa-fw fa-bars', badge: 5,
                         items: [

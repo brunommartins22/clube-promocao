@@ -68,9 +68,9 @@ export class PageScantechConfigComponent extends ProcessoComponent {
     }
 
     private errorMessage(message: any) {
-        this.showError(message);
+        this.errorMessageinit(message);
         setTimeout(() => {
-            this.msgs = [];
+            this.msgsInfo = [];
         }, 3000);
     }
 
@@ -85,6 +85,11 @@ export class PageScantechConfigComponent extends ProcessoComponent {
     private sucessMessageInit(message: any) {
         this.msgsInfo = [];
         this.msgsInfo.push({ severity: "success", summary: "", detail: message });
+    }
+    private errorMessageinit(message: any) {
+        this.msgsInfo = [];
+        this.msgsInfo.push({ severity: 'error', summary: '', detail: message });
+      
     }
     private infoMessageInit(message: any) {
         this.msgsInfo = [];
