@@ -9,6 +9,7 @@ import { PageCidadeComponent } from './pages/page-cidade/page-cidade.component';
 import { PageHomeComponent } from './pages/page-home/page-home.component';
 import { PageScantechConfigComponent } from './pages/page-scanntech-config/page-scantech-config.component';
 import { PageConsultaPromocaoComponent } from './pages/page-consulta-promocao/page-consulta-promocao.component';
+import { PageSincronizacaoVendas } from './pages/page-sincronizacao-vendas/page-sincronizacao-vendas.component';
 
 
 export const routes: Routes = [
@@ -22,7 +23,8 @@ export const routes: Routes = [
             { path: 'usuario', component: PageUsuarioComponent },
             { path: 'home-page', component: PageHomeComponent },
             { path: 'configuracao-scanntech', component: PageScantechConfigComponent },
-            { path: 'consulta-promocao-scanntech', component: PageConsultaPromocaoComponent }
+            { path: 'consulta-promocao-scanntech', component: PageConsultaPromocaoComponent },
+            { path: 'sincronizacao-vendas', component: PageSincronizacaoVendas}
         ]
     },
     { path: 'login', component: LoginComponent },

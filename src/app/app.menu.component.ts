@@ -34,7 +34,8 @@ export class AppMenuComponent implements OnInit, AfterViewInit {
             {
                 label: 'Integração', icon: 'fa fa-fw fa-compress', badge: 1,
                 items: [
-                    {label:'Consulta de Promoção',icon:'fa fa-fw fa-search', routerLink:['/sys/consulta-promocao-scanntech']}
+                    {label:'Consulta de Promoção',icon:'fa fa-fw fa-search', routerLink:['/sys/consulta-promocao-scanntech']},
+                    {label:'Sincronização de Vendas', icon:'fa fa-fw fa-refresh', routerLink:['/sys/sincronizacao-vendas']}
                 ]
             },
             {
