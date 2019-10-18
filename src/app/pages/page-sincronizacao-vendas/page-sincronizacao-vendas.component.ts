@@ -11,12 +11,12 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
 
     confirmationService: ConfirmationService;
     tituloSincronizacao: any = "";
-    numeroCaixa: number=null;
-    numeroCupom: number=null;
-    pt: any="";
+    numeroCaixa: number = null;
+    numeroCupom: number = null;
+    pt: any = "";
     isActiveFieldset: boolean = false;
 
-    rangeDates: Date[]=null;
+    rangeDates: Date[] = null;
     dadosFilialDropdown: any = [];
     dadosSituacaoDropdown: any = [];
     dadosFiltro: any = [];
@@ -34,13 +34,29 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
 
         this.dadosFilialDropdown.push({ label: "Selecione...", value: null });
 
+        //******** Popular um model dentro de um DropDown *********/
+        this.httpUtilService.get("/filialscanntech/loadAllFilial").subscribe(data => {
+            let dados = data.json();
+
+            dados.forEach(o => {
+                this.dadosFilialDropdown.push({ label: o.codigoFilial + " - " + o.nomeFilial, value: o });
+            });
+
+        }, erro => {
+            this.toastError(erro.message);
+        });
+
 
     }
 
     private loadSituacaoDropdown() {
         this.situacaoDropdownSelecionado = null;
-
+        //*********** Popular(Colocar) os itens dentro do DropDown ****************/    
         this.dadosSituacaoDropdown.push({ label: "Selecione...", value: null });
+        this.dadosSituacaoDropdown.push({ label: "Enviado", value: "E" });
+        this.dadosSituacaoDropdown.push({ label: "Erro", value: "R" });
+        this.dadosSituacaoDropdown.push({ label: "Pendente", value: "P" });
+
     }
 
     private loadDateByPt() {
@@ -70,17 +86,28 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
 
     ngOnInit() {
         this.tituloSincronizacao = "Sincronização de Vendas";
-        this.urlControler = "sincronizacoes";
+        this.urlControler = "/sincronizacoes";
         this.loadFilialDropdown();
         this.loadSituacaoDropdown();
         this.loadDateByPt();
     }
 
 
-    loadSearchFilters(){
+    loadSearchFilters() {
         this.isActiveFieldset = false;
-        setTimeout(() => {
+        const map = {
+            codigoFilial: this.filialDropdownSelecionado != null ? this.filialDropdownSelecionado.id : null,
+            numeroCaixa: this.numeroCaixa,
+            numeroCupom: this.numeroCupom,
+            situacao: this.situacaoDropdownSelecionado,
+            datasEnvio: this.rangeDates == null ? [] : this.rangeDates
+        }
+
+        this.httpUtilService.post(this.urlControler + "/loadSearchFilters", map).subscribe(data => {
+            this.dadosFiltro = data.json();
             this.isActiveFieldset = true;
-        }, 200);
+        }, erro => {
+            this.toastError(erro.message);
+        })
     }
 }
