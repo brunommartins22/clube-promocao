@@ -12,6 +12,7 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
     confirmationService: ConfirmationService;
     tituloConsulta: any = "";
     msgsFilter: Message[] = [];
+    loading: boolean = false;
     situacao: any = null;
     pt: any = null;
     rangeDates: Date[]
@@ -119,6 +120,7 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
 
 
     loadPromocoesByFilters() {
+        this.loading = true;
         this.isActiveFieldset = false;
         const map = {
             codigoFilial: this.filialDropdownSelecionada != null ? this.filialDropdownSelecionada.codigoFilial : null,
@@ -136,8 +138,7 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
                 d.datainicio = StringUtils.string2Date(d.datainicio);
                 d.datafim = StringUtils.string2Date(d.datafim);
             });
-
-              
+            this.loading = false;
 
         }, erro => {
             this.errorMessage(erro.message);

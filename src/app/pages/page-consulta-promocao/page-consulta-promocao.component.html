@@ -1,4 +1,7 @@
 <processo [componente]="this" [titulo]="tituloConsulta">
+    <p-blockUI [blocked]="loading">
+        <i class="pi pi-spin pi-spinner" style="position:absolute;top:50%;left:50%;font-size: 3em"></i>
+    </p-blockUI>
     <div class="ui-g">
         <div class="ui-g-12">
             <p-fieldset legend="Filtros" [toggleable]="true" [collapsed]="isActiveFieldset">
@@ -77,8 +80,10 @@
                         <ng-template pTemplate="body" let-item>
                             <tr [pSelectableRow]="item">
                                 <td style="text-align: center;width: 70px !important;">{{item.codpromocao}}</td>
-                                <td style="text-align: center;width: 135px !important;">{{item.datainicio|date:'dd/MM/yyyy'}}</td>
-                                <td style="text-align: center;width: 130px !important;">{{item.datafim|date:'dd/MM/yyyy'}}</td>
+                                <td style="text-align: center;width: 135px !important;">
+                                    {{item.datainicio|date:'dd/MM/yyyy'}}</td>
+                                <td style="text-align: center;width: 130px !important;">
+                                    {{item.datafim|date:'dd/MM/yyyy'}}</td>
                                 <td style="text-align: center;width: 80px !important;">{{item.codscanntech}}</td>
                                 <td style="text-align: justify;width: 240px !important;">{{item.titulo}}</td>
                                 <td style="text-align: justify;width: 240px !important;">{{item.descricao}}</td>
