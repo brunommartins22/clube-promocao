@@ -1,5 +1,5 @@
 import { Component, Injector } from "@angular/core";
-import { ProcessoComponent } from 'padrao';
+import { ProcessoComponent, StringUtils } from 'padrao';
 import { ConfirmationService, Message } from 'primeng/api';
 
 @Component({
@@ -120,9 +120,25 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
 
     loadPromocoesByFilters() {
         this.isActiveFieldset = false;
+        const map = {
+            codigoFilial: this.filialDropdownSelecionada != null ? this.filialDropdownSelecionada.codigoFilial : null,
+            tipo: this.tipoDropdownSelecionado,
+            situacao: this.situacaoDropdownSelecionado,
+            tituloPromocao: this.tituloPromocao,
+            autorPromocao: this.autorPromocao,
+            validade: this.rangeDates
+        }
         this.httpUtilService.post(this.urlControler + "/findTabpromocaoByFilters", {}).subscribe(data => {
             this.isActiveFieldset = true;
+
             this.dadosFiltro = data.json();
+            this.dadosFiltro.forEach(d => {
+                d.datainicio = StringUtils.string2Date(d.datainicio);
+                d.datafim = StringUtils.string2Date(d.datafim);
+            });
+
+              
+
         }, erro => {
             this.errorMessage(erro.message);
         })
