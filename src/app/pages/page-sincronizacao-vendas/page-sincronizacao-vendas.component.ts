@@ -1,5 +1,5 @@
 import { Component, Injector } from "@angular/core";
-import { ProcessoComponent } from 'padrao';
+import { ProcessoComponent, StringUtils } from 'padrao';
 import { ConfirmationService } from 'primeng/api';
 
 @Component({
@@ -11,6 +11,7 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
 
     confirmationService: ConfirmationService;
     tituloSincronizacao: any = "";
+    loading: boolean = false;
     numeroCaixa: number = null;
     numeroCupom: number = null;
     pt: any = "";
@@ -94,6 +95,7 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
 
 
     loadSearchFilters() {
+        this.loading = true;
         this.isActiveFieldset = false;
         const map = {
             codigoFilial: this.filialDropdownSelecionado != null ? this.filialDropdownSelecionado.id : null,
@@ -105,7 +107,12 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
 
         this.httpUtilService.post(this.urlControler + "/loadSearchFilters", map).subscribe(data => {
             this.dadosFiltro = data.json();
+            this.dadosFiltro.forEach(o => {
+                o.dataEnvio = StringUtils.string2Date(o.dataEnvio);
+            });
+
             this.isActiveFieldset = true;
+            this.loading = false;
         }, erro => {
             this.toastError(erro.message);
         })
