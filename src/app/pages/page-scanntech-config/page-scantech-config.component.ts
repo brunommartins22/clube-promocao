@@ -153,7 +153,7 @@ export class PageScantechConfigComponent extends ProcessoComponent {
         let json = JSON.stringify(this.configuracaoSelecionada);
         this.httpUtilService.put(this.urlControler, json).subscribe(data => {
             this.configuracaoSelecionada = data.json();
-            this.sucessMessageInit("Configuração atualizada com sucesso !!");
+            this.sucessMessageInit("Configuração atualizada com sucesso.");
             setTimeout(() => {
                 this.infoMessageInit("Configurações de processamento Scanntech, baseado no sistema de Clube de Promoção.");
             }, 2500);
@@ -226,7 +226,7 @@ export class PageScantechConfigComponent extends ProcessoComponent {
             this.httpUtilService.put(this.urlControler, json).subscribe(data => {
 
                 this.cancelarConfiguracao();
-                this.toastSuccess("Configuração salva com sucesso !!");
+                this.toastSuccess("Configuração salva com sucesso.");
 
             }, erro => {
                 this.errorMessage(erro.message);

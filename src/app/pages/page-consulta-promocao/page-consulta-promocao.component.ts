@@ -17,6 +17,7 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
     rangeDates: Date[]
     tituloPromocao: any = null;
     autorPromocao: any = null;
+    isActiveFieldset: boolean = false;
 
     filialDropdownSelecionada: any = null;
     situacaoDropdownSelecionado: any = null;
@@ -67,7 +68,7 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
 
     private loadTipoDropdown() {
         this.tipoDropdownSelecionado = null;
-        this.dadosTipoDropdown.push({ label: "Todas", value: null });
+        this.dadosTipoDropdown.push({ label: "Todos", value: null });
         this.dadosTipoDropdown.push({ label: "Presente Adicional", value: 1 });
         this.dadosTipoDropdown.push({ label: "Leva M Paga N", value: 2 });
         this.dadosTipoDropdown.push({ label: "Desconto Variável", value: 3 });
@@ -118,12 +119,12 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
 
 
     loadPromocoesByFilters() {
-        console.log("chamou");
-        this.httpUtilService.post(this.urlControler+"/findTabpromocaoByFilters", {}).subscribe(data => {
-            // console.log(data.json());
+        this.isActiveFieldset = false;
+        this.httpUtilService.post(this.urlControler + "/findTabpromocaoByFilters", {}).subscribe(data => {
+            this.isActiveFieldset = true;
             this.dadosFiltro = data.json();
         }, erro => {
-           this.errorMessage(erro.message);
+            this.errorMessage(erro.message);
         })
     }
 

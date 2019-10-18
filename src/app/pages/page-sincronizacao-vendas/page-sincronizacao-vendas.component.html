@@ -1,7 +1,7 @@
-<processo [componente]="this" [titulo]="tituloConsulta">
+<processo [componente]="this" [titulo]="tituloSincronizacao">
     <div class="ui-g">
         <div class="ui-g-12">
-            <p-fieldset legend="Filtros" [toggleable]="true" [collapsed]="isActiveFieldset">
+                <p-fieldset legend="Filtros" [toggleable]="true" [collapsed]="isActiveFieldset">
                 <div class="row">
                     <div class="ui-g-12 ui-md-6 ui-lg-8">
                         <label>Filial</label><br>
@@ -22,16 +22,13 @@
                         </inputText>
                     </div>
 
-
-
-
-                    <div class="ui-g-12 ui-md-3 ui-lg-2">
+                    <div class="ui-g-12 ui-md-4 ui-lg-3">
                         <label>Situação</label><br>
                         <p-dropdown [options]="dadosSituacaoDropdown" [(ngModel)]="situacaoDropdownSelecionada"
                             [style]="{'width':'100%'}">
                         </p-dropdown>
                     </div>
-                    <div class="ui-g-12 ui-md-3 ui-lg-2">
+                    <div class="ui-g-12 ui-md-4 ui-lg-2">
                         <label>Data de Envio</label><br>
                         <p-calendar [locale]="pt" [inline]="false" [showButtonBar]="true" [monthNavigator]="true"
                             [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true"
@@ -41,9 +38,9 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <button class="mr-1" label="Pesquisar" (click)="loadSearchFilters()" icon="fa fa-search" pButton></button>
+                    <button class="mr-1" label="Pesquisar" (click)="loadSearchFilters()" icon="fa fa-search"
+                        pButton></button>
                     <button class="mr-1" label="Limpar" icon="fa fa-eraser" pButton></button>
-                    <button class="mr-1" label="Imprimir" icon="fa fa-print" pButton></button>
                 </div>
             </p-fieldset>
             <espaco></espaco>
@@ -55,8 +52,9 @@
                         [(selection)]="filtroSelecionado" [responsive]="false" (onRowSelect)="onRowSelectUrl($event)"
                         (onRowUnselect)="onRowUnselectUrl($event)">
                         <ng-template pTemplate="caption">
-
-
+                            <div style="position: relative;top: -5px;">
+                                <button label="Imprimir" icon="fa fa-print" pButton></button>
+                            </div>
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>

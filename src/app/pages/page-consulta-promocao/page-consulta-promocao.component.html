@@ -1,53 +1,59 @@
 <processo [componente]="this" [titulo]="tituloConsulta">
     <div class="ui-g">
         <div class="ui-g-12">
-            <div class="row">
-                <div class="ui-g-12 ui-md-8">
-                    <label>Filial</label><br>
-                    <p-dropdown [options]="dadosFilialDropdown" [(ngModel)]="filialDropdownSelecionada"
-                        [style]="{'width':'100%'}">
-                    </p-dropdown>
-                </div>
-                <div class="ui-g-12 ui-md-2">
-                    <label>Validade</label><br>
-                    <p-calendar [locale]="pt" [inline]="false" [showButtonBar]="true" [monthNavigator]="true"
-                        [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true"
-                        yearRange="2000:2030" placeholder="XX/XX/XXXX - XX/XX/XXXX" [showIcon]="true"></p-calendar>
-                </div>
+            <p-fieldset legend="Filtros" [toggleable]="true" [collapsed]="isActiveFieldset">
+                <div class="row">
+                    <div class="ui-g-12 ui-md-4 ui-lg-7">
+                        <label>Filial</label><br>
+                        <p-dropdown [options]="dadosFilialDropdown" [(ngModel)]="filialDropdownSelecionada"
+                            [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="ui-g-12 ui-md-4 ui-lg-3 ">
+                        <label>Tipo</label><br>
+                        <p-dropdown [options]="dadosTipoDropdown" [(ngModel)]="tipoDropdownSelecionado"
+                            [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="ui-g-12 ui-md-4 ui-lg-1">
+                        <label>Situação</label><br>
+                        <p-dropdown [options]="dadosSituacaoDropdown" [(ngModel)]="situacaoDropdownSelecionado"
+                            [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="ui-g-12 ui-md-4 ui-lg-4">
+                        <inputText md="12" placeholder="Título da Promoção" [(ngModel)]="tituloPromocao"
+                            id="titulo_promocao" label="Título da Promoção">
+                        </inputText>
+                    </div>
+                    <div class="ui-g-12 ui-md-3 ui-lg-2">
+                        <inputText md="12" placeholder="Autor da Promoção" [(ngModel)]="autorPromocao"
+                            id="Autor_promocao" label="Autor da Promoção">
+                        </inputText>
+                    </div>
+                    <div class="ui-g-12 ui-md-2" style="position: relative;top:2px">
+                        <label>Validade</label><br>
+                        <p-calendar [locale]="pt" [inputStyle]="{'width':'240px'}" [inline]="false"
+                            [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true"
+                            [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
+                            placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="true"></p-calendar>
+                    </div>
 
-                <div class="ui-g-12 ui-md-2">
-                    <label>Situação</label><br>
-                    <p-dropdown [options]="dadosSituacaoDropdown" [(ngModel)]="situacaoDropdownSelecionado"
-                        [style]="{'width':'100%'}">
-                    </p-dropdown>
                 </div>
-                <div class="ui-g-12 ui-md-4">
-                    <inputText md="12" placeholder="Título da Promoção" [(ngModel)]="tituloPromocao"
-                        id="titulo_promocao" label="Título da Promoção">
-                    </inputText>
-                </div>
-                <div class="ui-g-12 ui-md-2">
-                    <inputText md="12" placeholder="Autor da Promoção" [(ngModel)]="autorPromocao" id="Autor_promocao"
-                        label="Autor da Promoção">
-                    </inputText>
-                </div>
-                <div class="ui-g-12 ui-md-2" style="position: relative;top:2px">
-                    <label>Tipo</label><br>
-                    <p-dropdown [options]="dadosTipoDropdown" [(ngModel)]="tipoDropdownSelecionado"
-                        [style]="{'width':'100%'}">
-                    </p-dropdown>
-                </div>
-                <div class="ui-g-12 ui-md-4 ui-lg-3" style="position: relative;top: 19px;">
+                <hr>
+                <div class="row">
                     <button class="mr-1" label="Pesquisar" (click)="loadPromocoesByFilters()" icon="fa fa-search"
                         pButton></button>
                     <button class="mr-1" label="Limpar" icon="fa fa-eraser" pButton></button>
                 </div>
-            </div>
+            </p-fieldset>
+            <espaco></espaco>
             <div class="row">
                 <div class="ui-g-12">
-                    <p-table [value]="dadosFiltro" dataKey="codpromocao" selectionMode="single" [resizableColumns]="true"
-                        [scrollable]="true" scrollHeight="300px" [(selection)]="filtroSelecionado" [responsive]="false"
-                        (onRowSelect)="onRowSelectUrl($event)" (onRowUnselect)="onRowUnselectUrl($event)">
+                    <p-table [value]="dadosFiltro" dataKey="codpromocao" selectionMode="single"
+                        [resizableColumns]="true" [scrollable]="true" scrollHeight="300px"
+                        [(selection)]="filtroSelecionado" [responsive]="false" (onRowSelect)="onRowSelectUrl($event)"
+                        (onRowUnselect)="onRowUnselectUrl($event)">
                         <ng-template pTemplate="caption">
 
                             <div style="position: relative;top: -5px;">
@@ -56,27 +62,29 @@
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="text-align: center;width: 120px !important;">Cód. Promoção</th>
-                                <th style="text-align: center;width: 80px !important;">Scanntech</th>
-                                <th style="text-align: justify;width: 220px !important;">Título</th>
-                                <th style="text-align: justify;width: 220px !important;">Descrição</th>
-                                <th style="text-align: center;width: 120px !important;">Tipo</th>
-                                <th style="text-align: center;width: 120px !important;">Autor</th>
+                                <th style="text-align: center;width: 70px !important;">Código</th>
                                 <th style="text-align: center;width: 135px !important;">Início da Promoção</th>
                                 <th style="text-align: center;width: 130px !important;">Fim da Promoção</th>
+                                <th style="text-align: center;width: 80px !important;">Scanntech</th>
+                                <th style="text-align: justify;width: 240px !important;">Título</th>
+                                <th style="text-align: justify;width: 240px !important;">Descrição</th>
+                                <th style="text-align: center;width: 120px !important;">Tipo</th>
+                                <th style="text-align: center;width: 120px !important;">Autor</th>
+
 
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-item>
                             <tr [pSelectableRow]="item">
-                                <td style="text-align: center;width: 120px !important;">{{item.codpromocao}}</td>
-                                <td style="text-align: center;width: 80px !important;">{{item.codscanntech}}</td>
-                                <td style="text-align: justify;width: 220px !important;">{{item.titulo}}</td>
-                                <td style="text-align: justify;width: 220px !important;">{{item.descricao}}</td>
-                                <td style="text-align: center;width: 120px !important;">{{item.tipo}}</td>
-                                <td style="text-align: center;width: 120px !important;">{{item.autor}}</td>
+                                <td style="text-align: center;width: 70px !important;">{{item.codpromocao}}</td>
                                 <td style="text-align: center;width: 135px !important;">{{item.datainicio|date}}</td>
                                 <td style="text-align: center;width: 130px !important;">{{item.datafim|date}}</td>
+                                <td style="text-align: center;width: 80px !important;">{{item.codscanntech}}</td>
+                                <td style="text-align: justify;width: 240px !important;">{{item.titulo}}</td>
+                                <td style="text-align: justify;width: 240px !important;">{{item.descricao}}</td>
+                                <td style="text-align: center;width: 120px !important;">{{item.tipo}}</td>
+                                <td style="text-align: center;width: 120px !important;">{{item.autor}}</td>
+
                             </tr>
                         </ng-template>
 
@@ -87,8 +95,6 @@
             </div>
         </div>
     </div>
-
-    consulta de promoção
 
     <p-toast [baseZIndex]="5000"></p-toast>
 </processo>
