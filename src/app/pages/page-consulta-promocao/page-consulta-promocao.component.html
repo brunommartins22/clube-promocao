@@ -36,7 +36,7 @@
                     </div>
                     <div class="ui-g-12 ui-md-2" style="position: relative;top:2px">
                         <label>Validade</label><br>
-                        <p-calendar [locale]="pt" [inputStyle]="{'width':'240px'}" [inline]="false"
+                        <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'240px'}" [inline]="false"
                             [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true"
                             [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
                             placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="true"></p-calendar>
@@ -45,9 +45,9 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <button class="mr-1" label="Pesquisar" (click)="loadPromocoesByFilters()" icon="fa fa-search"
+                    <button class="mr-1" label="Pesquisar" (click)="loadSearchFilters()" icon="fa fa-search"
                         pButton></button>
-                    <button class="mr-1" label="Limpar" icon="fa fa-eraser" pButton></button>
+                    <button class="mr-1" label="Limpar" (click)="clearSearchFilters()" icon="fa fa-eraser" pButton></button>
                 </div>
             </p-fieldset>
             <espaco></espaco>
@@ -87,7 +87,7 @@
                                 <td style="text-align: center;width: 80px !important;">{{item.codscanntech}}</td>
                                 <td style="text-align: justify;width: 240px !important;">{{item.titulo}}</td>
                                 <td style="text-align: justify;width: 240px !important;">{{item.descricao}}</td>
-                                <td style="text-align: center;width: 120px !important;">{{item.tipo}}</td>
+                                <td style="text-align: center;width: 120px !important;">{{item.tipoDesc}}</td>
                                 <td style="text-align: center;width: 120px !important;">{{item.autor}}</td>
 
                             </tr>

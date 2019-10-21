@@ -98,7 +98,7 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
         this.loading = true;
         this.isActiveFieldset = false;
         const map = {
-            codigoFilial: this.filialDropdownSelecionado != null ? this.filialDropdownSelecionado.id : null,
+            codigoFilial: this.filialDropdownSelecionado != null ? this.filialDropdownSelecionado.codigoFilial : null,
             numeroCaixa: this.numeroCaixa,
             numeroCupom: this.numeroCupom,
             situacao: this.situacaoDropdownSelecionado,
@@ -106,6 +106,7 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
         }
 
         this.httpUtilService.post(this.urlControler + "/loadSearchFilters", map).subscribe(data => {
+
             this.dadosFiltro = data.json();
             this.dadosFiltro.forEach(o => {
                 o.dataEnvio = StringUtils.string2Date(o.dataEnvio);
@@ -113,8 +114,26 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
 
             this.isActiveFieldset = true;
             this.loading = false;
+            this.toastSuccess("Pesquisa realizada com sucesso.")
         }, erro => {
+            this.loading = false;
+            this.dadosFiltro = null;
             this.toastError(erro.message);
         })
+    }
+
+
+    clearSearchFilters() {
+        this.loading = true;
+        this.isActiveFieldset = false;
+
+        this.loadFilialDropdown();
+        this.numeroCaixa = null;
+        this.numeroCupom = null;
+        this.loadSituacaoDropdown();
+        this.rangeDates = null;
+
+        this.dadosFiltro = null;
+        this.loading = false;
     }
 }

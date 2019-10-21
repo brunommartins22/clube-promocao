@@ -119,7 +119,7 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
     }
 
 
-    loadPromocoesByFilters() {
+    loadSearchFilters() {
         this.loading = true;
         this.isActiveFieldset = false;
         const map = {
@@ -128,21 +128,38 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
             situacao: this.situacaoDropdownSelecionado,
             tituloPromocao: this.tituloPromocao,
             autorPromocao: this.autorPromocao,
-            validade: this.rangeDates
+            validade: this.rangeDates == null ? [] : this.rangeDates
         }
-        this.httpUtilService.post(this.urlControler + "/findTabpromocaoByFilters", {}).subscribe(data => {
-            this.isActiveFieldset = true;
+        this.httpUtilService.post(this.urlControler + "/findTabpromocaoByFilters", map).subscribe(data => {
 
             this.dadosFiltro = data.json();
             this.dadosFiltro.forEach(d => {
                 d.datainicio = StringUtils.string2Date(d.datainicio);
                 d.datafim = StringUtils.string2Date(d.datafim);
             });
+
+            this.isActiveFieldset = true;
             this.loading = false;
+            this.toastSuccess("Pesquisa realizada com sucesso.")
 
         }, erro => {
-            this.errorMessage(erro.message);
+            this.loading = false;
+            this.toastError(erro.message);
+            this.dadosFiltro = null;
         })
+    }
+
+
+    clearSearchFilters() {
+        this.loading = true;
+        this.isActiveFieldset = false;
+        this.loadFilialDropdown();
+        this.loadTipoDropdown();
+        this.loadSituacaoDrodown();
+        this.tituloPromocao = null;
+        this.autorPromocao = null;
+        this.rangeDates = null;
+        this.loading=false;
     }
 
 
