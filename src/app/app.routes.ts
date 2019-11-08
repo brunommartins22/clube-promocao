@@ -10,6 +10,7 @@ import { PageHomeComponent } from './pages/page-home/page-home.component';
 import { PageScantechConfigComponent } from './pages/page-scanntech-config/page-scantech-config.component';
 import { PageConsultaPromocaoComponent } from './pages/page-consulta-promocao/page-consulta-promocao.component';
 import { PageSincronizacaoVendas } from './pages/page-sincronizacao-vendas/page-sincronizacao-vendas.component';
+import { PageConsultaVendas } from './pages/page-consulta-vendas/page-consulta-vendas.component';
 
 
 export const routes: Routes = [
@@ -24,7 +25,8 @@ export const routes: Routes = [
             { path: 'home-page', component: PageHomeComponent },
             { path: 'configuracao-scanntech', component: PageScantechConfigComponent },
             { path: 'consulta-promocao-scanntech', component: PageConsultaPromocaoComponent },
-            { path: 'sincronizacao-vendas', component: PageSincronizacaoVendas}
+            { path: 'sincronizacao-vendas', component: PageSincronizacaoVendas },
+            { path: 'consulta-vendas', component: PageConsultaVendas }
         ]
     },
     { path: 'login', component: LoginComponent },

@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { sincronizador } from './services/sincronizador.service';
+import { ConfirmationService } from 'primeng/api';
+import { loading } from './services/loading.service';
 
 
 @Component({
@@ -40,6 +43,12 @@ export class AppComponent {
     rightPanelActive: boolean;
 
     rightPanelClick: boolean;
+
+
+    constructor(public sincronizador: sincronizador, public confirmationService: ConfirmationService, public loading: loading) {
+
+    }
+
 
     onLayoutClick() {
 

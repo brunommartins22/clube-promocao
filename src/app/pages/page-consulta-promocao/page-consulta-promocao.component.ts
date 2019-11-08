@@ -1,10 +1,27 @@
 import { Component, Injector } from "@angular/core";
 import { ProcessoComponent, StringUtils } from 'padrao';
 import { ConfirmationService, Message } from 'primeng/api';
+import { loading } from 'src/app/services/loading.service';
 
 @Component({
     selector: "app-page-consulta-promocao",
-    templateUrl: "./page-consulta-promocao.component.html"
+    templateUrl: "./page-consulta-promocao.component.html",
+    styles: [`
+        .incorret {
+            background-color: #FFE399 !important;
+            color: black !important;
+        }
+        .divergent {
+            background-color: #EE9EAF !important;
+            color: black !important;
+        }
+
+        .corret {
+            background-color: #CCF7D4 !important;
+            color: black !important;
+        }
+    `
+    ],
 })
 
 export class PageConsultaPromocaoComponent extends ProcessoComponent {
@@ -12,23 +29,30 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
     confirmationService: ConfirmationService;
     tituloConsulta: any = "";
     msgsFilter: Message[] = [];
-    loading: boolean = false;
     situacao: any = null;
     pt: any = null;
     rangeDates: Date[]
     tituloPromocao: any = null;
     autorPromocao: any = null;
     isActiveFieldset: boolean = false;
+    renderizarFilters: boolean = false;
 
     filialDropdownSelecionada: any = null;
     situacaoDropdownSelecionado: any = null;
     tipoDropdownSelecionado: any = null;
     filtroSelecionado: any = null;
+    itemFiltroSelecionado: any = null;
 
     dadosFilialDropdown: any = [];
     dadosSituacaoDropdown: any = [];
     dadosTipoDropdown: any = [];
     dadosFiltro: any = [];
+
+    countAtivos: number = 0;
+    countInativos: number = 0;
+    countPendentes: number = 0;
+    countRejeitados: number = 0;
+
 
 
 
@@ -104,46 +128,61 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
 
     //*************************** end Methods ***************************/
 
-    constructor(injector: Injector) {
+    constructor(injector: Injector, public loading: loading) {
         super(injector);
         this.confirmationService = injector.get(ConfirmationService);
     };
 
     ngOnInit() {
+        this.loading.getIsVisible();
         this.tituloConsulta = "Consulta de Promoção Scanntech"
         this.urlControler = "/promocoes";
         this.loadFilialDropdown();
         this.loadSituacaoDrodown();
         this.loadDateByPt();
         this.loadTipoDropdown();
+        this.renderizarFilters = false;
+        this.registrosPorPagina = 50;
+        this.quantidadeRegistros = 0;
+        this.loading.getNotIsVisible();
     }
 
 
-    loadSearchFilters() {
-        this.loading = true;
-        this.isActiveFieldset = false;
+    loadSearchFilters(isPaginate: boolean) {
+        this.loading.getIsVisible();
+        this.isActiveFieldset = isPaginate;
         const map = {
             codigoFilial: this.filialDropdownSelecionada != null ? this.filialDropdownSelecionada.codigoFilial : null,
             tipo: this.tipoDropdownSelecionado,
             situacao: this.situacaoDropdownSelecionado,
             tituloPromocao: this.tituloPromocao,
             autorPromocao: this.autorPromocao,
-            validade: this.rangeDates == null ? [] : this.rangeDates
+            validade: this.rangeDates == null ? [] : this.rangeDates,
+            inicial: this.posicaoInicial,
+            final: this.registrosPorPagina
         }
         this.httpUtilService.post(this.urlControler + "/findTabpromocaoByFilters", map).subscribe(data => {
 
-            this.dadosFiltro = data.json();
+            const resp = data.json();
+            this.quantidadeRegistros = resp.count;
+            this.dadosFiltro = resp.promocoes;
             this.dadosFiltro.forEach(d => {
                 d.datainicio = StringUtils.string2Date(d.datainicio);
                 d.datafim = StringUtils.string2Date(d.datafim);
             });
 
-            this.isActiveFieldset = true;
-            this.loading = false;
-            this.toastSuccess("Pesquisa realizada com sucesso.")
+            this.countAtivos = resp.countAtivos;
+            this.countInativos = resp.countInativos;
+            this.countPendentes = resp.countPendentes;
+            this.countRejeitados = resp.countRejeitados;
 
+            this.isActiveFieldset = true;
+            this.loading.getNotIsVisible();
+            if (!isPaginate) {
+                this.toastSuccess("Pesquisa realizada com sucesso.")
+            }
         }, erro => {
-            this.loading = false;
+            this.loading.getNotIsVisible();
             this.toastError(erro.message);
             this.dadosFiltro = null;
         })
@@ -151,7 +190,7 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
 
 
     clearSearchFilters() {
-        this.loading = true;
+        this.loading.getIsVisible();
         this.isActiveFieldset = false;
         this.loadFilialDropdown();
         this.loadTipoDropdown();
@@ -159,7 +198,53 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
         this.tituloPromocao = null;
         this.autorPromocao = null;
         this.rangeDates = null;
-        this.loading=false;
+        this.dadosFiltro = null;
+        this.filtroSelecionado = null;
+        this.loading.getNotIsVisible();
+    }
+
+    onRowSelect(event) {
+        this.filtroSelecionado = event.data;
+    }
+
+    onRowUnselect(event) {
+        this.filtroSelecionado = event.data;
+
+        this.editSearchFilters();
+
+    }
+
+    paginate(objeto: any) {
+        this.registrosPorPagina = objeto.rows;
+        this.posicaoInicial = (objeto.first);
+
+        this.loadSearchFilters(true);
+    }
+
+    editSearchFilters() {
+        if (this.filtroSelecionado != null) {
+            this.renderizarFilters = true;
+        } else {
+            this.toastError("Nenhum registro selecionado.");
+        }
+
+
+    }
+    //******************************** item selecionado ************************************/
+
+    onRowSelectItem(event) {
+        this.itemFiltroSelecionado = event.data;
+    }
+
+    onRowUnselectItem(event) {
+        this.itemFiltroSelecionado = event.data;
+
+    }
+
+    cancelItemSelected() {
+        this.renderizarFilters = false;
+        this.filtroSelecionado = null;
+        this.itemFiltroSelecionado = null;
     }
 
 

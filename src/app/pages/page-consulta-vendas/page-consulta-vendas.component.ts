@@ -1,12 +1,11 @@
 import { Component, Injector } from "@angular/core";
 import { ProcessoComponent, StringUtils } from 'padrao';
 import { ConfirmationService } from 'primeng/api';
-import { sincronizador } from 'src/app/services/sincronizador.service';
 import { loading } from 'src/app/services/loading.service';
 
 @Component({
-    selector: "app-page-sincronizacao-vendas",
-    templateUrl: "./page-sincronizacao-vendas.component.html",
+    selector: "app-page-consulta-vendas",
+    templateUrl: "./page-consulta-vendas.component.html",
     styles: [`
         
         .divergent {
@@ -22,26 +21,22 @@ import { loading } from 'src/app/services/loading.service';
     ],
 })
 
-export class PageSincronizacaoVendas extends ProcessoComponent {
+export class PageConsultaVendas extends ProcessoComponent {
 
     confirmationService: ConfirmationService;
-    tituloSincronizacao: any = "";
-    numeroCaixa: number = null;
-    numeroCupom: number = null;
-    pt: any = "";
+    tituloConsultaVendas: any = "";
     isActiveFieldset: boolean = false;
+    pt: any = null;
+    descricaoPromocao: any = null;
+
+
 
     rangeDates: Date[] = null;
     dadosFilialDropdown: any = [];
-    dadosSituacaoDropdown: any = [];
     dadosFiltro: any = [];
 
-    filialDropdownSelecionado: any = null;
-    situacaoDropdownSelecionado: any = null;
-    filtroSelecionado: any = null;
 
-
-    display: boolean = false;
+    filialDropdownSelecionada: any = null;
 
 
 
@@ -50,7 +45,7 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
     private loadFilialDropdown() {
 
         this.dadosFilialDropdown = [];
-        this.filialDropdownSelecionado = null;
+        this.filialDropdownSelecionada = null;
 
         this.dadosFilialDropdown.push({ label: "Selecione...", value: null });
 
@@ -69,15 +64,6 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
 
     }
 
-    private loadSituacaoDropdown() {
-        this.situacaoDropdownSelecionado = null;
-        //*********** Popular(Colocar) os itens dentro do DropDown ****************/    
-        this.dadosSituacaoDropdown.push({ label: "Selecione...", value: null });
-        this.dadosSituacaoDropdown.push({ label: "Enviado", value: "E" });
-        this.dadosSituacaoDropdown.push({ label: "Erro", value: "R" });
-        this.dadosSituacaoDropdown.push({ label: "Pendente", value: "P" });
-
-    }
 
     private loadDateByPt() {
         this.pt = {
@@ -98,65 +84,55 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
     //******************** end methods ********************/
 
 
-
-    constructor(injector: Injector, public sincronizador: sincronizador, public loading: loading) {
+    constructor(injector: Injector, public loading: loading) {
         super(injector);
         this.confirmationService = injector.get(ConfirmationService);
     }
 
     ngOnInit() {
         this.loading.getIsVisible();
-        this.tituloSincronizacao = "Sincronização de Vendas";
-        this.urlControler = "/sincronizacoes";
+        this.tituloConsultaVendas = "Consulta de Vendas";
+        this.urlControler = "/notasaiitens";
         this.loadFilialDropdown();
-        this.loadSituacaoDropdown();
         this.loadDateByPt();
         this.registrosPorPagina = 50;
         this.quantidadeRegistros = 0;
         this.loading.getNotIsVisible();
     }
 
-
     loadSearchFilters(isPaginate: boolean) {
         this.loading.getIsVisible();
         this.isActiveFieldset = isPaginate;
+
         const map = {
-            codigoFilial: this.filialDropdownSelecionado != null ? this.filialDropdownSelecionado.codigoFilial : null,
-            numeroCaixa: this.numeroCaixa,
-            numeroCupom: this.numeroCupom,
-            situacao: this.situacaoDropdownSelecionado,
-            datasEnvio: this.rangeDates == null ? [] : this.rangeDates,
+            codigoFilial: this.filialDropdownSelecionada != null ? this.filialDropdownSelecionada.codigoFilial : null,
+            descricaoPromocao: this.descricaoPromocao,
+            datas: this.rangeDates == undefined || this.rangeDates == null ? [] : this.rangeDates,
             inicial: this.posicaoInicial,
             final: this.registrosPorPagina
-
         }
 
-        this.httpUtilService.post(this.urlControler + "/loadSearchFilters", map).subscribe(data => {
+        this.httpUtilService.post(this.urlControler + "/findItensByFilters", map).subscribe(data => {
+
 
             const resp = data.json();
             this.quantidadeRegistros = resp.count;
             this.dadosFiltro = resp.list;
-            this.dadosFiltro.forEach(o => {
-                o.dataEnvio = StringUtils.string2Date(o.dataEnvio);
+
+            this.dadosFiltro.forEach(d => {
+                d.dataVenda = StringUtils.string2Date(d.dataVenda);
             });
 
             this.isActiveFieldset = true;
             this.loading.getNotIsVisible();
             if (!isPaginate) {
-                this.toastSuccess("Pesquisa realizada com sucesso.")
+                this.toastSuccess("Pesquisa realizada com sucesso.");
             }
         }, erro => {
             this.loading.getNotIsVisible();
             this.dadosFiltro = null;
             this.toastError(erro.message);
-        })
-    }
-
-    paginate(objeto: any) {
-        this.registrosPorPagina = objeto.rows;
-        this.posicaoInicial = (objeto.first);
-
-        this.loadSearchFilters(true);
+        });
     }
 
 
@@ -165,21 +141,18 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
         this.isActiveFieldset = false;
 
         this.loadFilialDropdown();
-        this.numeroCaixa = null;
-        this.numeroCupom = null;
-        this.loadSituacaoDropdown();
+        this.descricaoPromocao = null;
         this.rangeDates = null;
 
         this.dadosFiltro = null;
         this.loading.getNotIsVisible();
     }
 
-    sincronzarVendas() {
-        this.sincronizador.visible = true;
-        this.sincronizador.titulo = "Enviando Vendas ...";
-        this.sincronizador.executando = true;
-        this.sincronizador.startProcess();
+    paginate(objeto: any) {
+        this.registrosPorPagina = objeto.rows;
+        this.posicaoInicial = (objeto.first);
 
+        this.loadSearchFilters(true);
     }
 
 

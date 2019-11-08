@@ -73,6 +73,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { TreeModule } from 'primeng/tree';
 import { TreeTableModule } from 'primeng/treetable';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
+import {SidebarModule} from 'primeng/sidebar';
 
 
 
@@ -95,6 +96,7 @@ import { PageHomeComponent } from './pages/page-home/page-home.component';
 import { PageScantechConfigComponent } from './pages/page-scanntech-config/page-scantech-config.component';
 import { PageConsultaPromocaoComponent } from './pages/page-consulta-promocao/page-consulta-promocao.component';
 import { PageSincronizacaoVendas } from './pages/page-sincronizacao-vendas/page-sincronizacao-vendas.component';
+import { PageConsultaVendas } from './pages/page-consulta-vendas/page-consulta-vendas.component';
 registerLocaleData(ptBr)
 
 @NgModule({
@@ -170,6 +172,7 @@ registerLocaleData(ptBr)
         TreeModule,
         TreeTableModule,
         VirtualScrollerModule,
+        SidebarModule,
         PageModule,
         PadraoModule.forRoot(environment.API_URL, environment.GRUPO_SISTEMA)
 
@@ -188,7 +191,8 @@ registerLocaleData(ptBr)
         PageHomeComponent,
         PageScantechConfigComponent,
         PageConsultaPromocaoComponent,
-        PageSincronizacaoVendas
+        PageSincronizacaoVendas,
+        PageConsultaVendas
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },

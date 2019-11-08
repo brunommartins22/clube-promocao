@@ -1,49 +1,40 @@
 <processo [componente]="this" [titulo]="tituloSincronizacao">
-    <p-blockUI [blocked]="loading">
-        <i class="pi pi-spin pi-spinner" style="position:absolute;top:50%;left:50%;font-size: 3em"></i>
-    </p-blockUI>
+
     <div class="ui-g">
         <div class="ui-g-12">
             <p-fieldset legend="Filtros" [toggleable]="true" [collapsed]="isActiveFieldset">
                 <div class="row">
                     <div class="ui-g-12 ui-md-6 ui-lg-8">
                         <label>Filial</label><br>
-                        <p-dropdown [options]="dadosFilialDropdown" [(ngModel)]="filialDropdownSelecionado"
-                            [style]="{'width':'100%'}">
+                        <p-dropdown [options]="dadosFilialDropdown" [(ngModel)]="filialDropdownSelecionado" [style]="{'width':'100%'}">
                         </p-dropdown>
                     </div>
 
                     <div class="ui-g-12 ui-md-3 ui-lg-2">
-                        <inputText md="12" placeholder="Nº do Caixa" [(ngModel)]="numeroCaixa" id="numero_caixa"
-                            label="Número do Caixa">
+                        <inputText md="12" placeholder="Nº do Caixa" [(ngModel)]="numeroCaixa" id="numero_caixa" label="Número do Caixa">
                         </inputText>
                     </div>
 
                     <div class="ui-g-12 ui-md-3 ui-lg-2">
-                        <inputText md="12" placeholder="Nº do Cupom" [(ngModel)]="numeroCupom" id="numero_cupom"
-                            label="Número do Cupom">
+                        <inputText md="12" placeholder="Nº do Cupom" [(ngModel)]="numeroCupom" id="numero_cupom" label="Número do Cupom">
                         </inputText>
                     </div>
 
                     <div class="ui-g-12 ui-md-4 ui-lg-3">
                         <label>Situação</label><br>
-                        <p-dropdown [options]="dadosSituacaoDropdown" [(ngModel)]="situacaoDropdownSelecionado"
-                            [style]="{'width':'100%'}">
+                        <p-dropdown [options]="dadosSituacaoDropdown" [(ngModel)]="situacaoDropdownSelecionado" [style]="{'width':'100%'}">
                         </p-dropdown>
                     </div>
                     <div class="ui-g-12 ui-md-4 ui-lg-2">
                         <label>Data de Envio</label><br>
-                        <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'240px'}" [inline]="false"
-                            [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true"
-                            [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
+                        <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'240px'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
                             placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="true"></p-calendar>
                     </div>
 
                 </div>
                 <hr>
                 <div class="row">
-                    <button class="mr-1" label="Pesquisar" (click)="loadSearchFilters()" icon="fa fa-search"
-                        pButton></button>
+                    <button class="mr-1" label="Pesquisar" (click)="loadSearchFilters(false)" icon="fa fa-search" pButton></button>
                     <button class="mr-1" label="Limpar" (click)="clearSearchFilters()" icon="fa fa-eraser" pButton></button>
                 </div>
             </p-fieldset>
@@ -51,16 +42,16 @@
 
             <div class="row">
                 <div class="ui-g-12">
-                    <p-table [value]="dadosFiltro" dataKey="id" selectionMode="single" [resizableColumns]="true"
-                        [scrollable]="true" scrollHeight="300px" [(selection)]="filtroSelecionado" [responsive]="false"
-                        (onRowSelect)="onRowSelectUrl($event)" (onRowUnselect)="onRowUnselectUrl($event)">
+                    <p-table [value]="dadosFiltro" dataKey="id" selectionMode="single" [resizableColumns]="true" [scrollable]="true" scrollHeight="300px" [(selection)]="filtroSelecionado" [responsive]="false" (onRowSelect)="onRowSelectUrl($event)" (onRowUnselect)="onRowUnselectUrl($event)">
                         <ng-template pTemplate="caption">
                             <div style="position: relative;top: -5px;">
-                                <button label="Imprimir" icon="fa fa-print" pButton></button>
+                                <button label="Sincronizar" (click)="sincronzarVendas()" title="Sincronização Manual das Vendas" icon="fa fa-refresh" pButton></button>
+                                <button label="Imprimir" title="Impressão" icon="fa fa-print" pButton></button>
                             </div>
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
+                                <th style="width: 3em"></th>
                                 <th style="text-align: center;width: 100px !important;">Situação</th>
                                 <th style="text-align: justify;width: 350px !important;">Filial</th>
                                 <th style="text-align: center;width: 150px !important;">Número do Cupom</th>
@@ -69,26 +60,46 @@
 
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-item>
-                            <tr [pSelectableRow]="item">
+                        <ng-template pTemplate="body" let-item let-expanded="expanded">
+                            <tr [pSelectableRow]="item" [ngClass]="item.situacao=='E'?'corret':item.situacao=='R'?'divergent':null">
+                                <td style="width: 3em">
+                                    <a href="#" *ngIf="item.situacao=='R'" [pRowToggler]="item">
+                                        <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                                    </a>
+                                </td>
                                 <td style="text-align: center;width: 100px !important;">{{item.situacaoDesc}}</td>
                                 <td style="text-align: justify;width: 350px !important;">{{item.filial}}</td>
                                 <td style="text-align: center;width: 150px !important;">{{item.numeroCupom}}</td>
                                 <td style="text-align: center;width: 120px !important;">{{item.numeroCaixa}}</td>
-                                <td style="text-align: center;width: 120px !important;">{{item.dataEnvio|date:"dd/MM/yyyy"}}</td>
+                                <td style="text-align: center;width: 120px !important;">
+                                    {{item.dataEnvio|date:"dd/MM/yyyy"}}</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-item>
+                            <tr>
+                                <td colspan="6">Error: {{item.erro}}</td>
                             </tr>
                         </ng-template>
 
                     </p-table>
 
-                </div>
+                    <p-paginator [rows]="registrosPorPagina" [rowsPerPageOptions]="[10,20,30,50,100]" [totalRecords]="quantidadeRegistros" (onPageChange)="paginate($event)">
+                    </p-paginator>
 
+                    <espaco></espaco>
+                    <div style="text-align: center;padding: 5px">
+                        Registro de {{posicaoInicial + 1}} / {{posicaoInicial + (quantidadeRegistros
+                        < registrosPorPagina ? quantidadeRegistros : registrosPorPagina)}} de um total de {{quantidadeRegistros}} </div>
+
+                    </div>
+
+                </div>
             </div>
+
+
         </div>
 
 
-    </div>
 
-
-    <p-toast [baseZIndex]="5000"></p-toast>
+        <p-toast [baseZIndex]="5000"></p-toast>
 </processo>

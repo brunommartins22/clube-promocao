@@ -1,4 +1,29 @@
+<p-blockUI [blocked]="loading.isVisible">
+    <i class="pi pi-spin pi-spinner" style="position:absolute;top:50%;left:50%;font-size: 3em"></i>
+</p-blockUI>
 <router-outlet></router-outlet>
+
+<p-sidebar [(visible)]="sincronizador.visible" [modal]="false" position="right" [baseZIndex]="10000" [style]="{width:'300px','height':'150px','top':'auto','bottom':'0px'}" styleClass="ui-sidebar-sm">
+
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <p-panel header="Sincronizador">
+                <div class="row" *ngIf="sincronizador.executando">
+
+                    <label style="font-size: 14px;color: #136A8A;">Sincronizando {{sincronizador.envio}} ...</label>
+                    <p-progressBar mode="indeterminate" class="ui-g-12" [style]="{'height': '20px'}">
+
+                    </p-progressBar>
+                </div>
+                <div class="row" *ngIf="!sincronizador.executando">
+                    <p-messages [closable]="false" class="ui-g-12" [(value)]="sincronizador.msgsInfo">
+                    </p-messages>
+                </div>
+            </p-panel>
+        </div>
+    </div>
+
+</p-sidebar>
 
 <!-- <div class="layout-wrapper" [ngClass]="{'layout-horizontal': menuMode === 'horizontal',
                                         'layout-static': menuMode === 'static',

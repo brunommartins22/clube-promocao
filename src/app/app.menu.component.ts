@@ -24,7 +24,7 @@ export class AppMenuComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.model = [
             { label: 'Home', icon: 'fa fa-fw fa-home', routerLink: ['/sys/home-page'] },
-       
+
             {
                 label: 'Cadastros', icon: 'fa fa-fw fa-plus-circle', badge: 1,
                 items: [
@@ -32,10 +32,11 @@ export class AppMenuComponent implements OnInit, AfterViewInit {
                 ]
             },
             {
-                label: 'Integração', icon: 'fa fa-fw fa-compress', badge: 1,
+                label: 'Clube de Promoção', icon: 'fa fa-fw fa-compress', badge: 3,
                 items: [
-                    {label:'Consulta de Promoção',icon:'fa fa-fw fa-search', routerLink:['/sys/consulta-promocao-scanntech']},
-                    {label:'Sincronização de Vendas', icon:'fa fa-fw fa-refresh', routerLink:['/sys/sincronizacao-vendas']}
+                    { label: 'Consulta de Promoção', icon: 'fa fa-fw fa-search', routerLink: ['/sys/consulta-promocao-scanntech'] },
+                    { label: 'Consulta de Vendas', icon: 'fa fa-fw fa-search', routerLink: ['/sys/consulta-vendas'] },
+                    { label: 'Sincronização de Vendas', icon: 'fa fa-fw fa-refresh', routerLink: ['/sys/sincronizacao-vendas'] }
                 ]
             },
             {
