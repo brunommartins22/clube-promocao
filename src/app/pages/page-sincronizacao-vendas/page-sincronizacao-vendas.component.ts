@@ -8,7 +8,7 @@ import { loading } from 'src/app/services/loading.service';
     selector: "app-page-sincronizacao-vendas",
     templateUrl: "./page-sincronizacao-vendas.component.html",
     styles: [`
-        
+
         .divergent {
             background-color: #EE9EAF !important;
             color: black !important;
@@ -71,7 +71,7 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
 
     private loadSituacaoDropdown() {
         this.situacaoDropdownSelecionado = null;
-        //*********** Popular(Colocar) os itens dentro do DropDown ****************/    
+        //*********** Popular(Colocar) os itens dentro do DropDown ****************/
         this.dadosSituacaoDropdown.push({ label: "Selecione...", value: null });
         this.dadosSituacaoDropdown.push({ label: "Enviado", value: "E" });
         this.dadosSituacaoDropdown.push({ label: "Erro", value: "R" });
@@ -179,6 +179,14 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
         this.sincronizador.titulo = "Enviando Vendas ...";
         this.sincronizador.executando = true;
         this.sincronizador.startProcess();
+
+    }
+
+    sincronzarVendasV2() {
+        this.sincronizador.visible = true;
+        this.sincronizador.titulo = "Enviando Vendas ...";
+        this.sincronizador.executando = true;
+        this.sincronizador.startVendaProcess();
 
     }
 

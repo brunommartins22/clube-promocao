@@ -54,5 +54,27 @@ export class sincronizador {
 
     }
 
+    public startVendaProcess() {
+        this.httpUtilsService
+            .post("/sincronizador/venda/start", [])
+            .subscribe((res)=>{
+                const source = timer(1000, 1000);
+
+                this.subscribe = source.subscribe(val =>
+                    this.statusProcess()
+                );
+            });
+    }
+
+    public startPromocaoProcess() {
+        this.httpUtilsService
+            .post("/sincronizador/promocao/start", [])
+            .subscribe(res => {
+                const source = timer(1000, 1000);
+
+                this.subscribe = source.subscribe(val => this.statusProcess());
+            });
+    }
+
 
 }

@@ -45,6 +45,7 @@
                     <p-table [value]="dadosFiltro" dataKey="id" selectionMode="single" [resizableColumns]="true" [scrollable]="true" scrollHeight="300px" [(selection)]="filtroSelecionado" [responsive]="false" (onRowSelect)="onRowSelectUrl($event)" (onRowUnselect)="onRowUnselectUrl($event)">
                         <ng-template pTemplate="caption">
                             <div style="position: relative;top: -5px;">
+                                <button label="Sincronizar Vendas" (click)="sincronzarVendasV2()" title="Sincronização Manual das Vendas" icon="fa fa-refresh" pButton></button>
                                 <button label="Sincronizar" (click)="sincronzarVendas()" title="Sincronização Manual das Vendas" icon="fa fa-refresh" pButton></button>
                                 <button label="Imprimir" title="Impressão" icon="fa fa-print" pButton></button>
                             </div>
