@@ -174,18 +174,13 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
         this.loading.getNotIsVisible();
     }
 
+   
+
     sincronzarVendas() {
         this.sincronizador.visible = true;
-        this.sincronizador.titulo = "Enviando Vendas ...";
+        this.sincronizador.titulo = "Enviando Vendas";
         this.sincronizador.executando = true;
-        this.sincronizador.startProcess();
-
-    }
-
-    sincronzarVendasV2() {
-        this.sincronizador.visible = true;
-        this.sincronizador.titulo = "Enviando Vendas ...";
-        this.sincronizador.executando = true;
+        this.sincronizador.msgs = "Sincronização de vendas realizado com sucesso."
         this.sincronizador.startVendaProcess();
 
     }

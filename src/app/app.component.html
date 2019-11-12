@@ -3,11 +3,11 @@
 </p-blockUI>
 <router-outlet></router-outlet>
 
-<p-sidebar [(visible)]="sincronizador.visible" [modal]="false" position="right" [baseZIndex]="10000" [style]="{width:'300px','height':'150px','top':'auto','bottom':'0px'}" styleClass="ui-sidebar-sm">
+<p-sidebar [(visible)]="sincronizador.visible" [modal]="false" position="right" [baseZIndex]="10000" [style]="{width:'300px','height':'150px','top':'auto','bottom':'5px'}" styleClass="ui-sidebar-sm">
 
     <div class="ui-g">
         <div class="ui-g-12">
-            <p-panel header="Sincronizador">
+            <p-panel [header]="sincronizador.titulo">
                 <div class="row" *ngIf="sincronizador.executando">
 
                     <label style="font-size: 14px;color: #136A8A;">Sincronizando {{sincronizador.envio}} ...</label>

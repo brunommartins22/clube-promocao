@@ -2,6 +2,7 @@ import { Component, Injector } from "@angular/core";
 import { ProcessoComponent, StringUtils } from 'padrao';
 import { ConfirmationService, Message } from 'primeng/api';
 import { loading } from 'src/app/services/loading.service';
+import { sincronizador } from 'src/app/services/sincronizador.service';
 
 @Component({
     selector: "app-page-consulta-promocao",
@@ -128,7 +129,7 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
 
     //*************************** end Methods ***************************/
 
-    constructor(injector: Injector, public loading: loading) {
+    constructor(injector: Injector, public loading: loading,public sincronizador:sincronizador) {
         super(injector);
         this.confirmationService = injector.get(ConfirmationService);
     };
@@ -227,7 +228,14 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
         } else {
             this.toastError("Nenhum registro selecionado.");
         }
+    }
 
+    sincronzarPromocao() {
+        this.sincronizador.visible = true;
+        this.sincronizador.titulo = "Baixando Promoções";
+        this.sincronizador.executando = true;
+        this.sincronizador.msgs = "Download de Promoções realizado com sucesso."
+        this.sincronizador.startPromocaoProcess();
 
     }
     //******************************** item selecionado ************************************/

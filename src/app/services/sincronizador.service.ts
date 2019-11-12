@@ -12,6 +12,7 @@ export class sincronizador {
     error: any = "";
     visible: boolean = false;
     msgsInfo: Message[] = [];
+    msgs: any = "";
     subscribe: any = null;
 
 
@@ -28,7 +29,7 @@ export class sincronizador {
             this.envio = resp.envio;
             if (!this.executando) {
                 this.msgsInfo = [];
-                this.msgsInfo.push({ severity: "success", summary: "", detail: "Sincronização realizada com sucesso." });
+                this.msgsInfo.push({ severity: "success", summary: "", detail: this.msgs });
                 setTimeout(() => {
                     this.visible = false;
                     this.subscribe.unsubscribe();
@@ -43,7 +44,7 @@ export class sincronizador {
         this.httpUtilsService.post("/sincronizador/stop", []).subscribe();
     }
 
-    public startProcess() {
+    public startAllProcess() {
         this.httpUtilsService.post("/sincronizador/start", []).subscribe();
 
         const source = timer(1000, 1000);
@@ -57,7 +58,7 @@ export class sincronizador {
     public startVendaProcess() {
         this.httpUtilsService
             .post("/sincronizador/venda/start", [])
-            .subscribe((res)=>{
+            .subscribe((res) => {
                 const source = timer(1000, 1000);
 
                 this.subscribe = source.subscribe(val =>

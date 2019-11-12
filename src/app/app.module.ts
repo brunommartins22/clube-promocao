@@ -81,11 +81,11 @@ import { AppRightPanelComponent } from './app.rightpanel.component';
 import { AppRoutes } from './app.routes';
 import { AppTopBarComponent } from './app.topbar.component';
 import { PageModule } from './page.module';
-import { PageConsultaPromocaoComponent } from './pages/page-consulta-promocao/page-consulta-promocao.component';
-import { PageConsultaVendas } from './pages/page-consulta-vendas/page-consulta-vendas.component';
-import { PageHomeComponent } from './pages/page-home/page-home.component';
-import { PageScantechConfigComponent } from './pages/page-scanntech-config/page-scantech-config.component';
-import { PageSincronizacaoVendas } from './pages/page-sincronizacao-vendas/page-sincronizacao-vendas.component';
+import { PageConsultaPromocaoComponent } from './pages/processos/page-consulta-promocao/page-consulta-promocao.component';
+import { PageConsultaVendas } from './pages/processos/page-consulta-vendas/page-consulta-vendas.component';
+import { PageHomeComponent } from './pages/processos/page-home/page-home.component';
+import { PageScantechConfigComponent } from './pages/processos/page-scanntech-config/page-scantech-config.component';
+import { PageSincronizacaoVendas } from './pages/processos/page-sincronizacao-vendas/page-sincronizacao-vendas.component';
 import { RaizComponent } from './raiz/raiz.component';
 
 
