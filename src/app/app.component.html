@@ -3,27 +3,73 @@
 </p-blockUI>
 <router-outlet></router-outlet>
 
-<p-sidebar [(visible)]="sincronizador.visible" [modal]="false" position="right" [baseZIndex]="10000" [style]="{width:'300px','height':'150px','top':'auto','bottom':'5px'}" styleClass="ui-sidebar-sm">
+<p-sidebar [(visible)]="sincronizador.visible" [modal]="false" [showCloseIcon]="false" position="right" [baseZIndex]="10000" [style]="{'width':'320px','height':'180px','top':'auto','bottom':'4px','margin-right':'2px','padding':'2px'}" styleClass="ui-sidebar-sm">
 
     <div class="ui-g">
         <div class="ui-g-12">
-            <p-panel [header]="sincronizador.titulo">
-                <div class="row" *ngIf="sincronizador.executando">
-
-                    <label style="font-size: 14px;color: #136A8A;">Sincronizando {{sincronizador.envio}} ...</label>
-                    <p-progressBar mode="indeterminate" class="ui-g-12" [style]="{'height': '20px'}">
-
-                    </p-progressBar>
+            <div class="row">
+                <div class="ui-g-12 " style="text-align: center !important;background-color: #136A8A;height: 30px !important;border-radius: 2px !important;position: relative;top: -4px;">
+                    <label style="color: white !important; font-size: 14px !important;font-weight: bold;position: relative;top: 4px;">{{sincronizador.titulo}}
+                        <i class="fa fa-times mr-2" *ngIf="sincronizador.envio=='ERRO'"
+                            (click)="sincronizador.closeDialog()" style="float: right;cursor:pointer"></i></label>
                 </div>
+                <label style="font-size: 14px;color: #136A8A;padding: 2px;font-weight: 800;">{{sincronizador.descricaoProcess}}
+                    ({{sincronizador.envio}})
+                    ...</label>
+                <p-progressBar mode="indeterminate" class="ui-g-12" [style]="{'height': '25px'}">
+                </p-progressBar>
+                <div class="ui-g-12">
+                    <div style="float: right;">
+                        <button class="mr-1" label="Mais Detalhes" (click)="sincronizador.moreDetail()" icon="fa fa-info-circle" pButton></button>
+                        <button label="Stop process" [disabled]="sincronizador.envio=='ERRO' || sincronizador.envio=='NADA'" icon="fa fa-times" style="background-color: rgb(196, 94, 94);" pButton (click)="sincronizador.stopProcess()"></button>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 mt-2" *ngIf="sincronizador.envio=='ERRO'" style="text-align: center;height: 30px;top:auto !important;bottom: 0px !important;background-color: #F8B7BD;border-radius: 2px;">
+                    <i class="fa fa-times"></i> {{sincronizador.msgs}}
+                </div>
+                <div class="ui-g-12 mt-2" *ngIf="sincronizador.envio!=='ERRO' && !sincronizador.executando" style="text-align: center;height: 30px;top:auto !important;bottom: 0px !important;background-color: #B7D8B7;border-radius: 2px;">
+                    <i class="fa fa-times"></i> {{sincronizador.msgs}}
+                </div>
+            </div>
+
+            <!-- <p-panel [header]="sincronizador.titulo">
                 <div class="row" *ngIf="!sincronizador.executando">
                     <p-messages [closable]="false" class="ui-g-12" [(value)]="sincronizador.msgsInfo">
                     </p-messages>
                 </div>
-            </p-panel>
+                
+
+
+
+            </p-panel> -->
         </div>
     </div>
 
 </p-sidebar>
+
+
+<p-sidebar [(visible)]="sincronizador.isVisibleDetail" [modal]="false" [showCloseIcon]="false" position="right" [baseZIndex]="10000" [style]="{'width':'320px','height':'360px','top':'auto','bottom':'200px','margin-right':'2px','padding':'2px'}" styleClass="ui-sidebar-sm">
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="row">
+                <div class="ui-g-12 " style="text-align: center !important;background-color: #136A8A;height: 30px !important;border-radius: 2px !important;position: relative;top: -4px;">
+                    <label style="color: white !important; font-size: 14px !important;font-weight: bold;position: relative;top: 4px;">Log
+                        de Sincronização
+                        <i class="fa fa-times mr-2" (click)="sincronizador.isVisibleDetail = false"
+                            style="float: right;cursor:pointer"></i></label>
+                </div>
+                <div class="ui-g-12">
+                    <inputTextArea id="textAreaDesc" [rows]="20" [readonly]="true" [(ngModel)]="sincronizador.error">
+                    </inputTextArea>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-sidebar>
+
+
+
 
 <!-- <div class="layout-wrapper" [ngClass]="{'layout-horizontal': menuMode === 'horizontal',
                                         'layout-static': menuMode === 'static',
