@@ -104,13 +104,8 @@ export class sincronizador {
     }
 
     public startReenvioVendasProcess(objeto: any) {
-        this.httpUtilsService
-            .post("/sincronizador/vendas/desmarcar", objeto)
-            .subscribe(res => {
-                const source = timer(1000, 1000);
-
-                this.subscribe = source.subscribe(val => this.statusProcess());
-            })
+        return this.httpUtilsService
+            .post("/sincronizador/vendas/desmarcar", objeto);
     }
 
 

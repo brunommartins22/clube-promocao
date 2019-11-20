@@ -238,9 +238,6 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
         if (this.tipoReenvioSelecionado == null || this.tipoReenvioSelecionado == undefined) {
             this.errorMessage("Tipo de reenvio não infomado.");
             return;
-        } else if (this.tipoReenvioSelecionado == 'F' && (this.numeroCaixaDialog == null || this.numeroCaixaDialog == undefined)) {
-            this.errorMessage("Nº do caixa nao Informado p/ o tipo de reenvio fechamento.")
-            return;
         }
 
         const map = {
@@ -248,19 +245,21 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
             tipo: this.tipoReenvioSelecionado,
             numCaixa: this.numeroCaixaDialog
         }
-        this.sincronizador.visible = true;
-        this.sincronizador.descricaoProcess = "Upload";
-        this.sincronizador.executando = true;
-        if (this.tipoReenvioSelecionado == 'F') {
 
-            this.sincronizador.titulo = "Reenviando Fechamento(s)";
-            this.sincronizador.msgs = "Reenvio de Fechamento(s) realizado com sucesso."
-            this.sincronizador.startReenvioFechamentosProcess(map);
+        if (this.tipoReenvioSelecionado == 'V') {
+
+            this.sincronizador.startReenvioVendasProcess(map)
+                .subscribe((res)=>{
+                    this.toastSuccess('Vendas desmarcadas');
+                });
 
         } else {
-            this.sincronizador.titulo = "Reenviando Venda(s)";
-            this.sincronizador.msgs = "Reenvio de venda(s) realizado com sucesso."
-            this.sincronizador.startReenvioVendasProcess(map);
+            this.sincronizador.visible = true;
+            this.sincronizador.descricaoProcess = "Upload";
+            this.sincronizador.executando = true;
+            this.sincronizador.titulo = "Reenviando Fechamento(s)";
+            this.sincronizador.msgs = "Reenvio de Fechamento(s) realizado com sucesso.."
+            this.sincronizador.startReenvioFechamentosProcess(map);
         }
 
 
