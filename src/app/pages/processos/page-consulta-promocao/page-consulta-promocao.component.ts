@@ -233,6 +233,7 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
     sincronzarPromocao() {
         this.sincronizador.visible = true;
         this.sincronizador.titulo = "Baixando Promoções";
+        this.sincronizador.descricaoProcess="Download";
         this.sincronizador.executando = true;
         this.sincronizador.msgs = "Download de Promoções realizado com sucesso."
         this.sincronizador.startPromocaoProcess();

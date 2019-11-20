@@ -91,7 +91,7 @@ export class PageConsultaVendas extends ProcessoComponent {
 
     ngOnInit() {
         this.loading.getIsVisible();
-        this.tituloConsultaVendas = "Consulta de Vendas";
+        this.tituloConsultaVendas = "Vendas Promocionais";
         this.urlControler = "/notasaiitens";
         this.loadFilialDropdown();
         this.loadDateByPt();

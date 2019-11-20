@@ -46,6 +46,7 @@
                         <ng-template pTemplate="caption">
                             <div style="position: relative;top: -5px;">
                                 <button label="Sincronizar Vendas" (click)="sincronzarVendas()" title="Sincronização Manual das Vendas" icon="fa fa-refresh" pButton></button>
+                                <button label="Reenviar Vendas" (click)="showReenvioVendas()" title="Reenvio Manual das Vendas" icon="fa fa-upload" pButton></button>
                             </div>
                         </ng-template>
                         <ng-template pTemplate="header">
@@ -71,7 +72,7 @@
                                 <td style="text-align: center;width: 150px !important;">{{item.numeroCupom}}</td>
                                 <td style="text-align: center;width: 120px !important;">{{item.numeroCaixa}}</td>
                                 <td style="text-align: center;width: 120px !important;">
-                                    {{item.dataEnvio|date:"dd/MM/yyyy"}}</td>
+                                    {{item.dataEnvio|date:"dd/MM/yyyy HH:mm:ss"}}</td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="rowexpansion" let-item>
@@ -98,7 +99,25 @@
 
         </div>
 
+        <p-dialog header="Reenvio de vendas" [(visible)]="isDisplayReenvio" [modal]="true" [closeOnEscape]="true" [responsive]="true" [style]="{width: '320px'}" [minY]="70" [maximizable]="false" [baseZIndex]="10000">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="row">
+                        <div class="ui-g-12">
+                            <label>Informe um Período p/ sincronização</label><br>
+                            <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'240px'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
+                                placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="true"></p-calendar>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <button class="mr-1" label="Confirmar" icon="fa fa-check" pButton></button>
+                        <button label="Cancelar" icon="fa fa-times" pButton></button>
+                    </div>
+                </div>
+            </div>
 
+        </p-dialog>
 
         <p-toast [baseZIndex]="5000"></p-toast>
 </processo>

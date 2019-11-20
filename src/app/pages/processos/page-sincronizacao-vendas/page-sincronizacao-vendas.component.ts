@@ -42,6 +42,7 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
 
 
     display: boolean = false;
+    isDisplayReenvio: boolean = false;
 
 
 
@@ -106,7 +107,7 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
 
     ngOnInit() {
         this.loading.getIsVisible();
-        this.tituloSincronizacao = "Sincronização de Vendas";
+        this.tituloSincronizacao = "Consulta de Vendas";
         this.urlControler = "/sincronizacoes";
         this.loadFilialDropdown();
         this.loadSituacaoDropdown();
@@ -174,15 +175,21 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
         this.loading.getNotIsVisible();
     }
 
-   
+
 
     sincronzarVendas() {
         this.sincronizador.visible = true;
         this.sincronizador.titulo = "Enviando Vendas";
+        this.sincronizador.descricaoProcess = "Upload";
         this.sincronizador.executando = true;
         this.sincronizador.msgs = "Sincronização de vendas realizado com sucesso."
         this.sincronizador.startVendaProcess();
 
+    }
+
+    showReenvioVendas() {
+        this.isDisplayReenvio = true;
+        this.rangeDates = null;
     }
 
 

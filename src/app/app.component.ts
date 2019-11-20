@@ -6,7 +6,17 @@ import { loading } from './services/loading.service';
 
 @Component({
     selector: 'app-root',
-    templateUrl: './app.component.html'
+    templateUrl: './app.component.html',
+    styles: [`{
+         .unsuccess:{
+            height: 30px !important;
+            background-color: #F8B7BD !important;
+         }
+        .success:{
+            height: 30px !important;
+            background-color: #B7D8B7 !important;
+        }
+    }`]
 })
 export class AppComponent {
 

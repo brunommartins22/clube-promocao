@@ -7,17 +7,19 @@ import { Message } from 'primeng/api';
 export class sincronizador {
 
     titulo: any = "";
+    descricaoProcess: any = "";
     executando: boolean = false;
     envio: any = "";
     error: any = "";
     visible: boolean = false;
+    isIconVisible: boolean = false;
     msgsInfo: Message[] = [];
     msgs: any = "";
     subscribe: any = null;
+    isVisibleDetail: boolean = false;
 
 
     constructor(public httpUtilsService: HttpUtilService) {
-
     }
 
 
@@ -25,18 +27,31 @@ export class sincronizador {
     public statusProcess() {
         this.httpUtilsService.get("/sincronizador/status").subscribe(data => {
             const resp = data.json();
+            this.isIconVisible = false;
             this.executando = resp.executando;
             this.envio = resp.envio;
-            if (!this.executando) {
+            console.log(resp);
+            if (resp.envio == "ERRO") {
+                this.isIconVisible = true;
+                this.error = resp.log;
+                this.msgs = "Falha na sincronização de dados !";
                 this.msgsInfo = [];
-                this.msgsInfo.push({ severity: "success", summary: "", detail: this.msgs });
-                setTimeout(() => {
-                    this.visible = false;
-                    this.subscribe.unsubscribe();
-                }, 2500);
+                this.msgsInfo.push({ severity: "error", summary: "", detail: this.msgs });
+            } else {
+
+                if (!this.executando) {
+                    this.msgsInfo = [];
+                    this.msgsInfo.push({ severity: "success", summary: "", detail: this.msgs });
+                    setTimeout(() => {
+                        this.visible = false;
+                        this.subscribe.unsubscribe();
+                    }, 2500);
+                }
             }
         }, erro => {
             this.error = erro.message;
+            this.msgsInfo = [];
+            this.msgsInfo.push({ severity: "error", summary: "", detail: "Falha na sincronização de dados !" });
         });
     }
 
@@ -75,6 +90,21 @@ export class sincronizador {
 
                 this.subscribe = source.subscribe(val => this.statusProcess());
             });
+    }
+
+
+    public closeDialog() {
+        this.subscribe.unsubscribe();
+        this.visible = false;
+
+    }
+
+    public moreDetail() {
+        this.isVisibleDetail = true;
+    }
+
+    public cancelDetail() {
+        this.isVisibleDetail = false;
     }
 
 
