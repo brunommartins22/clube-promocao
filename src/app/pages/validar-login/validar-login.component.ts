@@ -13,7 +13,7 @@ export class validarLoginComponent implements OnInit {
   msgs: Message[] = [];
 
   constructor(
-    private auth: AuthenticationService, 
+    public auth: AuthenticationService, 
     private router: Router, 
     private util: HttpUtilService, 
     public messageService: MessageService) { }

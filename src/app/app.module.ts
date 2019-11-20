@@ -1,3 +1,5 @@
+import { validarLoginComponent } from './pages/validar-login/validar-login.component';
+import { liberacaoComponent } from './pages/liberacao/liberacao.component';
 import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import ptBr from '@angular/common/locales/pt';
@@ -87,6 +89,7 @@ import { PageHomeComponent } from './pages/processos/page-home/page-home.compone
 import { PageScantechConfigComponent } from './pages/processos/page-scanntech-config/page-scantech-config.component';
 import { PageSincronizacaoVendas } from './pages/processos/page-sincronizacao-vendas/page-sincronizacao-vendas.component';
 import { RaizComponent } from './raiz/raiz.component';
+import { Erro404Component } from './pages/erros/erro-404';
 
 
 
@@ -182,13 +185,14 @@ registerLocaleData(ptBr)
         AppTopBarComponent,
         AppFooterComponent,
         RaizComponent,
-
-
+        Erro404Component,
         PageHomeComponent,
         PageScantechConfigComponent,
         PageConsultaPromocaoComponent,
         PageSincronizacaoVendas,
-        PageConsultaVendas
+        PageConsultaVendas,
+        liberacaoComponent,
+        validarLoginComponent
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
