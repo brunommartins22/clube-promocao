@@ -93,6 +93,27 @@ export class sincronizador {
     }
 
 
+    public startReenvioFechamentosProcess(objeto: any) {
+        this.httpUtilsService
+            .post("/sincronizador/fechamento/reenvio", objeto)
+            .subscribe(res => {
+                const source = timer(1000, 1000);
+
+                this.subscribe = source.subscribe(val => this.statusProcess());
+            });
+    }
+
+    public startReenvioVendasProcess(objeto: any) {
+        this.httpUtilsService
+            .post("/sincronizador/vendas/desmarcar", objeto)
+            .subscribe(res => {
+                const source = timer(1000, 1000);
+
+                this.subscribe = source.subscribe(val => this.statusProcess());
+            })
+    }
+
+
     public closeDialog() {
         this.subscribe.unsubscribe();
         this.visible = false;

@@ -46,7 +46,7 @@
                         <ng-template pTemplate="caption">
                             <div style="position: relative;top: -5px;">
                                 <button label="Sincronizar Vendas" (click)="sincronzarVendas()" title="Sincronização Manual das Vendas" icon="fa fa-refresh" pButton></button>
-                                <button label="Reenviar Vendas" (click)="showReenvioVendas()" title="Reenvio Manual das Vendas" icon="fa fa-upload" pButton></button>
+                                <button label="Reenviar" (click)="showReenvio()" title="Reenvio Manual das Vendas" icon="fa fa-upload" pButton></button>
                             </div>
                         </ng-template>
                         <ng-template pTemplate="header">
@@ -99,24 +99,41 @@
 
         </div>
 
-        <p-dialog header="Reenvio de vendas" [(visible)]="isDisplayReenvio" [modal]="true" [closeOnEscape]="true" [responsive]="true" [style]="{width: '320px'}" [minY]="70" [maximizable]="false" [baseZIndex]="10000">
-            <div class="ui-g">
+        <p-dialog header="Reenvio" [(visible)]="isDisplayReenvio" [modal]="true" [closeOnEscape]="true" [style]="{'width':'320px'}" [responsive]="true" [minY]="70" [maximizable]="false" [baseZIndex]="10000">
+
+            <div class="ui-g" style="height: 375px;">
                 <div class="ui-g-12">
+                    <p-messages class="ui-g-12" [(value)]="msgsInfo" [closable]="false">
+                    </p-messages>
                     <div class="row">
-                        <div class="ui-g-12">
+                        <div class="ui-g-12 ">
                             <label>Informe um Período p/ sincronização</label><br>
-                            <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'240px'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
-                                placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="true"></p-calendar>
+                            <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'240px'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDatesDialog" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
+                                placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="true">
+                            </p-calendar>
                         </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <button class="mr-1" label="Confirmar" icon="fa fa-check" pButton></button>
-                        <button label="Cancelar" icon="fa fa-times" pButton></button>
+                        <div class="ui-g-12">
+                            <label>Tipo de Sincronização</label><br>
+                            <p-dropdown [options]="dadosTipoReenvio" [(ngModel)]="tipoReenvioSelecionado" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                        <div class="ui-g-12">
+                            <inputText md="12" [disabled]="tipoReenvioSelecionado!=='F'" placeholder="Nº do Caixa" [(ngModel)]="numeroCaixaDialog" id="numero_caixa_dialog" label="Número do Caixa">
+                            </inputText>
+                        </div>
+
                     </div>
                 </div>
-            </div>
 
+            </div>
+            <p-footer>
+                <div class="row">
+                    <div class="ui-g-12">
+                        <button style="float: left;" label="Confirmar" (click)="confirmReenvio()" icon="fa fa-check" pButton></button>
+                        <button style="float: right;" (click)="cancelReenvio()" label="Cancelar" icon="fa fa-times" pButton></button>
+                    </div>
+                </div>
+            </p-footer>
         </p-dialog>
 
         <p-toast [baseZIndex]="5000"></p-toast>

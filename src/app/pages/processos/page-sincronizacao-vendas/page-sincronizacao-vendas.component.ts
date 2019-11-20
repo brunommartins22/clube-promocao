@@ -1,6 +1,6 @@
 import { Component, Injector } from "@angular/core";
 import { ProcessoComponent, StringUtils } from 'padrao';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, Message } from 'primeng/api';
 import { sincronizador } from 'src/app/services/sincronizador.service';
 import { loading } from 'src/app/services/loading.service';
 
@@ -31,19 +31,33 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
     pt: any = "";
     isActiveFieldset: boolean = false;
 
+
     rangeDates: Date[] = null;
     dadosFilialDropdown: any = [];
     dadosSituacaoDropdown: any = [];
     dadosFiltro: any = [];
+
 
     filialDropdownSelecionado: any = null;
     situacaoDropdownSelecionado: any = null;
     filtroSelecionado: any = null;
 
 
+
     display: boolean = false;
+
+
+    //****************** Dialog Reenvio ******************/
     isDisplayReenvio: boolean = false;
 
+    rangeDatesDialog: Date[] = null;
+    dadosTipoReenvio: any = [];
+
+    tipoReenvioSelecionado: any = null;
+
+    numeroCaixaDialog: number = null;
+
+    msgsInfo: Message[] = [];
 
 
     //******************** methods ************************/
@@ -93,6 +107,27 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
             dateFormat: 'dd/MM/yyyy',
             weekHeader: 'Wk'
         };
+    }
+
+    private loadTipoEnvio() {
+        this.tipoReenvioSelecionado = null;
+        this.dadosTipoReenvio = new Array();
+        this.dadosTipoReenvio.push({ label: "Selecione ...", value: null });
+        this.dadosTipoReenvio.push({ label: "Venda(s)", value: "V" });
+        this.dadosTipoReenvio.push({ label: "Fechamento(s)", value: "F" });
+    }
+
+    private errorMessage(message: any) {
+        this.errorMessageinit(message);
+        setTimeout(() => {
+            this.msgsInfo = [];
+        }, 3000);
+    }
+
+    private errorMessageinit(message: any) {
+        this.msgsInfo = [];
+        this.msgsInfo.push({ severity: 'error', summary: '', detail: message });
+
     }
 
 
@@ -186,10 +221,59 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
         this.sincronizador.startVendaProcess();
 
     }
+    //*************************** dialog reevio ***************************/
 
-    showReenvioVendas() {
+    showReenvio() {
+        this.rangeDatesDialog = null;
+        this.numeroCaixaDialog = null;
+        this.loadTipoEnvio();
         this.isDisplayReenvio = true;
-        this.rangeDates = null;
+    }
+
+    confirmReenvio() {
+        if (this.rangeDatesDialog == null || this.rangeDatesDialog == undefined || this.rangeDatesDialog == []) {
+            this.errorMessage("Período para sincronização não informado.");
+            return;
+        }
+        if (this.tipoReenvioSelecionado == null || this.tipoReenvioSelecionado == undefined) {
+            this.errorMessage("Tipo de reenvio não infomado.");
+            return;
+        } else if (this.tipoReenvioSelecionado == 'F' && (this.numeroCaixaDialog == null || this.numeroCaixaDialog == undefined)) {
+            this.errorMessage("Nº do caixa nao Informado p/ o tipo de reenvio fechamento.")
+            return;
+        }
+
+        const map = {
+            datasReenvio: this.rangeDatesDialog == null ? [] : this.rangeDatesDialog,
+            tipo: this.tipoReenvioSelecionado,
+            numCaixa: this.numeroCaixaDialog
+        }
+        this.sincronizador.visible = true;
+        this.sincronizador.descricaoProcess = "Upload";
+        this.sincronizador.executando = true;
+        if (this.tipoReenvioSelecionado == 'V') {
+
+            this.sincronizador.titulo = "Reenviando Fechamento(s)";
+            this.sincronizador.msgs = "Sincronização de venda(s) realizado com sucesso."
+            this.sincronizador.startReenvioFechamentosProcess(map);
+
+        } else {
+            this.sincronizador.titulo = "Reenviando Venda(s)";
+            this.sincronizador.msgs = "Sincronização de Fechamento(s) realizado com sucesso."
+            this.sincronizador.startReenvioVendasProcess(map);
+        }
+
+
+        this.cancelReenvio();
+
+    }
+
+
+    cancelReenvio() {
+        this.rangeDatesDialog = null;
+        this.numeroCaixaDialog = null
+        this.tipoReenvioSelecionado = null;
+        this.isDisplayReenvio = false;
     }
 
 
