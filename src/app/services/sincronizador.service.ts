@@ -31,9 +31,9 @@ export class sincronizador {
             this.executando = resp.executando;
             this.envio = resp.envio;
             console.log(resp);
-            if (resp.envio == "ERRO") {
+            if (resp.envio == "ERRO" || data.json().hasOwnProperty('errorCode')) {
                 this.isIconVisible = true;
-                this.error = resp.log;
+                this.error = resp.log != null && resp.log == '' ? resp.log : data.text();
                 this.msgs = "Falha na sincronização de dados !";
                 this.msgsInfo = [];
                 this.msgsInfo.push({ severity: "error", summary: "", detail: this.msgs });

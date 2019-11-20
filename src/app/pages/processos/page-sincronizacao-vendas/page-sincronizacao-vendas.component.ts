@@ -251,15 +251,15 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
         this.sincronizador.visible = true;
         this.sincronizador.descricaoProcess = "Upload";
         this.sincronizador.executando = true;
-        if (this.tipoReenvioSelecionado == 'V') {
+        if (this.tipoReenvioSelecionado == 'F') {
 
             this.sincronizador.titulo = "Reenviando Fechamento(s)";
-            this.sincronizador.msgs = "Sincronização de venda(s) realizado com sucesso."
+            this.sincronizador.msgs = "Reenvio de Fechamento(s) realizado com sucesso."
             this.sincronizador.startReenvioFechamentosProcess(map);
 
         } else {
             this.sincronizador.titulo = "Reenviando Venda(s)";
-            this.sincronizador.msgs = "Sincronização de Fechamento(s) realizado com sucesso."
+            this.sincronizador.msgs = "Reenvio de venda(s) realizado com sucesso."
             this.sincronizador.startReenvioVendasProcess(map);
         }
 
