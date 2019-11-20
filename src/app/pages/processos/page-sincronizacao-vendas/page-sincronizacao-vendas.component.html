@@ -103,7 +103,7 @@
 
             <div class="ui-g" style="height: 375px;">
                 <div class="ui-g-12">
-                    <p-messages class="ui-g-12" [(value)]="msgsInfo" [closable]="false">
+                    <p-messages class="ui-g-12" [(value)]="msgsDialog" [closable]="false">
                     </p-messages>
                     <div class="row">
                         <div class="ui-g-12 ">
@@ -118,7 +118,6 @@
                             </p-dropdown>
                         </div>
                         <div class="ui-g-12">
-                            <input type="password" class="form-control ng-valid-minlength ng-valid-pattern ng-dirty ng-valid ng-valid-required" id="pass" name="pass" data-ng-minlength="4" maxlength="4" tabindex="-1">
                             <inputText md="12" [disabled]="tipoReenvioSelecionado!=='F'" placeholder="Nº do Caixa" [(ngModel)]="numeroCaixaDialog" id="numero_caixa_dialog" label="Número do Caixa">
                             </inputText>
                         </div>

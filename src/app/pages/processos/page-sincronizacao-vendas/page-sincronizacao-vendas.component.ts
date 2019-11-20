@@ -57,7 +57,7 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
 
     numeroCaixaDialog: number = null;
 
-    msgsInfo: Message[] = [];
+    msgsDialog: Message[] = [];
 
 
     //******************** methods ************************/
@@ -120,16 +120,15 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
     private errorMessage(message: any) {
         this.errorMessageinit(message);
         setTimeout(() => {
-            this.msgsInfo = [];
+            this.msgsDialog = [];
         }, 3000);
     }
 
     private errorMessageinit(message: any) {
-        this.msgsInfo = [];
-        this.msgsInfo.push({ severity: 'error', summary: '', detail: message });
+        this.msgsDialog = [];
+        this.msgsDialog.push({ severity: 'error', summary: '', detail: message });
 
     }
-
 
     //******************** end methods ********************/
 
@@ -224,6 +223,7 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
     //*************************** dialog reevio ***************************/
 
     showReenvio() {
+        this.msgsDialog=[];
         this.rangeDatesDialog = null;
         this.numeroCaixaDialog = null;
         this.loadTipoEnvio();
@@ -231,6 +231,7 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
     }
 
     confirmReenvio() {
+        this.loading.getIsVisible();
         if (this.rangeDatesDialog == null || this.rangeDatesDialog == undefined || this.rangeDatesDialog == []) {
             this.errorMessage("Período para sincronização não informado.");
             return;
@@ -249,11 +250,20 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
         if (this.tipoReenvioSelecionado == 'V') {
 
             this.sincronizador.startReenvioVendasProcess(map)
-                .subscribe((res)=>{
-                    this.toastSuccess('Vendas desmarcadas');
+                .subscribe(data => {
+                    this.loading.getNotIsVisible();
+                    if (data.json().hasOwnProperty('errorCode')) {
+                        this.toastError(data.text());
+                    } else {
+                        this.toastSuccess('Vendas desmarcadas');
+                    }
+                }, erro => {
+                    this.loading.getNotIsVisible();
+                    this.toastError(erro.message)
                 });
 
         } else {
+            this.loading.getNotIsVisible();
             this.sincronizador.visible = true;
             this.sincronizador.descricaoProcess = "Upload";
             this.sincronizador.executando = true;
