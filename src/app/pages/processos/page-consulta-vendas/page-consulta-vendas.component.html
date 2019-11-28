@@ -11,15 +11,15 @@
                         </p-dropdown>
                     </div>
 
-                    <div class="ui-g-12 ui-md-4 ui-lg-4" style="position: relative;top:-2px">
+                    <div class="ui-g-12 ui-md-4 ui-lg-5" style="position: relative;top:-2px">
                         <inputText md="12" placeholder="Descricao Promoção/Ean" [(ngModel)]="descricaoPromocao" id="desc_promocao" label="Descricao Promoção/Ean">
                         </inputText>
                     </div>
 
-                    <div class="ui-g-12 ui-md-2">
+                    <div class="ui-g-12 ui-md-4 ui-lg-3">
                         <label>Data Venda</label><br>
-                        <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'240px'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
-                            placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="true"></p-calendar>
+                        <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'100%'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
+                            placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="false"></p-calendar>
                     </div>
 
                 </div>

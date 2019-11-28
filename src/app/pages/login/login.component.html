@@ -15,6 +15,9 @@
 </head>
 
 <body class="login-body" style="background-image: linear-gradient(235deg, #565867, #191a25);">
+  <p-blockUI [blocked]="loading">
+    <i class="pi pi-spin pi-spinner" style="position:absolute;top:50%;left:50%;font-size: 3em"></i>
+  </p-blockUI>
   <div class="ui-g">
     <div class="ui-g-12" style="text-align:center">
       <img src="assets/layout/images/logo-interage.png" class="logo" />
@@ -33,29 +36,41 @@
 
 
           <h2>Bem Vindo ao Clube de Promoção</h2>
-          <h3>Informe Login e senha para autenticar</h3>
+          <h3 *ngIf="!primeiroAcesso">Informe Login e senha para autenticar</h3>
+          <h3 *ngIf="primeiroAcesso">Informe o CNPJ da empresa para autenticação</h3>
         </div>
         <form (submit)="logar()">
-          <div class="ui-g-12">
-            <label for="username" value="Usuário"></label>
-            <div class="input-wrapper">
-              <input type="text" name="login" autocomplete="off" id="login" placeholder="Usuário" class="ui-inputtext ui-widget"
-                [disabled]="processando" [(ngModel)]="credentials.login" />
-              <i class="fa fa-user"></i>
+          <div *ngIf="!primeiroAcesso">
+            <div class="ui-g-12">
+              <label for="username" value="Usuário"></label>
+              <div class="input-wrapper">
+                <input type="text" name="login" autocomplete="off" id="login" placeholder="Usuário"
+                  class="ui-inputtext ui-widget" [disabled]="processando" [(ngModel)]="credentials.login" />
+                <i class="fa fa-user"></i>
+              </div>
             </div>
+            <div class="ui-g-12">
+              <label for="password" value="Senha"></label>
+              <div class="input-wrapper">
+                <input type="password" name="id" id="password" autocomplete="off" placeholder="Senha"
+                  class="ui-inputtext ui-widget" [disabled]="processando" required [(ngModel)]="credentials.password" />
+                <i class="fa fa-lock"></i>
+              </div>
+            </div>
+
           </div>
-          <div class="ui-g-12">
-            <label for="password" value="Senha"></label>
-            <div class="input-wrapper">
-              <input type="password" name="id" id="password" autocomplete="off" placeholder="Senha" class="ui-inputtext ui-widget"
-                [disabled]="processando" required [(ngModel)]="credentials.password" />
-              <i class="fa fa-lock"></i>
+          <div *ngIf="primeiroAcesso">
+
+            <div class="ui-g-12">
+              <p-inputMask name="abc" id="cnpj" mask="99.999.999/9999-99" [(ngModel)]="cnpj"
+                placeholder="Ex.: 00.000.000/0000-00"></p-inputMask>
             </div>
+
           </div>
           <div class="ui-g-12 button-container">
             <button type="submit" pButton [disabled]="processando"
               class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only blue-btn raised-btn">
-              <span class="ui-button-text ui-c">Entrar</span>
+              <span class="ui-button-text ui-c">{{!primeiroAcesso?'Entrar':'Validar'}}</span>
             </button>
 
 

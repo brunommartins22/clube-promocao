@@ -41,10 +41,9 @@
         "rxjs-compat": "^6.5.2",
         "web-animations-js": "^2.3.2",
         "zone.js": "0.9.1",
-        "padrao": "^0.1.4"
+        "padrao": "^0.1.28"
     },
     "devDependencies": {
-        "padrao": "^0.1.4",
         "@angular-devkit/build-angular": "0.800.2",
         "@angular/compiler-cli": "8.1.1",
         "@angular/cli": "8.1.1",

@@ -14,52 +14,112 @@ export class LoginComponent implements OnInit {
   credentials: Credentials;
   msgs: Message[] = [];
   processando: boolean;
+  primeiroAcesso: boolean;
+  cnpj: string;
+  loading: boolean = false;
 
   constructor(private auth: AuthenticationService, private router: Router) { }
 
   ngOnInit() {
+    this.loading = true;
     this.credentials = new Credentials();
     this.processando = false;
-    document.getElementById("login").focus();
+
+    this.loadPrimeiroAcesso();
   }
 
+  private loadPrimeiroAcesso() {
+    this.auth.isPrimeiroAcesso().subscribe(data => {
+      this.primeiroAcesso = data.json();
+      let idFocus = "";
+      if (!this.primeiroAcesso) {
+        idFocus = "login";
+      } else {
+        this.cnpj = null;
+        idFocus = "cnpj"
+      }
+      setTimeout(() => {
+        document.getElementById(idFocus).focus();
+      }, 100);
+      this.loading = false;
+    })
+  }
+
+
+  private validationPrimeiroAcesso(objeto: string) {
+    this.loading = true;
+    this.auth.validarPrimeiroAcesso(objeto).subscribe(data => {
+      this.loading = false;
+      if (data.json().hasOwnProperty('errorCode')) {
+        this.showError(data.text());
+      } else {
+        let resp = data.json();
+        if (resp) {
+          this.primeiroAcesso = false;
+          setTimeout(() => {
+            document.getElementById("login").focus();
+          }, 100);
+          this.msgs.push({severity:'success', summary:'', detail:'Empresa autorizada com sucesso.'})
+          setTimeout(() => {
+            this.msgs=[];
+          }, 2000);
+        } else {
+          this.showError("Empresa não autorizada para uso do sistema.");
+        }
+      }
+
+    }, erro => {
+      this.loading = false;
+      this.showError(erro.message);
+    })
+  }
+
+
   logar() {
+this.msgs=[];
+    if (!this.primeiroAcesso) {
+      if (StringUtils.isEmpty(this.credentials.login)) {
+        this.showError("Usuário não informado");
+        document.getElementById("login").focus();
+        return;
+      }
+
+      if (StringUtils.isEmpty(this.credentials.password)) {
+        this.showError("Senha não informada");
+        document.getElementById("password").focus();
+        return;
+      }
+      this.loading = true;
+      this.credentials.password = this.credentials.password.toUpperCase();
+
+      this.processando = true;
+      this.auth.login(this.credentials).subscribe(
+        result => {
+          this.loading = false;
+          this.processando = false;
+          this.router.navigate(['/sys']);
+        },
+        error => {
+          this.loading = false;
+          this.processando = false;
+          this.showError("Falha na autenticação");
 
 
-    if (StringUtils.isEmpty(this.credentials.login)) {
-      this.showError("Usuário não informado");
-      document.getElementById("login").focus();
-      return;
+          setTimeout(() => {
+            document.getElementById("login").focus();
+          }, 100);
+
+
+        },
+      );
+    } else {
+      if (StringUtils.isEmpty(this.cnpj)) {
+        this.showError("CNPJ não informado.");
+        return;
+      }
+
+      this.validationPrimeiroAcesso(this.cnpj);
     }
-
-    if (StringUtils.isEmpty(this.credentials.password)) {
-      this.showError("Senha não informada");
-      document.getElementById("password").focus();
-      return;
-    }
-
-    this.credentials.password = this.credentials.password.toUpperCase();
-
-    this.processando = true;
-    this.auth.login(this.credentials).subscribe(
-      result => {
-        this.processando = false;
-        this.router.navigate(['/sys']);
-      },
-      error => {
-        this.processando = false;
-        this.showError("Falha na autenticação");
-
-
-        setTimeout(() => {
-          document.getElementById("login").focus();
-        }, 100);
-
-
-      },
-    );
-
-
   }
 
   logarCookie() {

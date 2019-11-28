@@ -27,8 +27,8 @@
                     </div>
                     <div class="ui-g-12 ui-md-4 ui-lg-2">
                         <label>Data de Envio</label><br>
-                        <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'240px'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
-                            placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="true"></p-calendar>
+                        <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'100%'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
+                            placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="false"></p-calendar>
                     </div>
 
                 </div>
@@ -99,7 +99,7 @@
 
         </div>
 
-        <p-dialog header="Reenvio" [(visible)]="isDisplayReenvio" [modal]="true" [closeOnEscape]="true" [style]="{'width':'320px'}" [responsive]="true" [minY]="70" [maximizable]="false" [baseZIndex]="10000">
+        <p-dialog header="Reenvio Manual" [(visible)]="isDisplayReenvio" [modal]="true" [closeOnEscape]="true" [style]="{'width':'300px'}" [responsive]="true" [minY]="70" [maximizable]="false" [baseZIndex]="10000">
 
             <div class="ui-g" style="height: 375px;">
                 <div class="ui-g-12">
@@ -108,8 +108,8 @@
                     <div class="row">
                         <div class="ui-g-12 ">
                             <label>Informe um Período p/ sincronização</label><br>
-                            <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'240px'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDatesDialog" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
-                                placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="true">
+                            <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'100%'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDatesDialog" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
+                                placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="false">
                             </p-calendar>
                         </div>
                         <div class="ui-g-12">

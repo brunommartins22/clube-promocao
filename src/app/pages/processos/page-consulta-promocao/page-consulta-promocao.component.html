@@ -4,7 +4,7 @@
         <div class="ui-g-12" *ngIf="!renderizarFilters">
             <p-fieldset legend="Filtros" [toggleable]="true" [collapsed]="isActiveFieldset">
                 <div class="row">
-                    <div class="ui-g-12 ui-md-4 ui-lg-7">
+                    <div class="ui-g-12 ui-md-4 ui-lg-6">
                         <label>Filial</label><br>
                         <p-dropdown [options]="dadosFilialDropdown" [(ngModel)]="filialDropdownSelecionada" [style]="{'width':'100%'}">
                         </p-dropdown>
@@ -14,7 +14,7 @@
                         <p-dropdown [options]="dadosTipoDropdown" [(ngModel)]="tipoDropdownSelecionado" [style]="{'width':'100%'}">
                         </p-dropdown>
                     </div>
-                    <div class="ui-g-12 ui-md-4 ui-lg-1">
+                    <div class="ui-g-12 ui-md-4 ui-lg-3">
                         <label>Situação</label><br>
                         <p-dropdown [options]="dadosSituacaoDropdown" [(ngModel)]="situacaoDropdownSelecionado" [style]="{'width':'100%'}">
                         </p-dropdown>
@@ -23,14 +23,14 @@
                         <inputText md="12" placeholder="Título da Promoção" [(ngModel)]="tituloPromocao" id="titulo_promocao" label="Título da Promoção">
                         </inputText>
                     </div>
-                    <div class="ui-g-12 ui-md-3 ui-lg-2">
+                    <div class="ui-g-12 ui-md-4 ui-lg-2">
                         <inputText md="12" placeholder="Autor da Promoção" [(ngModel)]="autorPromocao" id="Autor_promocao" label="Autor da Promoção">
                         </inputText>
                     </div>
-                    <div class="ui-g-12 ui-md-2" style="position: relative;top:2px">
+                    <div class="ui-g-12 ui-md-4 ui-lg-2" style="position: relative;top:2px">
                         <label>Validade</label><br>
-                        <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'240px'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
-                            placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="true"></p-calendar>
+                        <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'100%'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
+                            placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="false"></p-calendar>
                     </div>
 
                 </div>
