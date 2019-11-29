@@ -119,10 +119,6 @@ export class PageConsultaVendas extends ProcessoComponent {
             this.quantidadeRegistros = resp.count;
             this.dadosFiltro = resp.list;
 
-            this.dadosFiltro.forEach(d => {
-                d.dataVenda = StringUtils.string2Date(d.dataVenda);
-            });
-
             this.isActiveFieldset = true;
             this.loading.getNotIsVisible();
             if (!isPaginate) {

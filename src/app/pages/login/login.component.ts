@@ -18,14 +18,18 @@ export class LoginComponent implements OnInit {
   cnpj: string;
   loading: boolean = false;
 
-  constructor(private auth: AuthenticationService, private router: Router) { }
+  constructor(private auth: AuthenticationService, private router: Router) { 
 
-  ngOnInit() {
     this.loading = true;
-    this.credentials = new Credentials();
     this.processando = false;
 
     this.loadPrimeiroAcesso();
+  }
+
+  ngOnInit() {
+    
+    this.credentials = new Credentials();
+    
   }
 
   private loadPrimeiroAcesso() {
@@ -36,7 +40,7 @@ export class LoginComponent implements OnInit {
         idFocus = "login";
       } else {
         this.cnpj = null;
-        idFocus = "cnpj"
+        idFocus = "cnpj_id"
       }
       setTimeout(() => {
         document.getElementById(idFocus).focus();

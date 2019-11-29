@@ -1,4 +1,4 @@
-<processo [componente]="this" [titulo]="tituloConfiguracao">
+<processo [componente]="this" permissao="2.09" [titulo]="tituloConfiguracao">
     <div class="ui-g">
         <div class="ui-g-12">
             <p-messages class="ui-g-12" [(value)]="msgsInfo" [closable]="false">
@@ -138,7 +138,7 @@
                                 <div class="ui-g-12 ui-md-4 ui-lg-2">
                                     <label>Senha</label><br>
                                     <div class="ui-inputgroup">
-                                        <input [type]="isCheck?'text':'password'" class="ui-g-12" [(ngModel)]="configuracaoItemSelecionada.senha" pInputText [placeholder]="isCheck?'text':'password'">
+                                        <input [type]="isCheck?'text':'password'" class="ui-g-12" [(ngModel)]="configuracaoItemSelecionada.senha" pPassword  placeholder="SENHA">
                                         <span class="ui-inputgroup-addon">
                                             <p-checkbox title="Visualizar Senha" binary="true" [(ngModel)]="isCheck">
                                             </p-checkbox>

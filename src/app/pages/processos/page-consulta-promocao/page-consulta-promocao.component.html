@@ -1,4 +1,4 @@
-<processo [componente]="this" [titulo]="tituloConsulta">
+<processo [componente]="this" permissao="2.06" [titulo]="tituloConsulta">
 
     <div class="ui-g">
         <div class="ui-g-12" *ngIf="!renderizarFilters">
@@ -47,7 +47,7 @@
                         <ng-template pTemplate="caption">
 
                             <div style="position: relative;top: -5px;">
-                                <button label="Editar" (click)="editSearchFilters()" icon="fa fa-edit" pButton></button>
+                                <button label="Visualizar" (click)="editSearchFilters()" icon="fa fa-search-plus" pButton></button>
                                 <button label="Baixar Promoção" (click)="sincronzarPromocao()" title="Download de Promoção" icon="fa fa-download" pButton></button>
                             </div>
                         </ng-template>

@@ -54,14 +54,13 @@ export class PageScantechConfigComponent extends ProcessoComponent {
             } else {
 
                 let resp = data.json();
-                console.log(resp);
+
                 if (resp != null && resp != undefined && resp != []) {
                     resp.forEach(r => {
                         this.dadosFilialDropdown.push({ label: r.codigoFilial + " - " + r.nomeFilial, value: r })
                     });
                     this.filialDropdownSelecionada = objeto;
 
-                    console.log(this.filialDropdownSelecionada);
                     if (this.filialDropdownSelecionada != null) {
                         this.codigoScanntech = this.filialDropdownSelecionada.codigoScanntech;
                     }
@@ -114,6 +113,8 @@ export class PageScantechConfigComponent extends ProcessoComponent {
     constructor(injector: Injector, public loading: loading) {
         super(injector);
         this.confirmationService = injector.get(ConfirmationService);
+        this.loading.getIsVisible();
+
     };
 
     ngOnInit() {
@@ -125,18 +126,22 @@ export class PageScantechConfigComponent extends ProcessoComponent {
     //************************* Load Configuracao ************************/
 
     initConfig() {
-        this.loading.getIsVisible();
+
         this.httpUtilService.get(this.urlControler).subscribe(data => {
+
             if (data.json().hasOwnProperty('errorCode')) {
                 this.toastError('Erro', data.text());
             } else {
+
                 this.configuracaoSelecionada = (data.json())[0];
                 this.intervalo = this.configuracaoSelecionada.intervaloSincronizacao;
-                if (this.configuracaoSelecionada.configuracaoItem != undefined && this.configuracaoSelecionada.configuracaoItem != null) {
+                if (this.configuracaoSelecionada.configuracaoItem != undefined && this.configuracaoSelecionada.configuracaoItem != null && this.configuracaoSelecionada.configuracaoItem != []) {
+
                     this.configuracaoSelecionada.configuracaoItem.sort(function (a, b) {
                         return a.id - b.id;
                     })
                 }
+
                 this.loading.getNotIsVisible();
                 this.infoMessageInit("Configurações de processamento Scanntech, baseado no sistema de Clube de Promoção.");
 
@@ -162,11 +167,16 @@ export class PageScantechConfigComponent extends ProcessoComponent {
     atualizarConfiguracao() {
         this.loading.getIsVisible();
         this.configuracaoSelecionada.intervaloSincronizacao = this.intervalo;
+
         let json = JSON.stringify(this.configuracaoSelecionada);
+
         this.httpUtilService.put(this.urlControler, json).subscribe(data => {
+
             this.configuracaoSelecionada = data.json();
-            this.loading.getNotIsVisible();
+
             this.sucessMessageInit("Configuração atualizada com sucesso.");
+
+            this.loading.getNotIsVisible();
             setTimeout(() => {
                 this.infoMessageInit("Configurações de processamento Scanntech, baseado no sistema de Clube de Promoção.");
             }, 2500);
@@ -179,6 +189,7 @@ export class PageScantechConfigComponent extends ProcessoComponent {
     adicionarConfiguracao() {
         this.loading.getIsVisible();
         this.msgsInfo = [];
+
         this.configuracaoItemSelecionada = {
             id: null,
             usuario: null,
@@ -189,9 +200,11 @@ export class PageScantechConfigComponent extends ProcessoComponent {
             listaFilial: []
 
         };
+
         this.statusConfig = "1";
         this.renderizarFilial = false;
         this.renderizarUrl = false;
+
         this.warnMessage("As filiais participantes deverão conter o código respectivo da Scanntech. "
             + "Lojas sem esta coluna preenchida não participarão do envio de informações "
             + "e nem da aceitação de promoções de parceiros Scanntech.");
@@ -204,9 +217,11 @@ export class PageScantechConfigComponent extends ProcessoComponent {
     editarConfiguracao() {
         this.loading.getIsVisible();
         this.msgsInfo = []
+
         this.statusConfig = "2";
         this.renderizarFilial = false;
         this.renderizarUrl = false;
+
         this.warnMessage("As filiais participantes deverão conter o código respectivo da Scanntech. "
             + "Lojas sem esta coluna preenchida não participarão do envio de informações "
             + "e nem da aceitação de promoções de parceiros Scanntech.");
@@ -218,7 +233,9 @@ export class PageScantechConfigComponent extends ProcessoComponent {
 
     confirmarConfiguracao() {
         this.loading.getIsVisible();
+
         if (this.configuracaoItemSelecionada != null) {
+
             let json = "";
             switch (this.statusConfig) {
                 case "1": {
@@ -238,10 +255,11 @@ export class PageScantechConfigComponent extends ProcessoComponent {
                     break
                 }
             }
+
             json = JSON.stringify(this.configuracaoSelecionada);
 
             this.httpUtilService.put(this.urlControler, json).subscribe(data => {
-                
+
                 this.cancelarConfiguracao();
                 this.loading.getNotIsVisible();
                 this.toastSuccess("Configuração salva com sucesso.");
@@ -285,6 +303,7 @@ export class PageScantechConfigComponent extends ProcessoComponent {
             this.errorMessage("Nenhuma filial selecionada.");
             return;
         }
+
         this.renderizarFilial = true;
         this.statusFilial = "2";
         this.loadFilialDropdown(this.filialSelecionada);
@@ -295,6 +314,7 @@ export class PageScantechConfigComponent extends ProcessoComponent {
             this.errorMessage("Nenhuma filial selecionada.");
             return;
         }
+
         this.showWarn('Filial selecionada será removida da listagem.');
         this.renderizarFilial = true;
         this.statusFilial = '3';
@@ -305,6 +325,7 @@ export class PageScantechConfigComponent extends ProcessoComponent {
         if (this.filialDropdownSelecionada != null) {
             let msg = '';
             let isExist = false;
+
             if (this.statusFilial == '1') {
                 if (this.configuracaoItemSelecionada.listaFilial == undefined || this.configuracaoItemSelecionada.listaFilial == null) {
                     this.configuracaoItemSelecionada.listaFilial = new Array();
@@ -354,8 +375,10 @@ export class PageScantechConfigComponent extends ProcessoComponent {
                 this.configuracaoItemSelecionada.listaFilial.sort(function (a, b) {
                     return a.codigoFilial - b.codigoFilial;
                 });
+
                 this.sucessMessage(msg);
                 this.cancelarFilial();
+
             } else {
                 this.errorMessage(msg);
             }
@@ -394,10 +417,12 @@ export class PageScantechConfigComponent extends ProcessoComponent {
     }
 
     removerUrl() {
+
         if (this.urlSelecionada == null) {
             this.errorMessage("Nenhuma URL selecionada.");
             return;
         }
+
         this.showWarn('URL selecionada será removida da listagem.');
         this.renderizarUrl = true;
         this.statusUrl = '3';
@@ -406,8 +431,10 @@ export class PageScantechConfigComponent extends ProcessoComponent {
 
     confirmarUrl() {
         if (this.url != null && this.url != '') {
+
             let msg = '';
             let isExist = false;
+
             if (this.statusUrl !== '3') {
                 if (this.configuracaoItemSelecionada.listaUrl == undefined || this.configuracaoItemSelecionada.listaUrl == null) {
                     this.configuracaoItemSelecionada.listaUrl = new Array();
@@ -459,8 +486,10 @@ export class PageScantechConfigComponent extends ProcessoComponent {
                 this.configuracaoItemSelecionada.listaUrl.sort(function (a, b) {
                     return a.id - b.id;
                 });
+
                 this.sucessMessage(msg);
                 this.cancelarUrl();
+
             } else {
                 this.errorMessage(msg);
             }

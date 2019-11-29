@@ -32,6 +32,7 @@
         "jquery": "^3.4.1",
         "ng2-cookies": "^1.0.12",
         "ng2-currency-mask": "^5.3.1",
+        "padrao": "^0.1.29",
         "pdfobject": "^2.1.1",
         "primeicons": "1.0.0",
         "primeng": "8.0.1",
@@ -40,8 +41,7 @@
         "rxjs": "6.4.0",
         "rxjs-compat": "^6.5.2",
         "web-animations-js": "^2.3.2",
-        "zone.js": "0.9.1",
-        "padrao": "^0.1.28"
+        "zone.js": "0.9.1"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "0.800.2",

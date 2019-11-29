@@ -171,10 +171,7 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
             const resp = data.json();
             this.quantidadeRegistros = resp.count;
             this.dadosFiltro = resp.list;
-            this.dadosFiltro.forEach(o => {
-                o.dataEnvio = StringUtils.string2Date(o.dataEnvio);
-            });
-
+          
             this.isActiveFieldset = true;
             this.loading.getNotIsVisible();
             if (!isPaginate) {

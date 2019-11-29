@@ -129,9 +129,10 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
 
     //*************************** end Methods ***************************/
 
-    constructor(injector: Injector, public loading: loading,public sincronizador:sincronizador) {
+    constructor(injector: Injector, public loading: loading, public sincronizador: sincronizador) {
         super(injector);
         this.confirmationService = injector.get(ConfirmationService);
+       
     };
 
     ngOnInit() {
@@ -165,12 +166,9 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
         this.httpUtilService.post(this.urlControler + "/findTabpromocaoByFilters", map).subscribe(data => {
 
             const resp = data.json();
+
             this.quantidadeRegistros = resp.count;
             this.dadosFiltro = resp.promocoes;
-            this.dadosFiltro.forEach(d => {
-                d.datainicio = StringUtils.string2Date(d.datainicio);
-                d.datafim = StringUtils.string2Date(d.datafim);
-            });
 
             this.countAtivos = resp.countAtivos;
             this.countInativos = resp.countInativos;
@@ -233,7 +231,7 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
     sincronzarPromocao() {
         this.sincronizador.visible = true;
         this.sincronizador.titulo = "Baixando Promoções";
-        this.sincronizador.descricaoProcess="Download";
+        this.sincronizador.descricaoProcess = "Download";
         this.sincronizador.executando = true;
         this.sincronizador.msgs = "Download de Promoções realizado com sucesso."
         this.sincronizador.startPromocaoProcess();
