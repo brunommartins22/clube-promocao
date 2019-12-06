@@ -1,237 +1,269 @@
 <processo [componente]="this" permissao="2.06" [titulo]="tituloConsulta">
 
-    <div class="ui-g">
-        <div class="ui-g-12" *ngIf="!renderizarFilters">
-            <p-fieldset legend="Filtros" [toggleable]="true" [collapsed]="isActiveFieldset">
-                <div class="row">
-                    <div class="ui-g-12 ui-md-4 ui-lg-6">
-                        <label>Filial</label><br>
-                        <p-dropdown [options]="dadosFilialDropdown" [(ngModel)]="filialDropdownSelecionada" [style]="{'width':'100%'}">
-                        </p-dropdown>
-                    </div>
-                    <div class="ui-g-12 ui-md-4 ui-lg-3 ">
-                        <label>Tipo</label><br>
-                        <p-dropdown [options]="dadosTipoDropdown" [(ngModel)]="tipoDropdownSelecionado" [style]="{'width':'100%'}">
-                        </p-dropdown>
-                    </div>
-                    <div class="ui-g-12 ui-md-4 ui-lg-3">
-                        <label>Situação</label><br>
-                        <p-dropdown [options]="dadosSituacaoDropdown" [(ngModel)]="situacaoDropdownSelecionado" [style]="{'width':'100%'}">
-                        </p-dropdown>
-                    </div>
-                    <div class="ui-g-12 ui-md-4 ui-lg-4">
-                        <inputText md="12" placeholder="Título da Promoção" [(ngModel)]="tituloPromocao" id="titulo_promocao" label="Título da Promoção">
-                        </inputText>
-                    </div>
-                    <div class="ui-g-12 ui-md-4 ui-lg-2">
-                        <inputText md="12" placeholder="Autor da Promoção" [(ngModel)]="autorPromocao" id="Autor_promocao" label="Autor da Promoção">
-                        </inputText>
-                    </div>
-                    <div class="ui-g-12 ui-md-4 ui-lg-2" style="position: relative;top:2px">
-                        <label>Validade</label><br>
-                        <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'100%'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
-                            placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="false"></p-calendar>
-                    </div>
-
-                </div>
-                <hr>
-                <div class="row">
-                    <button class="mr-1" label="Pesquisar" (click)="loadSearchFilters(false)" icon="fa fa-search" pButton></button>
-                    <button class="mr-1" label="Limpar" (click)="clearSearchFilters()" icon="fa fa-eraser" pButton></button>
-                </div>
-            </p-fieldset>
-            <espaco></espaco>
+    <div class="ui-g-12" *ngIf="!renderizarFilters">
+        <p-fieldset legend="Filtros" [toggleable]="true" [collapsed]="isActiveFieldset">
             <div class="row">
-                <div class="ui-g-12">
-                    <p-table [value]="dadosFiltro" dataKey="codpromocao" selectionMode="single" [resizableColumns]="true" [scrollable]="true" scrollHeight="300px" [(selection)]="filtroSelecionado" [responsive]="false" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
-                        <ng-template pTemplate="caption">
-
-                            <div style="position: relative;top: -5px;">
-                                <button label="Visualizar" (click)="editSearchFilters()" icon="fa fa-search-plus" pButton></button>
-                                <button label="Baixar Promoção" (click)="sincronzarPromocao()" title="Download de Promoção" icon="fa fa-download" pButton></button>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th style="text-align: center;width: 70px !important;">Código</th>
-                                <th style="text-align: center;width: 135px !important;">Início da Promoção</th>
-                                <th style="text-align: center;width: 130px !important;">Fim da Promoção</th>
-                                <th style="text-align: center;width: 80px !important;">Scanntech</th>
-                                <th style="text-align: justify;width: 240px !important;">Título</th>
-                                <th style="text-align: justify;width: 240px !important;">Descrição</th>
-                                <th style="text-align: center;width: 120px !important;">Tipo</th>
-                                <th style="text-align: center;width: 120px !important;">Autor</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-item>
-                            <tr [pSelectableRow]="item" [title]="item.situacao=='I'?'Promoção Inativa':item.situacao=='A'?'Promoção Ativa':item.situacao=='P'?'Promoção Pendente':'Promoção Rejeitada'" [ngClass]="item.situacao=='I'?'divergent':item.situacao=='A'?'corret':item.situacao=='P'?'incorret':null">
-
-                                <td style="text-align: center;width: 70px !important;">{{item.codpromocao}}</td>
-                                <td style="text-align: center;width: 135px !important;">
-                                    {{item.datainicio|date:'dd/MM/yyyy'}}</td>
-                                <td style="text-align: center;width: 130px !important;">
-                                    {{item.datafim|date:'dd/MM/yyyy'}}</td>
-                                <td style="text-align: center;width: 80px !important;">{{item.codscanntech}}</td>
-                                <td style="text-align: justify;width: 240px !important;">{{item.titulo}}</td>
-                                <td style="text-align: justify;width: 240px !important;">{{item.descricao}}</td>
-                                <td style="text-align: center;width: 120px !important;">{{item.tipoDesc}}</td>
-                                <td style="text-align: center;width: 120px !important;">{{item.autor}}</td>
-
-                            </tr>
-                        </ng-template>
-
-                    </p-table>
-                    <p-paginator [rows]="registrosPorPagina" [rowsPerPageOptions]="[10,20,30,50,100]" [totalRecords]="quantidadeRegistros" (onPageChange)="paginate($event)">
-                    </p-paginator>
-
-                    <espaco></espaco>
-                    <div style="text-align: center;padding: 5px">
-                        Registro de {{posicaoInicial + 1}} / {{posicaoInicial + (quantidadeRegistros
-                        < registrosPorPagina ? quantidadeRegistros : registrosPorPagina)}} de um total de {{quantidadeRegistros}} </div>
-
-                    </div>
+                <div class="ui-g-12 ui-md-4 ui-lg-6">
+                    <label>Filial</label><br>
+                    <p-dropdown [options]="dadosFilialDropdown" [(ngModel)]="filialDropdownSelecionada"
+                        [style]="{'width':'100%'}">
+                    </p-dropdown>
                 </div>
-                <div class="row">
-
-                    <p-fieldset class="ui-g-12" legend="* Legenda(Status da Promoção)" *ngIf="dadosFiltro.length > 0">
-
-                        <div class="ui-g-12 ui-md-2 ui-lg-2 pl-3 mr-1" style="background-color:#CCF7D4;border-radius: 2px !important">
-                            <div class="ui-g ">
-                                <i class="fa fa-pie-chart mr-2" style="position: relative;top: 15px"></i>
-                                <div>
-                                    <div style="font-size: 28px"><b>{{countAtivos}}</b></div>
-                                    <div style="font-size: 14.5px">Ativa(s)</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="ui-g-12 ui-md-2 ui-lg-3 pl-3 mr-1" style="background-color:#EE9EAF;border-radius: 2px !important">
-                            <div class="ui-g ">
-                                <i class="fa fa-pie-chart mr-2" style="position: relative;top: 15px"></i>
-                                <div>
-                                    <div style="font-size: 28px"><b>{{countInativos}}</b>
-                                    </div>
-                                    <div style="font-size: 14.5px">Inativa(s)</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui-g-12 ui-md-2 ui-lg-3 pl-3 mr-1" style="background-color:#D9C7DD;border-radius: 2px !important">
-                            <div class="ui-g ">
-                                <i class="fa fa-pie-chart mr-2" style="position: relative;top: 15px"></i>
-                                <div>
-                                    <div style="font-size: 28px"><b>{{countRejeitados}}</b></div>
-                                    <div style="font-size: 14.5px">Rejeitada(s)</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui-g-12 ui-md-3 ui-lg-2 pl-3 " style="background-color:#FFE399;border-radius: 2px !important">
-                            <div class="ui-g ">
-                                <i class="fa fa-pie-chart mr-2" style="position: relative;top: 15px"></i>
-                                <div>
-                                    <div style="font-size: 28px"><b>{{countPendentes}}</b></div>
-                                    <div style="font-size: 14.5px">Pendente(s)</div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </p-fieldset>
+                <div class="ui-g-12 ui-md-4 ui-lg-3 ">
+                    <label>Tipo</label><br>
+                    <p-dropdown [options]="dadosTipoDropdown" [(ngModel)]="tipoDropdownSelecionado"
+                        [style]="{'width':'100%'}">
+                    </p-dropdown>
                 </div>
+                <div class="ui-g-12 ui-md-4 ui-lg-3">
+                    <label>Situação</label><br>
+                    <p-dropdown [options]="dadosSituacaoDropdown" [(ngModel)]="situacaoDropdownSelecionado"
+                        [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
+                <div class="ui-g-12 ui-md-4 ui-lg-4">
+                    <inputText md="12" placeholder="Título da Promoção" [(ngModel)]="tituloPromocao"
+                        id="titulo_promocao" label="Título da Promoção">
+                    </inputText>
+                </div>
+                <div class="ui-g-12 ui-md-4 ui-lg-2">
+                    <inputText md="12" placeholder="Autor da Promoção" [(ngModel)]="autorPromocao" id="Autor_promocao"
+                        label="Autor da Promoção">
+                    </inputText>
+                </div>
+                <div class="ui-g-12 ui-md-4 ui-lg-2" style="position: relative;top:2px">
+                    <label>Validade</label><br>
+                    <p-calendar [locale]="pt" (onClose)="change($event)" dateFormat="dd/mm/yy" [inputStyle]="{'width':'100%'}" [inline]="false"
+                        [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates"
+                        selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
+                        placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="false"></p-calendar>
+                </div>
+
             </div>
-            <div class="ui-g-12" *ngIf="renderizarFilters">
-                <div class="row">
+            <hr>
+            <div class="row">
+                <button class="mr-1" label="Pesquisar" (click)="loadSearchFilters(false)" icon="fa fa-search"
+                    pButton></button>
+                <button class="mr-1" label="Limpar" (click)="clearSearchFilters()" icon="fa fa-eraser" pButton></button>
+            </div>
+        </p-fieldset>
+        <espaco></espaco>
+        <div class="row">
+            <div class="ui-g-12">
+                <p-table [value]="dadosFiltro" dataKey="codpromocao" selectionMode="single" [resizableColumns]="true"
+                    [scrollable]="true" scrollHeight="300px" [(selection)]="filtroSelecionado" [responsive]="false"
+                    (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                    <ng-template pTemplate="caption">
 
-                    <label class="ui-g-12"><b>Título da Promoção: <i
-                            style="font-size: 18px;">{{filtroSelecionado.titulo}}</i></b></label>
-                    <div class="ui-g-12 ui-md-4 pt-1">
-                        <inputTextArea id="textAreaDesc" [maxlength]="255" [rows]="5" [readonly]="true" label="Descrição" [(ngModel)]="filtroSelecionado.descricao">
-                        </inputTextArea>
-                    </div>
-                    <div class="ui-g-12 ui-md-8">
-                        <div class="ui-g-12 ui-md-4">
-                            <inputText md="12" placeholder="Tipo" readonly="true" [(ngModel)]="filtroSelecionado.tipoDesc" id="tipo" label="Tipo">
-                            </inputText>
+                        <div style="position: relative;top: -5px;">
+                            <button label="Visualizar" (click)="editSearchFilters()" icon="fa fa-search-plus"
+                                pButton></button>
+                            <button label="Baixar Promoção" (click)="sincronzarPromocao()" title="Download de Promoção"
+                                icon="fa fa-download" pButton></button>
                         </div>
-                        <div class="ui-g-12 ui-md-4">
-                            <inputText md="12" [readonly]="true" placeholder="Autor" [(ngModel)]="filtroSelecionado.autor" id="autor" label="Autor">
-                            </inputText>
-                        </div>
-                        <div class="ui-g-12 ui-md-4">
-                            <inputText md="12" [readonly]="true" placeholder="Limite" [(ngModel)]="filtroSelecionado.limiteporcupom" id="limite" label="Limite por cupom">
-                            </inputText>
-                        </div>
-                        <div class="ui-g-12 ui-md-4">
-                            <inputText md="12" [readonly]="true" placeholder="Início da Promoção" [(ngModel)]="filtroSelecionado.dataInicioDesc" id="data_inicio" label="Início da Promoção">
-                            </inputText>
-                        </div>
-                        <div class="ui-g-12 ui-md-4">
-                            <inputText md="12" [readonly]="true" placeholder="Fim da Promoção" [(ngModel)]="filtroSelecionado.dataFimDesc" id="data_fim" label="Fim da Promoção">
-                            </inputText>
-                        </div>
-                        <div class="ui-g-12 ui-md-4">
-                            <inputText md="12" [readonly]="true" placeholder="Situação" [(ngModel)]="filtroSelecionado.situacaoDesc" id="situacao" label="Situação">
-                            </inputText>
-                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="text-align: center;width: 70px !important;">Código</th>
+                            <th style="text-align: center;width: 135px !important;">Início da Promoção</th>
+                            <th style="text-align: center;width: 130px !important;">Fim da Promoção</th>
+                            <th style="text-align: center;width: 80px !important;">Scanntech</th>
+                            <th style="text-align: justify;width: 240px !important;">Título</th>
+                            <th style="text-align: justify;width: 240px !important;">Descrição</th>
+                            <th style="text-align: center;width: 120px !important;">Tipo</th>
+                            <th style="text-align: center;width: 120px !important;">Autor</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item>
+                        <tr [pSelectableRow]="item"
+                            [title]="item.situacao=='I'?'Promoção Inativa':item.situacao=='A'?'Promoção Ativa':item.situacao=='P'?'Promoção Pendente':'Promoção Rejeitada'"
+                            [ngClass]="item.situacao=='I'?'divergent':item.situacao=='A'?'corret':item.situacao=='P'?'incorret':null">
 
-                    </div>
+                            <td style="text-align: center;width: 70px !important;">{{item.codpromocao}}</td>
+                            <td style="text-align: center;width: 135px !important;">
+                                {{item.datainicio|date:'dd/MM/yyyy'}}</td>
+                            <td style="text-align: center;width: 130px !important;">
+                                {{item.datafim|date:'dd/MM/yyyy'}}</td>
+                            <td style="text-align: center;width: 80px !important;">{{item.codscanntech}}</td>
+                            <td style="text-align: justify;width: 240px !important;">{{item.titulo}}</td>
+                            <td style="text-align: justify;width: 240px !important;">{{item.descricao}}</td>
+                            <td style="text-align: center;width: 120px !important;">{{item.tipoDesc}}</td>
+                            <td style="text-align: center;width: 120px !important;">{{item.autor}}</td>
 
+                        </tr>
+                    </ng-template>
 
-                    <div class="ui-g-12">
-                        <p-table [value]="filtroSelecionado.itemList" dataKey="codbarun" selectionMode="single" [resizableColumns]="true" [scrollable]="true" scrollHeight="300px" [(selection)]="ietmFiltroSelecionado" [responsive]="false" (onRowSelect)="onRowSelectItem($event)"
-                            (onRowUnselect)="onRowUnselectItem($event)">
-                            <ng-template pTemplate="caption">
-                                <div style="font-size:14.5px !important;position: relative;top:1px;float: left;font-weight: normal !important;">
-                                    <label><i>{{filtroSelecionado.resumoPromo}}</i></label>
-                                </div>
-                            </ng-template>
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th style="text-align: center;width: 80px !important;">Código</th>
-                                    <th style="text-align: center;width: 110px !important;">EAN</th>
-                                    <th style="text-align:justify;width: 350px !important;">Produto</th>
-                                    <th style="text-align: center;width: 80px !important;">Levando</th>
-                                    <th *ngIf="filtroSelecionado.tipo==2" style="text-align: center;width: 80px !important;">Paga</th>
-                                    <th style="text-align: right;width: 100px !important;">Pr. Custo</th>
-                                    <th style="text-align: right;width: 100px !important;">Pr. Varejo</th>
-                                    <th style="text-align: right;width: 130px !important;">Pr. Promocional</th>
-                                    <th style="text-align: right;width: 100px !important;">Lucro(%)</th>
-                                    <th style="text-align: right;width: 100px !important;">Lucro(R$)</th>
+                </p-table>
+                <p-paginator [rows]="registrosPorPagina" [rowsPerPageOptions]="[10,20,30,50,100]"
+                    [totalRecords]="quantidadeRegistros" (onPageChange)="paginate($event)">
+                </p-paginator>
 
-
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-item>
-                                <tr [pSelectableRow]="item">
-                                    <td style="text-align: center;width: 80px !important;">{{item.codpro}}</td>
-                                    <td style="text-align: center;width: 110px !important;">{{item.codbarun}}</td>
-                                    <td style="text-align: justify;width: 350px !important;">{{item.descpro}}</td>
-                                    <td style="text-align: center;width: 80px !important;">{{item.quantidade}}</td>
-                                    <td *ngIf="filtroSelecionado.tipo==2" style="text-align: center;width: 80px !important;">{{item.paga}}</td>
-                                    <td style="text-align: right;width: 100px !important;">R$ {{item.prcustocom| currency:'BRL':'':'1.2-2'}}</td>
-                                    <td style="text-align: right;width: 100px !important;">R$ {{item.prvapro| currency:'BRL':'':'1.2-2'}}</td>
-                                    <td style="text-align: right;width: 130px !important;">R$ {{item.precoPromocional| currency:'BRL':'':'1.2-2'}}
-                                    </td>
-                                    <td style="text-align: right;width: 100px !important;">
-                                        {{item.lucroPercentual| currency:'BRL':'':'1.2-2'}}%</td>
-                                    <td style="text-align: right;width: 100px !important;">R$ {{item.lucroReal| currency:'BRL':'':'1.2-2'}}</td>
-                                </tr>
-                            </ng-template>
-
-                        </p-table>
-
-                    </div>
-                    <div class="ui-g-12 ui-md-6">
-
-                    </div>
-                    <espaco></espaco>
-                    <div class="ui-g-12" style="padding: 5px;background-color: #136A8A;">
-                        <button pButton label="Voltar" icon="fa fa-arrow-left" (click)="cancelItemSelected()"></button>
-                    </div>
-                </div>
-
+                <espaco></espaco>
+                <div style="text-align: center;padding: 5px">
+                    Registro de {{posicaoInicial + 1}} / {{posicaoInicial + (quantidadeRegistros
+                                < registrosPorPagina ? quantidadeRegistros : registrosPorPagina)}} de um total de
+                    {{quantidadeRegistros}} </div>
 
             </div>
         </div>
+        <div class="row">
 
-        <p-toast [baseZIndex]="5000"></p-toast>
+            <p-fieldset class="ui-g-12" legend="* Legenda(Status da Promoção)"
+                *ngIf="dadosFiltro != undefined && dadosFiltro!=null && dadosFiltro.length > 0">
+
+                <div class="ui-g-12 ui-md-2 ui-lg-2 pl-3 mr-1"
+                    style="background-color:#CCF7D4;border-radius: 2px !important">
+                    <div class="ui-g ">
+                        <i class="fa fa-pie-chart mr-2" style="position: relative;top: 15px"></i>
+                        <div>
+                            <div style="font-size: 28px"><b>{{countAtivos}}</b></div>
+                            <div style="font-size: 14.5px">Ativa(s)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-md-2 ui-lg-3 pl-3 mr-1"
+                    style="background-color:#EE9EAF;border-radius: 2px !important">
+                    <div class="ui-g ">
+                        <i class="fa fa-pie-chart mr-2" style="position: relative;top: 15px"></i>
+                        <div>
+                            <div style="font-size: 28px"><b>{{countInativos}}</b>
+                            </div>
+                            <div style="font-size: 14.5px">Inativa(s)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-2 ui-lg-3 pl-3 mr-1"
+                    style="background-color:#D9C7DD;border-radius: 2px !important">
+                    <div class="ui-g ">
+                        <i class="fa fa-pie-chart mr-2" style="position: relative;top: 15px"></i>
+                        <div>
+                            <div style="font-size: 28px"><b>{{countRejeitados}}</b></div>
+                            <div style="font-size: 14.5px">Rejeitada(s)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-3 ui-lg-2 pl-3 "
+                    style="background-color:#FFE399;border-radius: 2px !important">
+                    <div class="ui-g ">
+                        <i class="fa fa-pie-chart mr-2" style="position: relative;top: 15px"></i>
+                        <div>
+                            <div style="font-size: 28px"><b>{{countPendentes}}</b></div>
+                            <div style="font-size: 14.5px">Pendente(s)</div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </p-fieldset>
+        </div>
+    </div>
+    <div class="ui-g-12" *ngIf="renderizarFilters">
+        <div class="row">
+
+            <label class="ui-g-12"><b>Título da Promoção: <i
+                        style="font-size: 18px;">{{filtroSelecionado.titulo}}</i></b></label>
+            <div class="ui-g-12 ui-md-4 pt-1">
+                <inputTextArea id="textAreaDesc" [maxlength]="255" [rows]="5" [readonly]="true" label="Descrição"
+                    [(ngModel)]="filtroSelecionado.descricao">
+                </inputTextArea>
+            </div>
+            <div class="ui-g-12 ui-md-8">
+                <div class="ui-g-12 ui-md-4">
+                    <inputText md="12" placeholder="Tipo" readonly="true" [(ngModel)]="filtroSelecionado.tipoDesc"
+                        id="tipo" label="Tipo">
+                    </inputText>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <inputText md="12" [readonly]="true" placeholder="Autor" [(ngModel)]="filtroSelecionado.autor"
+                        id="autor" label="Autor">
+                    </inputText>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <inputText md="12" [readonly]="true" placeholder="Limite"
+                        [(ngModel)]="filtroSelecionado.limiteporcupom" id="limite" label="Limite por cupom">
+                    </inputText>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <inputText md="12" [readonly]="true" placeholder="Início da Promoção"
+                        [(ngModel)]="filtroSelecionado.dataInicioDesc" id="data_inicio" label="Início da Promoção">
+                    </inputText>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <inputText md="12" [readonly]="true" placeholder="Fim da Promoção"
+                        [(ngModel)]="filtroSelecionado.dataFimDesc" id="data_fim" label="Fim da Promoção">
+                    </inputText>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <inputText md="12" [readonly]="true" placeholder="Situação"
+                        [(ngModel)]="filtroSelecionado.situacaoDesc" id="situacao" label="Situação">
+                    </inputText>
+                </div>
+
+            </div>
+
+
+            <div class="ui-g-12">
+                <p-table [value]="filtroSelecionado.itemList" dataKey="codbarun" selectionMode="single"
+                    [resizableColumns]="true" [scrollable]="true" scrollHeight="300px"
+                    [(selection)]="ietmFiltroSelecionado" [responsive]="false" (onRowSelect)="onRowSelectItem($event)"
+                    (onRowUnselect)="onRowUnselectItem($event)">
+                    <ng-template pTemplate="caption">
+                        <div
+                            style="font-size:14.5px !important;position: relative;top:1px;float: left;font-weight: normal !important;">
+                            <label><i>{{filtroSelecionado.resumoPromo}}</i></label>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="text-align: center;width: 80px !important;">Código</th>
+                            <th style="text-align: center;width: 110px !important;">EAN</th>
+                            <th style="text-align:justify;width: 350px !important;">Produto</th>
+                            <th style="text-align: center;width: 80px !important;">Levando</th>
+                            <th *ngIf="filtroSelecionado.tipo==2" style="text-align: center;width: 80px !important;">
+                                Paga</th>
+                            <th style="text-align: right;width: 100px !important;">Pr. Custo</th>
+                            <th style="text-align: right;width: 100px !important;">Pr. Varejo</th>
+                            <th style="text-align: right;width: 130px !important;">Pr. Promocional</th>
+                            <th style="text-align: right;width: 100px !important;">Lucro(%)</th>
+                            <th style="text-align: right;width: 100px !important;">Lucro(R$)</th>
+
+
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item>
+                        <tr [pSelectableRow]="item">
+                            <td style="text-align: center;width: 80px !important;">{{item.codpro}}</td>
+                            <td style="text-align: center;width: 110px !important;">{{item.codbarun}}</td>
+                            <td style="text-align: justify;width: 350px !important;">{{item.descpro}}</td>
+                            <td style="text-align: center;width: 80px !important;">{{item.quantidade}}</td>
+                            <td *ngIf="filtroSelecionado.tipo==2" style="text-align: center;width: 80px !important;">
+                                {{item.paga}}</td>
+                            <td style="text-align: right;width: 100px !important;">R$
+                                {{item.prcustocom| currency:'BRL':'':'1.2-2'}}</td>
+                            <td style="text-align: right;width: 100px !important;">R$
+                                {{item.prvapro| currency:'BRL':'':'1.2-2'}}</td>
+                            <td style="text-align: right;width: 130px !important;">R$
+                                {{item.precoPromocional| currency:'BRL':'':'1.2-2'}}
+                            </td>
+                            <td style="text-align: right;width: 100px !important;">
+                                {{item.lucroPercentual| currency:'BRL':'':'1.2-2'}}%</td>
+                            <td style="text-align: right;width: 100px !important;">R$
+                                {{item.lucroReal| currency:'BRL':'':'1.2-2'}}</td>
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+
+            </div>
+            <div class="ui-g-12 ui-md-6">
+
+            </div>
+            <espaco></espaco>
+            <div class="ui-g-12" style="padding: 5px;background-color: #136A8A;">
+                <button pButton label="Voltar" icon="fa fa-arrow-left" (click)="cancelItemSelected()"></button>
+            </div>
+        </div>
+
+    </div>
 </processo>

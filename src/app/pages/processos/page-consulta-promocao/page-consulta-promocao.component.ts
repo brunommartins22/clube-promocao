@@ -25,6 +25,7 @@ import { sincronizador } from 'src/app/services/sincronizador.service';
     ],
 })
 
+
 export class PageConsultaPromocaoComponent extends ProcessoComponent {
 
     confirmationService: ConfirmationService;
@@ -132,7 +133,7 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
     constructor(injector: Injector, public loading: loading, public sincronizador: sincronizador) {
         super(injector);
         this.confirmationService = injector.get(ConfirmationService);
-       
+
     };
 
     ngOnInit() {
@@ -211,6 +212,16 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
 
         this.editSearchFilters();
 
+    }
+
+    
+
+    close() {
+        this.datePicker.overlayVisible = false;
+    }
+
+    change(event) {
+        console.log(event);
     }
 
     paginate(objeto: any) {

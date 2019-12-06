@@ -1,82 +1,87 @@
 <processo [componente]="this" permissao="2.07" [titulo]="tituloConsultaVendas">
 
-    <div class="ui-g">
-
-        <div class="ui-g-12">
-            <p-fieldset legend="Filtros" [toggleable]="true" [collapsed]="isActiveFieldset">
-                <div class="row">
-                    <div class="ui-g-12 ui-md-4 ui-lg-4">
-                        <label>Filial</label><br>
-                        <p-dropdown [options]="dadosFilialDropdown" [(ngModel)]="filialDropdownSelecionada" [style]="{'width':'100%'}">
-                        </p-dropdown>
-                    </div>
-
-                    <div class="ui-g-12 ui-md-4 ui-lg-5" style="position: relative;top:-2px">
-                        <inputText md="12" placeholder="Descricao Promoção/Ean" [(ngModel)]="descricaoPromocao" id="desc_promocao" label="Descricao Promoção/Ean">
-                        </inputText>
-                    </div>
-
-                    <div class="ui-g-12 ui-md-4 ui-lg-3">
-                        <label>Data Venda</label><br>
-                        <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'100%'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
-                            placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="false"></p-calendar>
-                    </div>
-
-                </div>
-                <hr>
-                <div class="row">
-                    <button class="mr-1" label="Pesquisar" (click)="loadSearchFilters(false)" icon="fa fa-search" pButton></button>
-                    <button class="mr-1" label="Limpar" (click)="clearSearchFilters()" icon="fa fa-eraser" pButton></button>
-                </div>
-            </p-fieldset>
-            <espaco></espaco>
+    <div class="ui-g-12">
+        <p-fieldset legend="Filtros" [toggleable]="true" [collapsed]="isActiveFieldset">
             <div class="row">
-                <div class="ui-g-12">
-                    <p-table [value]="dadosFiltro" dataKey="ean" selectionMode="single" [resizableColumns]="true" [scrollable]="true" scrollHeight="300px" [responsive]="false">
-                        <ng-template pTemplate="caption">
-
-                            <div style="position: relative;top: -5px;">
-
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th style="text-align: justify;width: 240px !important;">Filial</th>
-                                <th style="text-align: center;width: 135px !important;">Data da Venda</th>
-                                <th style="text-align: justify;width: 240px !important;">Promoção</th>
-                                <th style="text-align: center;width: 120px !important;">EAN</th>
-                                <th style="text-align: center;width: 120px !important;">Quantidade</th>
-                                <th style="text-align:Right;width: 120px !important">Desconto</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-item>
-                            <tr [pSelectableRow]="item">
-
-                                <td style="text-align: justify;width: 240px !important;">{{item.nomeFilial}}</td>
-                                <td style="text-align: center;width: 135px !important;">
-                                    {{item.dataVenda|date:"dd/MM/yyyy HH:mm:ss"}}</td>
-                                <td style="text-align: justify;width: 240px !important;">{{item.descricaoPromocao}}</td>
-                                <td style="text-align: center;width: 120px !important;">{{item.ean}}</td>
-                                <td style="text-align: center;width: 120px !important;">{{item.quantidade}}</td>
-                                <td style="text-align: right;width: 120px !important;">R$ {{item.desconto| currency:'BRL':'':'1.2-2'}}</td>
-
-                            </tr>
-                        </ng-template>
-
-                    </p-table>
-                    <p-paginator [rows]="registrosPorPagina" [rowsPerPageOptions]="[10,20,30,50,100]" [totalRecords]="quantidadeRegistros" (onPageChange)="paginate($event)">
-                    </p-paginator>
-
-                    <espaco></espaco>
-                    <div style="text-align: center;padding: 5px">
-                        Registro de {{posicaoInicial + 1}} / {{posicaoInicial + (quantidadeRegistros
-                        < registrosPorPagina ? quantidadeRegistros : registrosPorPagina)}} de um total de {{quantidadeRegistros}} </div>
-
-                    </div>
+                <div class="ui-g-12 ui-md-4 ui-lg-4">
+                    <label>Filial</label><br>
+                    <p-dropdown [options]="dadosFilialDropdown" [(ngModel)]="filialDropdownSelecionada"
+                        [style]="{'width':'100%'}">
+                    </p-dropdown>
                 </div>
+
+                <div class="ui-g-12 ui-md-4 ui-lg-5" style="position: relative;top:-2px">
+                    <inputText md="12" placeholder="Descricao Promoção/Ean" [(ngModel)]="descricaoPromocao"
+                        id="desc_promocao" label="Descricao Promoção/Ean">
+                    </inputText>
+                </div>
+
+                <div class="ui-g-12 ui-md-4 ui-lg-3">
+                    <label>Data Venda</label><br>
+                    <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'100%'}" [inline]="false"
+                        [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates"
+                        selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
+                        placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="false"></p-calendar>
+                </div>
+
+            </div>
+            <hr>
+            <div class="row">
+                <button class="mr-1" label="Pesquisar" (click)="loadSearchFilters(false)" icon="fa fa-search"
+                    pButton></button>
+                <button class="mr-1" label="Limpar" (click)="clearSearchFilters()" icon="fa fa-eraser" pButton></button>
+            </div>
+        </p-fieldset>
+        <espaco></espaco>
+        <div class="row">
+            <div class="ui-g-12">
+                <p-table [value]="dadosFiltro" dataKey="ean" selectionMode="single" [resizableColumns]="true"
+                    [scrollable]="true" scrollHeight="300px" [responsive]="false">
+                    <ng-template pTemplate="caption">
+
+                        <div style="position: relative;top: -5px;">
+
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="text-align: justify;width: 240px !important;">Filial</th>
+                            <th style="text-align: center;width: 135px !important;">Data da Venda</th>
+                            <th style="text-align: justify;width: 240px !important;">Promoção</th>
+                            <th style="text-align: center;width: 120px !important;">EAN</th>
+                            <th style="text-align: center;width: 120px !important;">Quantidade</th>
+                            <th style="text-align:Right;width: 120px !important">Desconto</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item>
+                        <tr [pSelectableRow]="item">
+
+                            <td style="text-align: justify;width: 240px !important;">{{item.nomeFilial}}</td>
+                            <td style="text-align: center;width: 135px !important;">
+                                {{item.dataVenda|date:"dd/MM/yyyy HH:mm:ss"}}</td>
+                            <td style="text-align: justify;width: 240px !important;">{{item.descricaoPromocao}}</td>
+                            <td style="text-align: center;width: 120px !important;">{{item.ean}}</td>
+                            <td style="text-align: center;width: 120px !important;">{{item.quantidade}}</td>
+                            <td style="text-align: right;width: 120px !important;">R$
+                                {{item.desconto| currency:'BRL':'':'1.2-2'}}</td>
+
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+                <p-paginator [rows]="registrosPorPagina" [rowsPerPageOptions]="[10,20,30,50,100]"
+                    [totalRecords]="quantidadeRegistros" (onPageChange)="paginate($event)">
+                </p-paginator>
+
+                <espaco></espaco>
+                <div style="text-align: center;padding: 5px">
+                    Registro de {{posicaoInicial + 1}} / {{posicaoInicial + (quantidadeRegistros
+                        < registrosPorPagina ? quantidadeRegistros : registrosPorPagina)}} de um total de
+                    {{quantidadeRegistros}} </div>
 
             </div>
         </div>
 
+    </div>
 
 </processo>

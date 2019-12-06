@@ -1,141 +1,159 @@
 <processo [componente]="this" permissao="2.08" [titulo]="tituloSincronizacao">
 
-    <div class="ui-g">
-        <div class="ui-g-12">
-            <p-fieldset legend="Filtros" [toggleable]="true" [collapsed]="isActiveFieldset">
-                <div class="row">
-                    <div class="ui-g-12 ui-md-6 ui-lg-8">
-                        <label>Filial</label><br>
-                        <p-dropdown [options]="dadosFilialDropdown" [(ngModel)]="filialDropdownSelecionado" [style]="{'width':'100%'}">
-                        </p-dropdown>
-                    </div>
-
-                    <div class="ui-g-12 ui-md-3 ui-lg-2">
-                        <inputText md="12" placeholder="Nº do Caixa" [(ngModel)]="numeroCaixa" id="numero_caixa" label="Número do Caixa">
-                        </inputText>
-                    </div>
-
-                    <div class="ui-g-12 ui-md-3 ui-lg-2">
-                        <inputText md="12" placeholder="Nº do Cupom" [(ngModel)]="numeroCupom" id="numero_cupom" label="Número do Cupom">
-                        </inputText>
-                    </div>
-
-                    <div class="ui-g-12 ui-md-4 ui-lg-3">
-                        <label>Situação</label><br>
-                        <p-dropdown [options]="dadosSituacaoDropdown" [(ngModel)]="situacaoDropdownSelecionado" [style]="{'width':'100%'}">
-                        </p-dropdown>
-                    </div>
-                    <div class="ui-g-12 ui-md-4 ui-lg-2">
-                        <label>Data de Envio</label><br>
-                        <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'100%'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
-                            placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="false"></p-calendar>
-                    </div>
-
-                </div>
-                <hr>
-                <div class="row">
-                    <button class="mr-1" label="Pesquisar" (click)="loadSearchFilters(false)" icon="fa fa-search" pButton></button>
-                    <button class="mr-1" label="Limpar" (click)="clearSearchFilters()" icon="fa fa-eraser" pButton></button>
-                </div>
-            </p-fieldset>
-            <espaco></espaco>
-
+    <div class="ui-g-12">
+        <p-fieldset legend="Filtros" [toggleable]="true" [collapsed]="isActiveFieldset">
             <div class="row">
-                <div class="ui-g-12">
-                    <p-table [value]="dadosFiltro" dataKey="id" selectionMode="single" [resizableColumns]="true" [scrollable]="true" scrollHeight="300px" [(selection)]="filtroSelecionado" [responsive]="false" (onRowSelect)="onRowSelectUrl($event)" (onRowUnselect)="onRowUnselectUrl($event)">
-                        <ng-template pTemplate="caption">
-                            <div style="position: relative;top: -5px;">
-                                <button label="Sincronizar Vendas" (click)="sincronzarVendas()" title="Sincronização Manual das Vendas" icon="fa fa-refresh" pButton></button>
-                                <button label="Reenviar" (click)="showReenvio()" title="Reenvio Manual das Vendas" icon="fa fa-upload" pButton></button>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th style="width: 3em"></th>
-                                <th style="text-align: center;width: 100px !important;">Situação</th>
-                                <th style="text-align: justify;width: 350px !important;">Filial</th>
-                                <th style="text-align: center;width: 150px !important;">Número do Cupom</th>
-                                <th style="text-align: center;width: 120px !important;">Número do Caixa</th>
-                                <th style="text-align: center;width: 120px !important;">Data de Envio</th>
-
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-item let-expanded="expanded">
-                            <tr [pSelectableRow]="item" [ngClass]="item.situacao=='E'?'corret':item.situacao=='R'?'divergent':null">
-                                <td style="width: 3em">
-                                    <a href="#" *ngIf="item.situacao=='R'" [pRowToggler]="item">
-                                        <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
-                                    </a>
-                                </td>
-                                <td style="text-align: center;width: 100px !important;">{{item.situacaoDesc}}</td>
-                                <td style="text-align: justify;width: 350px !important;">{{item.filial}}</td>
-                                <td style="text-align: center;width: 150px !important;">{{item.numeroCupom}}</td>
-                                <td style="text-align: center;width: 120px !important;">{{item.numeroCaixa}}</td>
-                                <td style="text-align: center;width: 120px !important;">
-                                    {{item.dataEnvio|date:"dd/MM/yyyy HH:mm:ss"}}</td>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="rowexpansion" let-item>
-                            <tr>
-                                <td colspan="6">Error: {{item.erro}}</td>
-                            </tr>
-                        </ng-template>
-
-                    </p-table>
-
-                    <p-paginator [rows]="registrosPorPagina" [rowsPerPageOptions]="[10,20,30,50,100]" [totalRecords]="quantidadeRegistros" (onPageChange)="paginate($event)">
-                    </p-paginator>
-
-                    <espaco></espaco>
-                    <div style="text-align: center;padding: 5px">
-                        Registro de {{posicaoInicial + 1}} / {{posicaoInicial + (quantidadeRegistros
-                        < registrosPorPagina ? quantidadeRegistros : registrosPorPagina)}} de um total de {{quantidadeRegistros}} </div>
-
-                    </div>
-
+                <div class="ui-g-12 ui-md-6 ui-lg-8">
+                    <label>Filial</label><br>
+                    <p-dropdown [options]="dadosFilialDropdown" [(ngModel)]="filialDropdownSelecionado"
+                        [style]="{'width':'100%'}">
+                    </p-dropdown>
                 </div>
-            </div>
 
+                <div class="ui-g-12 ui-md-3 ui-lg-2">
+                    <inputText md="12" placeholder="Nº do Caixa" [(ngModel)]="numeroCaixa" id="numero_caixa"
+                        label="Número do Caixa">
+                    </inputText>
+                </div>
+
+                <div class="ui-g-12 ui-md-3 ui-lg-2">
+                    <inputText md="12" placeholder="Nº do Cupom" [(ngModel)]="numeroCupom" id="numero_cupom"
+                        label="Número do Cupom">
+                    </inputText>
+                </div>
+
+                <div class="ui-g-12 ui-md-4 ui-lg-3">
+                    <label>Situação</label><br>
+                    <p-dropdown [options]="dadosSituacaoDropdown" [(ngModel)]="situacaoDropdownSelecionado"
+                        [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
+                <div class="ui-g-12 ui-md-4 ui-lg-2">
+                    <label>Data de Envio</label><br>
+                    <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'100%'}" [inline]="false"
+                        [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDates"
+                        selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
+                        placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="false"></p-calendar>
+                </div>
+
+            </div>
+            <hr>
+            <div class="row">
+                <button class="mr-1" label="Pesquisar" (click)="loadSearchFilters(false)" icon="fa fa-search"
+                    pButton></button>
+                <button class="mr-1" label="Limpar" (click)="clearSearchFilters()" icon="fa fa-eraser" pButton></button>
+            </div>
+        </p-fieldset>
+        <espaco></espaco>
+
+        <div class="row">
+            <div class="ui-g-12">
+                <p-table [value]="dadosFiltro" dataKey="id" selectionMode="single" [resizableColumns]="true"
+                    [scrollable]="true" scrollHeight="300px" [(selection)]="filtroSelecionado" [responsive]="false"
+                    (onRowSelect)="onRowSelectUrl($event)" (onRowUnselect)="onRowUnselectUrl($event)">
+                    <ng-template pTemplate="caption">
+                        <div style="position: relative;top: -5px;">
+                            <button label="Sincronizar Vendas" (click)="sincronzarVendas()"
+                                title="Sincronização Manual das Vendas" icon="fa fa-refresh" pButton></button>
+                            <button label="Reenviar" (click)="showReenvio()" title="Reenvio Manual das Vendas"
+                                icon="fa fa-upload" pButton></button>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 3em"></th>
+                            <th style="text-align: center;width: 100px !important;">Situação</th>
+                            <th style="text-align: justify;width: 350px !important;">Filial</th>
+                            <th style="text-align: center;width: 150px !important;">Número do Cupom</th>
+                            <th style="text-align: center;width: 120px !important;">Número do Caixa</th>
+                            <th style="text-align: center;width: 120px !important;">Data de Envio</th>
+
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item let-expanded="expanded">
+                        <tr [pSelectableRow]="item"
+                            [ngClass]="item.situacao=='E'?'corret':item.situacao=='R'?'divergent':null">
+                            <td style="width: 3em">
+                                <a href="#" *ngIf="item.situacao=='R'" [pRowToggler]="item">
+                                    <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                                </a>
+                            </td>
+                            <td style="text-align: center;width: 100px !important;">{{item.situacaoDesc}}</td>
+                            <td style="text-align: justify;width: 350px !important;">{{item.filial}}</td>
+                            <td style="text-align: center;width: 150px !important;">{{item.numeroCupom}}</td>
+                            <td style="text-align: center;width: 120px !important;">{{item.numeroCaixa}}</td>
+                            <td style="text-align: center;width: 120px !important;">
+                                {{item.dataEnvio|date:"dd/MM/yyyy HH:mm:ss"}}</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="rowexpansion" let-item>
+                        <tr>
+                            <td colspan="6">Error: {{item.erro}}</td>
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+
+                <p-paginator [rows]="registrosPorPagina" [rowsPerPageOptions]="[10,20,30,50,100]"
+                    [totalRecords]="quantidadeRegistros" (onPageChange)="paginate($event)">
+                </p-paginator>
+
+                <espaco></espaco>
+                <div style="text-align: center;padding: 5px">
+                    Registro de {{posicaoInicial + 1}} / {{posicaoInicial + (quantidadeRegistros
+                        < registrosPorPagina ? quantidadeRegistros : registrosPorPagina)}} de um total de
+                    {{quantidadeRegistros}} </div>
+
+            </div>
 
         </div>
+    </div>
 
-        <p-dialog header="Reenvio Manual" [(visible)]="isDisplayReenvio" [modal]="true" [closeOnEscape]="true" [style]="{'width':'300px'}" [responsive]="true" [minY]="70" [maximizable]="false" [baseZIndex]="10000">
 
-            <div class="ui-g" style="height: 375px;">
-                <div class="ui-g-12">
-                    <p-messages class="ui-g-12" [(value)]="msgsDialog" [closable]="false">
-                    </p-messages>
-                    <div class="row">
-                        <div class="ui-g-12 ">
-                            <label>Informe um Período p/ sincronização</label><br>
-                            <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'100%'}" [inline]="false" [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true" [(ngModel)]="rangeDatesDialog" selectionMode="range" [readonlyInput]="true" yearRange="2000:2030"
-                                placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="false">
-                            </p-calendar>
-                        </div>
-                        <div class="ui-g-12">
-                            <label>Tipo de Sincronização</label><br>
-                            <p-dropdown [options]="dadosTipoReenvio" [(ngModel)]="tipoReenvioSelecionado" [style]="{'width':'100%'}">
-                            </p-dropdown>
-                        </div>
-                        <div class="ui-g-12">
-                            <inputText md="12" [disabled]="tipoReenvioSelecionado!=='F'" placeholder="Nº do Caixa" [(ngModel)]="numeroCaixaDialog" id="numero_caixa_dialog" label="Número do Caixa">
-                            </inputText>
-                        </div>
+    <p-dialog header="Reenvio Manual" [(visible)]="isDisplayReenvio" [modal]="true" [closeOnEscape]="true"
+        [style]="{'width':'300px'}" [responsive]="true" [minY]="70" [maximizable]="false" [baseZIndex]="10000">
 
+        <div class="ui-g" style="height: 375px;">
+            <div class="ui-g-12">
+                <p-messages class="ui-g-12" [(value)]="msgsDialog" [closable]="false">
+                </p-messages>
+                <div class="row">
+                    <div class="ui-g-12 ">
+                        <label>Informe um Período p/ sincronização</label><br>
+                        <p-calendar [locale]="pt" dateFormat="dd/mm/yy" [inputStyle]="{'width':'100%'}" [inline]="false"
+                            [showButtonBar]="true" [monthNavigator]="true" [yearNavigator]="true"
+                            [(ngModel)]="rangeDatesDialog" selectionMode="range" [readonlyInput]="true"
+                            yearRange="2000:2030" placeholder="dd/MM/yyyy - dd/MM/yyyy" [showIcon]="false">
+                        </p-calendar>
                     </div>
+                    <div class="ui-g-12">
+                        <label>Tipo de Sincronização</label><br>
+                        <p-dropdown [options]="dadosTipoReenvio" [(ngModel)]="tipoReenvioSelecionado"
+                            [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="ui-g-12">
+                        <inputText md="12" [disabled]="tipoReenvioSelecionado!=='F'" placeholder="Nº do Caixa"
+                            [(ngModel)]="numeroCaixaDialog" id="numero_caixa_dialog" label="Número do Caixa">
+                        </inputText>
+                    </div>
+
                 </div>
             </div>
+        </div>
 
 
-            <p-footer>
-                <div class="row">
-                    <div class="ui-g-12">
-                        <button style="float: left;" label="Confirmar" (click)="confirmReenvio()" icon="fa fa-check" pButton></button>
-                        <button style="float: right;" (click)="cancelReenvio()" label="Cancelar" icon="fa fa-times" pButton></button>
-                    </div>
+        <p-footer>
+            <div class="row">
+                <div class="ui-g-12">
+                    <button style="float: left;" label="Confirmar" (click)="confirmReenvio()" icon="fa fa-check"
+                        pButton></button>
+                    <button style="float: right;" (click)="cancelReenvio()" label="Cancelar" icon="fa fa-times"
+                        pButton></button>
                 </div>
-            </p-footer>
-        </p-dialog>
+            </div>
+        </p-footer>
+    </p-dialog>
 
-        <p-toast [baseZIndex]="5000"></p-toast>
+
 </processo>
