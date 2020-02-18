@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   cnpj: string;
   loading: boolean = false;
 
-  constructor(private auth: AuthenticationService, private router: Router) { 
+  constructor(private auth: AuthenticationService, private router: Router) {
 
     this.loading = true;
     this.processando = false;
@@ -27,9 +27,9 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
     this.credentials = new Credentials();
-    
+
   }
 
   private loadPrimeiroAcesso() {
@@ -44,8 +44,9 @@ export class LoginComponent implements OnInit {
       }
       setTimeout(() => {
         document.getElementById(idFocus).focus();
+        this.loading = false;
       }, 100);
-      this.loading = false;
+
     })
   }
 
@@ -63,9 +64,9 @@ export class LoginComponent implements OnInit {
           setTimeout(() => {
             document.getElementById("login").focus();
           }, 100);
-          this.msgs.push({severity:'success', summary:'', detail:'Empresa autorizada com sucesso.'})
+          this.msgs.push({ severity: 'success', summary: '', detail: 'Empresa autorizada com sucesso.' })
           setTimeout(() => {
-            this.msgs=[];
+            this.msgs = [];
           }, 2000);
         } else {
           this.showError("Empresa não autorizada para uso do sistema.");
@@ -80,7 +81,7 @@ export class LoginComponent implements OnInit {
 
 
   logar() {
-this.msgs=[];
+    this.msgs = [];
     if (!this.primeiroAcesso) {
       if (StringUtils.isEmpty(this.credentials.login)) {
         this.showError("Usuário não informado");
@@ -93,15 +94,24 @@ this.msgs=[];
         document.getElementById("password").focus();
         return;
       }
+      
       this.loading = true;
-      this.credentials.password = this.credentials.password.toUpperCase();
 
       this.processando = true;
       this.auth.login(this.credentials).subscribe(
         result => {
           this.loading = false;
           this.processando = false;
-          this.router.navigate(['/sys']);
+          if (result) {
+            this.router.navigate(['/sys']);
+          } else {
+            this.showError("Falha na autenticação");
+
+            setTimeout(() => {
+              document.getElementById("login").focus();
+            }, 100);
+
+          }
         },
         error => {
           this.loading = false;

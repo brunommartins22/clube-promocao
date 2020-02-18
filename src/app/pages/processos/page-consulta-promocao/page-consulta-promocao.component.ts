@@ -217,7 +217,7 @@ export class PageConsultaPromocaoComponent extends ProcessoComponent {
     
 
     close() {
-        this.datePicker.overlayVisible = false;
+       // this.datePicker.overlayVisible = false;
     }
 
     change(event) {

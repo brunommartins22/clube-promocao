@@ -171,7 +171,7 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
             const resp = data.json();
             this.quantidadeRegistros = resp.count;
             this.dadosFiltro = resp.list;
-          
+
             this.isActiveFieldset = true;
             this.loading.getNotIsVisible();
             if (!isPaginate) {
@@ -220,11 +220,14 @@ export class PageSincronizacaoVendas extends ProcessoComponent {
     //*************************** dialog reevio ***************************/
 
     showReenvio() {
-        this.msgsDialog=[];
-        this.rangeDatesDialog = null;
-        this.numeroCaixaDialog = null;
-        this.loadTipoEnvio();
-        this.isDisplayReenvio = true;
+        this.msgsDialog = [];
+        setTimeout(() => {
+            this.rangeDatesDialog = null;
+            this.numeroCaixaDialog = null;
+            this.loadTipoEnvio();
+            this.isDisplayReenvio = true;
+        }, 100);
+
     }
 
     confirmReenvio() {

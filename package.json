@@ -32,7 +32,7 @@
         "jquery": "^3.4.1",
         "ng2-cookies": "^1.0.12",
         "ng2-currency-mask": "^5.3.1",
-        "padrao": "^0.1.29",
+        "padrao": "^0.1.32",
         "pdfobject": "^2.1.1",
         "primeicons": "1.0.0",
         "primeng": "8.0.1",
